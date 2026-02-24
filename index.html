@@ -3,32 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <link rel="icon" type="image/png" href="logo.png">
+    <link rel="apple-touch-icon" href="logo.png">
+    
     <title>Tonalpohualli: Tiempo Sagrado</title>
 
-    <meta name="description" content="Calculadora ancestral de energías mexicas, nahuales y señores del tiempo.">
-    <meta name="theme-color" content="#1a1a1a">
-
-    <!-- Librerías Externas -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 
     <style>
-        body { 
-            -webkit-tap-highlight-color: transparent; 
-            background-color: #f9fafb;
-        }
-        .fade-in { 
-            animation: fadeIn 0.6s ease-out forwards; 
-        }
+        body { -webkit-tap-highlight-color: transparent; background-color: #f3f4f6; }
+        .fade-in { animation: fadeIn 0.8s ease-out forwards; }
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
+            from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
-        }
-        .aztec-pattern {
-            background-color: #ffffff;
-            background-image: url("https://www.transparenttextures.com/patterns/aztec.png");
         }
     </style>
 </head>
@@ -36,270 +26,215 @@
     <div id="root"></div>
 
     <script type="text/babel">
-        const { useState, useEffect } = React;
+    const { useState } = React;
 
-        const INFO_DETALLADA = {
-            1: { titulo: "Lagarto", significado: "Inicio y Fuerza Vital", desc: "Representa el inicio, la fuerza vital y la capacidad de crear desde cero.", sombra: "Rechazo", aprendizaje: "Seguridad interior." },
-            2: { titulo: "Viento", significado: "Mente y Palabra", desc: "Simboliza la mente, la palabra y el movimiento invisible. Comunicadores natos.", sombra: "Evasión", aprendizaje: "Precisión verbal." },
-            3: { titulo: "Casa", significado: "Estructura y Estabilidad", desc: "Representa estructura, estabilidad y pensamiento profundo. Organizados.", sombra: "Rigidez", aprendizaje: "Bases firmes." },
-            4: { titulo: "Lagartija", significado: "Dinamismo y Acción", desc: "Energía dinámica, expresiva y orientada a la acción. Magnetismo.", sombra: "Impulsividad", aprendizaje: "Enfoque." },
-            5: { titulo: "Serpiente", significado: "Poder y Transformación", desc: "Signo de poder, transformación y emociones intensas. Carisma.", sombra: "Extremos", aprendizaje: "Evolución." },
-            6: { titulo: "Muerte", significado: "Trascendencia y Servicio", desc: "Transformación y conciencia social. Prácticos y responsables.", sombra: "Victimismo", aprendizaje: "Propósito." },
-            7: { titulo: "Venado", significado: "Sensibilidad y Autenticidad", desc: "Energía sensible, artística y espiritual. Necesidad de libertad.", sombra: "Conflicto", aprendizaje: "Equilibrio." },
-            8: { titulo: "Conejo", significado: "Percepción y Rapidez", desc: "Sensibilidad, rapidez mental y astucia. Perceptivos.", sombra: "Ansiedad", aprendizaje: "Moderación." },
-            9: { titulo: "Agua", significado: "Intuición y Emoción", desc: "Emoción, intuición y mundo interior. Imaginativos.", sombra: "Inestabilidad", aprendizaje: "Disciplina." },
-            10: { titulo: "Perro", significado: "Lealtad y Trabajo", desc: "Lealtad, trabajo y cooperación. Confiables y protectores.", sombra: "Obstinación", aprendizaje: "Liderazgo." },
-            11: { titulo: "Mono", significado: "Creatividad y Humor", desc: "Creatividad, humor y adaptabilidad. Talento artístico.", sombra: "Dispersión", aprendizaje: "Concentración." },
-            12: { titulo: "Yerba", significado: "Resistencia y Purificación", desc: "Crecimiento silencioso y resistencia. Trabajadores constantes.", sombra: "Represión", aprendizaje: "Expresión." },
-            13: { titulo: "Caña", significado: "Autoridad y Principios", desc: "Autoridad moral y lucha por principios. Sentido de justicia.", sombra: "Moralismo", aprendizaje: "Flexibilidad." },
-            14: { titulo: "Tigre", significado: "Intensidad e Intuición", desc: "Fuerza interior, intuición y espiritualidad profunda.", sombra: "Conflicto", aprendizaje: "Canalización." },
-            15: { titulo: "Águila", significado: "Visión y Libertad", desc: "Visión, independencia y ambición. Ideas originales.", sombra: "Aislamiento", aprendizaje: "Vínculos." },
-            16: { titulo: "Zopilote", significado: "Sabiduría y Supervivencia", desc: "Sabiduría práctica y conciencia social. Realistas.", sombra: "Inseguridad", aprendizaje: "Confianza." },
-            17: { titulo: "Movimiento", significado: "Progreso y Cambio", desc: "Energía mental activa y cambio constante. Progresistas.", sombra: "Inflexibilidad", aprendizaje: "Adaptabilidad." },
-            18: { titulo: "Pedernal", significado: "Claridad y Precisión", desc: "Claridad, precisión y corte de ilusiones. Comprometidos.", sombra: "Sacrificio", aprendizaje: "Equilibrio." },
-            19: { titulo: "Lluvia", significado: "Filosofía y Sanación", desc: "Fertilidad espiritual y aprendizaje continuo. Curiosos.", sombra: "Carga ajena", aprendizaje: "Estudio." },
-            20: { titulo: "Flor", significado: "Belleza e Idealismo", desc: "Representa belleza, amor e idealismo. Sensibles.", sombra: "Expectativas", aprendizaje: "Simplicidad." }
-        };
+    // --- BASE DE DATOS DE SIGNIFICADOS ---
+    const INFO_DETALLADA = {
+      1: { titulo: "Cipactli", significado: "Inicio y Fuerza Vital", desc: "Representa el inicio, la fuerza vital y la capacidad de crear desde cero.", sombra: "Sentimiento de rechazo.", aprendizaje: "Seguridad interior." },
+      2: { titulo: "Ehecatl", significado: "Mente y Palabra", desc: "Simboliza la mente, la palabra y el movimiento invisible.", sombra: "Miedo a perder libertad.", aprendizaje: "Palabra con precisión." },
+      3: { titulo: "Calli", significado: "Estructura y Estabilidad", desc: "Representa estructura y pensamiento profundo.", sombra: "Rigidez emocional.", aprendizaje: "Construir bases firmes." },
+      4: { titulo: "Cuetzpalin", significado: "Dinamismo y Acción", desc: "Energía dinámica, expresiva y orientada a la acción.", sombra: "Impulsividad.", aprendizaje: "Disciplina y enfoque." },
+      5: { titulo: "Coatl", significado: "Poder y Transformación", desc: "Signo de poder, transformación y carisma.", sombra: "Luchas de poder.", aprendizaje: "Aceptar los cambios." },
+      6: { titulo: "Miquiztli", significado: "Trascendencia y Servicio", desc: "No es fin físico, sino transformación social.", sombra: "Victimización.", aprendizaje: "Servicio consciente." },
+      7: { titulo: "Mazatl", significado: "Sensibilidad y Autenticidad", desc: "Energía pacífica, artística y espiritual.", sombra: "Conflicto de independencia.", aprendizaje: "Equilibrio afectivo." },
+      8: { titulo: "Tochtli", significado: "Percepción y Rapidez", desc: "Rapidez mental y energía perceptiva.", sombra: "Ansiedad o excesos.", aprendizaje: "Autocontrol." },
+      9: { titulo: "Atl", significado: "Intuición y Emoción", desc: "Simboliza el mundo interior y la empatía.", sombra: "Inestabilidad emocional.", aprendizaje: "Responsabilidad emocional." },
+      10: { titulo: "Itzcuintli", significado: "Lealtad y Trabajo", desc: "Lealtad, trabajo en equipo y protección.", sombra: "Obstinación.", aprendizaje: "Liderazgo consciente." },
+      11: { titulo: "Ozomatli", significado: "Creatividad y Humor", desc: "Creatividad, humor y talento artístico.", sombra: "Dispersión.", aprendizaje: "Desarrollo profundo." },
+      12: { titulo: "Malinalli", significado: "Resistencia y Purificación", desc: "Crecimiento silencioso y resistencia.", sombra: "Reprimir emociones.", aprendizaje: "Expresión auténtica." },
+      13: { titulo: "Acatl", significado: "Autoridad y Principios", desc: "Energía de autoridad moral y firmeza.", sombra: "Rigidez o moralismo.", aprendizaje: "Flexibilidad social." },
+      14: { titulo: "Ocelotl", significado: "Intensidad e Intuición", desc: "Fuerza interior, intuición y espiritualidad profunda.", sombra: "Conflictos internos.", aprendizaje: "Canalización de poder." },
+      15: { titulo: "Cuauhtli", significado: "Visión y Libertad", desc: "Visión elevada, independencia y ambición.", sombra: "Aislamiento.", aprendizaje: "Vínculos sanos." },
+      16: { titulo: "Cozcaquauhtli", significado: "Sabiduría y Supervivencia", desc: "Sabiduría práctica y conciencia del ciclo.", sombra: "Inseguridad.", aprendizaje: "Confianza profesional." },
+      17: { titulo: "Ollin", significado: "Progreso y Cambio", desc: "Mente activa, cambio constante y progreso.", sombra: "Inflexibilidad.", aprendizaje: "Paciencia y adaptación." },
+      18: { titulo: "Tecpatl", significado: "Claridad y Precisión", desc: "Cortar ilusiones, claridad y compromiso.", sombra: "Sacrificio excesivo.", aprendizaje: "Equilibrio personal." },
+      19: { titulo: "Quiahuitl", significado: "Filosofía y Sanación", desc: "Fertilidad espiritual y vocación de enseñanza.", sombra: "Cargas ajenas.", aprendizaje: "Formación constante." },
+      20: { titulo: "Xochitl", significado: "Belleza e Idealismo", desc: "Belleza, amor, arte e idealismo.", sombra: "Decepción constante.", aprendizaje: "Realismo afectivo." }
+    };
 
-        const SIGNOS = [
-            { nombre: "Cipactli", es: "Caimán", emoji: "🐊" },
-            { nombre: "Ehecatl", es: "Viento", emoji: "🌬️" },
-            { nombre: "Calli", es: "Casa", emoji: "🏠" },
-            { nombre: "Cuetzpalin", es: "Lagartija", emoji: "🦎" },
-            { nombre: "Coatl", es: "Serpiente", emoji: "🐍" },
-            { nombre: "Miquiztli", es: "Muerte", emoji: "💀" },
-            { nombre: "Mazatl", es: "Venado", emoji: "🦌" },
-            { nombre: "Tochtli", es: "Conejo", emoji: "🐇" },
-            { nombre: "Atl", es: "Agua", emoji: "💧" },
-            { nombre: "Itzcuintli", es: "Perro", emoji: "🐕" },
-            { nombre: "Ozomatli", es: "Mono", emoji: "🐒" },
-            { nombre: "Malinalli", es: "Hierba", emoji: "🌿" },
-            { nombre: "Acatl", es: "Caña", emoji: "🎋" },
-            { nombre: "Ocelotl", es: "Jaguar", emoji: "🐆" },
-            { nombre: "Cuauhtli", es: "Águila", emoji: "🦅" },
-            { nombre: "Cozcaquauhtli", es: "Zopilote", emoji: "🦃" },
-            { nombre: "Ollin", es: "Movimiento", emoji: "🌀" },
-            { nombre: "Tecpatl", es: "Pedernal", emoji: "🔪" },
-            { nombre: "Quiahuitl", es: "Lluvia", emoji: "🌧️" },
-            { nombre: "Xochitl", es: "Flor", emoji: "🌸" }
-        ];
+    const SIGNOS = [
+      { n: "Cipactli", es: "Caimán" }, { n: "Ehecatl", es: "Viento" }, { n: "Calli", es: "Casa" },
+      { n: "Cuetzpalin", es: "Lagartija" }, { n: "Coatl", es: "Serpiente" }, { n: "Miquiztli", es: "Muerte" },
+      { n: "Mazatl", es: "Venado" }, { n: "Tochtli", es: "Conejo" }, { n: "Atl", es: "Agua" },
+      { n: "Itzcuintli", es: "Perro" }, { n: "Ozomatli", es: "Mono" }, { n: "Malinalli", es: "Hierba" },
+      { n: "Acatl", es: "Caña" }, { n: "Ocelotl", es: "Jaguar" }, { n: "Cuauhtli", es: "Águila" },
+      { n: "Cozcaquauhtli", es: "Zopilote" }, { n: "Ollin", es: "Movimiento" }, { n: "Tecpatl", es: "Pedernal" },
+      { n: "Quiahuitl", es: "Lluvia" }, { n: "Xochitl", es: "Flor" }
+    ];
 
-        const TABLA_ANIOS = {
-            37: {s:"Calli", n:1, b:1}, 50: {s:"Tochtli", n:1, b:1}, 11: {s:"Acatl", n:1, b:1}, 24: {s:"Tecpatl", n:1, b:1},
-            25: {s:"Calli", n:2, b:10}, 38: {s:"Tochtli", n:2, b:10}, 51: {s:"Acatl", n:2, b:10}, 12: {s:"Tecpatl", n:2, b:10},
-            13: {s:"Calli", n:3, b:6}, 26: {s:"Tochtli", n:3, b:6}, 39: {s:"Acatl", n:3, b:6}, 0: {s:"Tecpatl", n:3, b:6},
-            1: {s:"Calli", n:4, b:2}, 14: {s:"Tochtli", n:4, b:2}, 27: {s:"Acatl", n:4, b:2}, 40: {s:"Tecpatl", n:4, b:2},
-            41: {s:"Calli", n:5, b:11}, 2: {s:"Tochtli", n:5, b:11}, 15: {s:"Acatl", n:5, b:11}, 28: {s:"Tecpatl", n:5, b:11},
-            29: {s:"Calli", n:6, b:7}, 42: {s:"Tochtli", n:6, b:7}, 3: {s:"Acatl", n:6, b:7}, 16: {s:"Tecpatl", n:6, b:7},
-            17: {s:"Calli", n:7, b:3}, 30: {s:"Tochtli", n:7, b:3}, 43: {s:"Acatl", n:7, b:3}, 4: {s:"Tecpatl", n:7, b:3},
-            5: {s:"Calli", n:8, b:12}, 18: {s:"Tochtli", n:8, b:12}, 31: {s:"Acatl", n:8, b:12}, 44: {s:"Tecpatl", n:8, b:12},
-            45: {s:"Calli", n:9, b:8}, 6: {s:"Tochtli", n:9, b:8}, 19: {s:"Acatl", n:9, b:8}, 32: {s:"Tecpatl", n:9, b:8},
-            33: {s:"Calli", n:10, b:4}, 46: {s:"Tochtli", n:10, b:4}, 7: {s:"Acatl", n:10, b:4}, 20: {s:"Tecpatl", n:10, b:4},
-            21: {s:"Calli", n:11, b:13}, 34: {s:"Tochtli", n:11, b:13}, 47: {s:"Acatl", n:11, b:13}, 8: {s:"Tecpatl", n:11, b:13},
-            9: {s:"Calli", n:12, b:9}, 22: {s:"Tochtli", n:12, b:9}, 35: {s:"Acatl", n:12, b:9}, 48: {s:"Tecpatl", n:12, b:9},
-            49: {s:"Calli", n:13, b:5}, 10: {s:"Tochtli", n:13, b:5}, 23: {s:"Acatl", n:13, b:5}, 36: {s:"Tecpatl", n:13, b:5}
-        };
+    const TABLA_ANIOS = {
+      37: {s:"Calli", b:1}, 50: {s:"Tochtli", b:1}, 11: {s:"Acatl", b:1}, 24: {s:"Tecpatl", b:1},
+      25: {s:"Calli", b:10}, 38: {s:"Tochtli", b:10}, 51: {s:"Acatl", b:10}, 12: {s:"Tecpatl", b:10},
+      13: {s:"Calli", b:6}, 26: {s:"Tochtli", b:6}, 39: {s:"Acatl", b:6}, 0: {s:"Tecpatl", b:6},
+      1: {s:"Calli", b:2}, 14: {s:"Tochtli", b:2}, 27: {s:"Acatl", b:2}, 40: {s:"Tecpatl", b:2},
+      41: {s:"Calli", b:11}, 2: {s:"Tochtli", b:11}, 15: {s:"Acatl", b:11}, 28: {s:"Tecpatl", b:11},
+      29: {s:"Calli", b:7}, 42: {s:"Tochtli", b:7}, 3: {s:"Acatl", b:7}, 16: {s:"Tecpatl", b:7},
+      17: {s:"Calli", b:3}, 30: {s:"Tochtli", b:3}, 43: {s:"Acatl", b:3}, 4: {s:"Tecpatl", b:3},
+      5: {s:"Calli", b:12}, 18: {s:"Tochtli", b:12}, 31: {s:"Acatl", b:12}, 44: {s:"Tecpatl", b:12},
+      45: {s:"Calli", b:8}, 6: {s:"Tochtli", b:8}, 19: {s:"Acatl", b:8}, 32: {s:"Tecpatl", b:8},
+      33: {s:"Calli", b:4}, 46: {s:"Tochtli", b:4}, 7: {s:"Acatl", b:4}, 20: {s:"Tecpatl", b:4},
+      21: {s:"Calli", b:13}, 34: {s:"Tochtli", b:13}, 47: {s:"Acatl", b:13}, 8: {s:"Tecpatl", b:13},
+      9: {s:"Calli", b:9}, 22: {s:"Tochtli", b:9}, 35: {s:"Acatl", b:9}, 48: {s:"Tecpatl", b:9},
+      49: {s:"Calli", b:5}, 10: {s:"Tochtli", b:5}, 23: {s:"Acatl", b:5}, 36: {s:"Tecpatl", b:5}
+    };
 
-        const VEINTENAS = [
-            { id: 1, nombre: "Atlacahualo", m: 3, d: 12 }, { id: 2, nombre: "Tlacaxipehualiztli", m: 4, d: 1 },
-            { id: 3, nombre: "Tozoztontli", m: 4, d: 21 }, { id: 4, nombre: "Hueytozoztli", m: 5, d: 11 },
-            { id: 5, nombre: "Toxcatl", m: 5, d: 31 }, { id: 6, nombre: "Etzalcualiztli", m: 6, d: 20 },
-            { id: 7, nombre: "Tecuilhuitontli", m: 7, d: 10 }, { id: 8, nombre: "Huey Tecuilhuitl", m: 7, d: 30 },
-            { id: 9, nombre: "Tlaxochimaco", m: 8, d: 19 }, { id: 10, nombre: "Xocotl Huetzi", m: 9, d: 8 },
-            { id: 11, nombre: "Ochpaniztli", m: 9, d: 28 }, { id: 12, nombre: "Teotleco", m: 10, d: 18 },
-            { id: 13, nombre: "Tepeilhuitl", m: 11, d: 7 }, { id: 14, nombre: "Quecholli", m: 11, d: 27 },
-            { id: 15, nombre: "Panquetzaliztli", m: 12, d: 17 }, { id: 16, nombre: "Atemoztli", m: 1, d: 6 },
-            { id: 17, nombre: "Tititl", m: 1, d: 26 }, { id: 18, nombre: "Izcalli", m: 2, d: 15 },
-            { id: 19, nombre: "Nemontemi", m: 3, d: 7 }
-        ];
+    const VEINTENAS = [
+      { id: 1, nombre: "Atlacahualo", m: 3, d: 12 }, { id: 2, nombre: "Tlacaxipehualiztli", m: 4, d: 1 },
+      { id: 3, nombre: "Tozoztontli", m: 4, d: 21 }, { id: 4, nombre: "Hueytozoztli", m: 5, d: 11 },
+      { id: 5, nombre: "Toxcatl", m: 5, d: 31 }, { id: 6, nombre: "Etzalcualiztli", m: 6, d: 20 },
+      { id: 7, nombre: "Tecuilhuitontli", m: 7, d: 10 }, { id: 8, nombre: "Huey Tecuilhuitl", m: 7, d: 30 },
+      { id: 9, nombre: "Tlaxochimaco", m: 8, d: 19 }, { id: 10, nombre: "Xocotl Huetzi", m: 9, d: 8 },
+      { id: 11, nombre: "Ochpaniztli", m: 9, d: 28 }, { id: 12, nombre: "Teotleco", m: 10, d: 18 },
+      { id: 13, nombre: "Tepeilhuitl", m: 11, d: 7 }, { id: 14, nombre: "Quecholli", m: 11, d: 27 },
+      { id: 15, nombre: "Panquetzaliztli", m: 12, d: 17 }, { id: 16, nombre: "Atemoztli", m: 1, d: 6 },
+      { id: 17, nombre: "Tititl", m: 1, d: 26 }, { id: 18, nombre: "Izcalli", m: 2, d: 15 },
+      { id: 19, nombre: "Nemontemi", m: 3, d: 7 }
+    ];
 
-        const SECUENCIA_VEINTENA = [1, 8, 2, 9, 3, 10, 4, 11, 5, 12, 6, 13, 7];
+    const SECUENCIA_VEINTENA = [1, 8, 2, 9, 3, 10, 4, 11, 5, 12, 6, 13, 7];
 
-        function calcularTonalli(fechaStr, horaStr) {
-            if (!fechaStr || !horaStr) return null;
-            const [yearStr, monthStr, dayStr] = fechaStr.split('-');
-            const [hourStr, minuteStr] = horaStr.split(':');
-            let anio = parseInt(yearStr);
-            let mes = parseInt(monthStr);
-            let dia = parseInt(dayStr);
-            let hora = parseInt(hourStr);
-            let minuto = parseInt(minuteStr);
-            
-            let fechaInput = new Date(anio, mes - 1, dia, hora, minuto);
-            let residuo = ((anio % 52) + 52) % 52;
-            let datosAnio = TABLA_ANIOS[residuo];
-            if (!datosAnio) return null;
-            
-            let diaInicioAnio = 12;
-            let horaInicio = 0, minInicio = 43;
-            if (datosAnio.s === "Tochtli") horaInicio = 6;
-            if (datosAnio.s === "Acatl")   horaInicio = 12;
-            if (datosAnio.s === "Tecpatl") { horaInicio = 18; diaInicioAnio = 11; }
-            
-            let inicioAnioGregoriano = new Date(anio, 2, diaInicioAnio, horaInicio, minInicio); 
-            if (fechaInput < inicioAnioGregoriano) {
-                anio -= 1;
-                residuo = ((anio % 52) + 52) % 52;
-                datosAnio = TABLA_ANIOS[residuo];
-            }
-
-            let floatNac = hora + (minuto / 60.0);
-            let floatIni = horaInicio + (minInicio / 60.0);
-            let fechaCalculo = new Date(fechaInput);
-            if (floatNac < floatIni) { fechaCalculo.setDate(fechaCalculo.getDate() - 1); }
-
-            let candidatos = [];
-            for (let v of VEINTENAS) {
-                let yV = anio;
-                if (v.m < 3 || v.nombre === "Nemontemi") yV = anio + 1; 
-                let fechaV = new Date(yV, v.m - 1, v.d - (datosAnio.s === "Tecpatl" ? 1 : 0));
-                if (fechaV <= fechaCalculo) { candidatos.push({ v, fechaV }); }
-            }
-            candidatos.sort((a, b) => a.fechaV - b.fechaV);
-            let seleccion = candidatos[candidatos.length - 1];
-            let veintena = seleccion.v;
-
-            if (veintena.nombre === "Nemontemi") return { nemontemi: true };
-
-            const diffDays = Math.floor(Math.abs(fechaCalculo - seleccion.fechaV) / (1000 * 60 * 60 * 24)); 
-            let indiceSigno = (0 + diffDays) % 20;
-            let signoObj = SIGNOS[indiceSigno];
-            let signoNum = indiceSigno + 1;
-
-            let idxSecuencia = SECUENCIA_VEINTENA.indexOf(datosAnio.b);
-            let numeralInicio = SECUENCIA_VEINTENA[(idxSecuencia + (veintena.id - 1)) % 13];
-            let numeral = (numeralInicio + diffDays - 1) % 13 + 1;
-
-            return {
-                signoNum: signoNum,
-                signo: signoObj.es,
-                tonal: { n: numeral, s: signoObj.nombre, emoji: signoObj.emoji }
-            };
+    function calcularTonalli(fechaStr, horaStr) {
+        if (!fechaStr || !horaStr) return null;
+        const [y, m, d] = fechaStr.split('-').map(Number);
+        const [hh, mm] = horaStr.split(':').map(Number);
+        
+        let anio = y;
+        let fechaInput = new Date(y, m - 1, d, hh, mm);
+        let residuo = anio % 52;
+        let datosAnio = TABLA_ANIOS[residuo];
+        
+        let dIni = 12, hIni = 0, mIni = 43;
+        if (datosAnio.s === "Tochtli") hIni = 6;
+        if (datosAnio.s === "Acatl") hIni = 12;
+        if (datosAnio.s === "Tecpatl") { hIni = 18; dIni = 11; }
+        
+        let inicioAnio = new Date(anio, 2, dIni, hIni, mIni);
+        if (fechaInput < inicioAnio) {
+            anio -= 1;
+            datosAnio = TABLA_ANIOS[anio % 52];
         }
 
-        const App = () => {
-            const [fecha, setFecha] = useState("");
-            const [hora, setHora] = useState("");
-            const [resultado, setResultado] = useState(null);
-            const [loading, setLoading] = useState(false);
+        let fNac = hh + (mm / 60), fIni = hIni + (mIni / 60);
+        let fCalc = new Date(fechaInput);
+        if (fNac < fIni) fCalc.setDate(fCalc.getDate() - 1);
 
-            const handleCalculate = () => {
-                if (!fecha || !hora) return;
-                setLoading(true);
-                setResultado(null);
-                
-                setTimeout(() => {
-                    const res = calcularTonalli(fecha, hora);
-                    setResultado(res);
-                    setLoading(false);
-                }, 800);
-            };
+        let candidatos = VEINTENAS.map(v => {
+            let yV = (v.m < 3 || v.nombre === "Nemontemi") ? anio + 1 : anio;
+            let fV = new Date(yV, v.m - 1, v.d - (datosAnio.s === "Tecpatl" ? 1 : 0));
+            return { v, fV };
+        }).filter(item => item.fV <= fCalc).sort((a, b) => b.fV - a.fV);
 
-            return (
-                <div className="min-h-screen bg-gray-50 font-sans text-gray-900 flex items-center justify-center p-4 aztec-pattern">
-                    <div className="max-w-md w-full bg-white/95 backdrop-blur-sm rounded-[2.5rem] shadow-2xl overflow-hidden border border-gray-100">
-                        <div className="pt-10 pb-6 px-8 text-center">
-                            <h1 className="text-4xl font-black tracking-tight text-red-800 mb-2">Tonalpohualli</h1>
-                            <p className="text-gray-500 text-sm font-medium uppercase tracking-widest">Cuenta del Destino</p>
-                        </div>
+        let seleccion = candidatos[0];
+        if (seleccion.v.nombre === "Nemontemi") return { nemontemi: true };
 
-                        <div className="px-8 space-y-4">
-                            <div className="space-y-1">
-                                <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Fecha de Nacimiento</label>
-                                <input 
-                                    type="date" 
-                                    value={fecha} 
-                                    onChange={(e) => setFecha(e.target.value)} 
-                                    className="block w-full px-4 py-4 bg-gray-50 border-none rounded-2xl text-gray-700 font-medium outline-none focus:ring-2 focus:ring-red-100 transition-all" 
-                                />
-                            </div>
-                            <div className="space-y-1">
-                                <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Hora de Nacimiento</label>
-                                <input 
-                                    type="time" 
-                                    value={hora} 
-                                    onChange={(e) => setHora(e.target.value)}
-                                    className="block w-full px-4 py-4 bg-gray-50 border-none rounded-2xl text-gray-700 font-medium outline-none focus:ring-2 focus:ring-red-100 transition-all" 
-                                />
-                            </div>
-                            <button 
-                                onClick={handleCalculate} 
-                                disabled={!fecha || !hora || loading}
-                                className={`w-full py-4 mt-2 rounded-2xl font-bold text-white shadow-lg transition-all active:scale-95 ${(!fecha || !hora || loading) ? 'bg-gray-300' : 'bg-red-700 hover:bg-red-800'}`}
-                            >
-                                {loading ? "Consultando al tiempo..." : "Revelar Destino"}
-                            </button>
-                        </div>
-
-                        <div className="px-6 py-8 min-h-[300px] flex flex-col justify-center">
-                            {resultado && (
-                                <div className="fade-in">
-                                    {resultado.nemontemi ? (
-                                        <div className="bg-orange-50 border border-orange-100 rounded-3xl p-8 text-center">
-                                            <h2 className="text-2xl font-bold text-orange-700">Días Nemontemi</h2>
-                                            <p className="text-orange-600/80 text-sm mt-2">
-                                                Días de silencio y reflexión. No hay una energía de nacimiento asignada en el ciclo tonal.
-                                            </p>
-                                        </div>
-                                    ) : (
-                                        <div className="bg-white rounded-3xl p-6 shadow-sm border border-gray-100 text-center">
-                                            <div className="w-44 h-44 bg-red-50 rounded-full flex items-center justify-center mx-auto mb-6 shadow-inner relative overflow-hidden">
-                                                <span className="text-6xl absolute z-0 opacity-20">{resultado.tonal.emoji}</span>
-                                                <img 
-                                                    src={`signos/${resultado.signoNum}.png`} 
-                                                    alt={resultado.signo}
-                                                    onError={(e) => {
-                                                        e.target.style.display = 'none';
-                                                        e.target.nextSibling.style.display = 'block';
-                                                    }}
-                                                    className="w-32 h-32 object-contain drop-shadow-xl z-10"
-                                                />
-                                                <span className="text-7xl hidden z-10" style={{display: 'none'}}>{resultado.tonal.emoji}</span>
-                                            </div>
-
-                                            <h2 className="text-4xl font-black text-red-900 mb-1">
-                                                {resultado.tonal.n} {resultado.tonal.s}
-                                            </h2>
-                                            <p className="text-xs text-gray-400 uppercase tracking-[0.4em] mb-4">
-                                                ({resultado.signo})
-                                            </p>
-
-                                            <div className="h-px bg-gradient-to-r from-transparent via-gray-200 to-transparent mb-4 w-full" />
-
-                                            <p className="text-sm font-bold text-red-700 uppercase tracking-widest mb-2">
-                                                {INFO_DETALLADA[resultado.signoNum]?.significado}
-                                            </p>
-                                            <p className="text-gray-600 leading-relaxed italic text-sm">
-                                                "{INFO_DETALLADA[resultado.signoNum]?.desc}"
-                                            </p>
-                                        </div>
-                                    )}
-                                </div>
-                            )}
-
-                            {!resultado && !loading && (
-                                <div className="text-center space-y-3 py-10 opacity-40">
-                                    <div className="text-4xl">⏳</div>
-                                    <p className="text-gray-500 font-medium">
-                                        Ingresa tus datos para calcular<br/>tu energía sagrada
-                                    </p>
-                                </div>
-                            )}
-                            
-                            {loading && (
-                                <div className="flex flex-col items-center justify-center py-10 space-y-4">
-                                    <div className="w-12 h-12 border-4 border-red-700 border-t-transparent rounded-full animate-spin"></div>
-                                    <p className="text-red-800 font-bold animate-pulse">Calculando Tonalli...</p>
-                                </div>
-                            )}
-                        </div>
-                    </div>
-                </div>
-            );
+        const diffDays = Math.floor(Math.abs(fCalc - seleccion.fV) / 86400000);
+        let idxSigno = diffDays % 20;
+        let numIni = SECUENCIA_VEINTENA[(SECUENCIA_VEINTENA.indexOf(datosAnio.b) + (seleccion.v.id - 1)) % 13];
+        
+        return {
+            signoNum: idxSigno + 1,
+            signo: SIGNOS[idxSigno].es,
+            tonal: { n: (numIni + diffDays - 1) % 13 + 1, nahuatl: SIGNOS[idxSigno].n }
         };
+    }
 
-        const root = ReactDOM.createRoot(document.getElementById('root'));
-        root.render(<App />);
+    const App = () => {
+      const [fecha, setFecha] = useState("");
+      const [hora, setHora] = useState("");
+      const [resultado, setResultado] = useState(null);
+      const [loading, setLoading] = useState(false);
+
+      const handleCalculate = () => {
+        if(!fecha || !hora) return;
+        setLoading(true);
+        setTimeout(() => {
+          setResultado(calcularTonalli(fecha, hora));
+          setLoading(false);
+        }, 600);
+      };
+
+      return (
+        <div className="min-h-screen flex items-center justify-center p-4">
+          <div className="max-w-md w-full bg-white rounded-[2.5rem] shadow-2xl border border-gray-100 overflow-hidden">
+            
+            <div className="pt-10 pb-6 px-8 text-center">
+              <h1 className="text-3xl font-bold text-gray-900 tracking-tight">Tonalpohualli</h1>
+              <p className="text-gray-400 text-[10px] font-bold uppercase tracking-[0.2em] mt-1">Sabiduría Ancestral</p>
+            </div>
+
+            <div className="px-8 space-y-4">
+              <div className="space-y-1">
+                <label className="text-[10px] font-bold text-gray-400 uppercase ml-1">Fecha</label>
+                <input type="date" value={fecha} onChange={(e) => setFecha(e.target.value)} 
+                       className="w-full px-4 py-4 bg-gray-50 rounded-2xl outline-none focus:ring-2 focus:ring-red-100 border-none" />
+              </div>
+              <div className="space-y-1">
+                <label className="text-[10px] font-bold text-gray-400 uppercase ml-1">Hora</label>
+                <input type="time" value={hora} onChange={(e) => setHora(e.target.value)} 
+                       className="w-full px-4 py-4 bg-gray-50 rounded-2xl outline-none focus:ring-2 focus:ring-red-100 border-none" />
+              </div>
+              <button onClick={handleCalculate} disabled={!fecha || !hora}
+                      className={`w-full py-4 rounded-2xl font-bold text-white shadow-lg transition-all active:scale-95 ${!fecha || !hora ? 'bg-gray-300' : 'bg-black hover:bg-gray-800'}`}>
+                {loading ? "Calculando..." : "Revelar Destino"}
+              </button>
+            </div>
+
+            <div className="px-6 py-8 min-h-[120px]">
+              {resultado && (
+                <div className="fade-in">
+                  {resultado.nemontemi ? (
+                    <div className="text-center p-8 bg-red-50 rounded-3xl border border-red-100">
+                      <div className="text-4xl mb-2">⏳</div>
+                      <h2 className="text-2xl font-bold text-red-800">Nemontemi</h2>
+                      <p className="text-red-600 text-sm">Días de silencio y reflexión.</p>
+                    </div>
+                  ) : (
+                    <div className="bg-white rounded-3xl p-6 border border-gray-100 shadow-xl text-center">
+                      <div className="w-32 h-32 bg-gray-50 rounded-full flex items-center justify-center mx-auto mb-4 border border-gray-100 shadow-inner">
+                        <img 
+                          src={`signos/${resultado.signoNum}.png`} 
+                          className="w-24 h-24 object-contain" 
+                          alt="Signo"
+                          onError={(e) => { e.target.src = "https://via.placeholder.com/100?text=Signo"; }}
+                        />
+                      </div>
+                      <h2 className="text-3xl font-black text-red-900 leading-tight">
+                        {resultado.tonal.n} {INFO_DETALLADA[resultado.signoNum].titulo}
+                      </h2>
+                      <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-4">
+                        ({resultado.signo})
+                      </p>
+                      
+                      <p className="text-xs font-bold text-red-700 uppercase tracking-widest mb-2">
+                        {INFO_DETALLADA[resultado.signoNum].significado}
+                      </p>
+                      
+                      <p className="text-gray-600 text-sm italic mb-6 leading-relaxed">
+                        "{INFO_DETALLADA[resultado.signoNum].desc}"
+                      </p>
+
+                      <div className="grid grid-cols-2 gap-3 text-left">
+                        <div className="bg-amber-50 p-4 rounded-2xl border-l-4 border-amber-400">
+                          <span className="text-[9px] font-bold text-amber-800 uppercase block mb-1">🌑 Sombra</span>
+                          <p className="text-[11px] text-amber-900 leading-tight">{INFO_DETALLADA[resultado.signoNum].sombra}</p>
+                        </div>
+                        <div className="bg-green-50 p-4 rounded-2xl border-l-4 border-green-400">
+                          <span className="text-[9px] font-bold text-green-800 uppercase block mb-1">✨ Aprendizaje</span>
+                          <p className="text-[11px] text-green-900 leading-tight">{INFO_DETALLADA[resultado.signoNum].aprendizaje}</p>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      );
+    };
+
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    root.render(<App />);
     </script>
 </body>
 </html>
