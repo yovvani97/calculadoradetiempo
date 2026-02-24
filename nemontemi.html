@@ -14,11 +14,11 @@
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 
     <style>
-        body { -webkit-tap-highlight-color: transparent; background-color: #f9fafb; }
-        .bg-nemontemi-header { background: linear-gradient(135deg, #1a1a1a 0%, #434343 100%); }
-        .fade-in { animation: fadeIn 0.6s ease-out forwards; }
+        body { -webkit-tap-highlight-color: transparent; background-color: #f3f4f6; }
+        .bg-nemontemi-header { background: linear-gradient(135deg, #000000 0%, #2d2d2d 100%); }
+        .fade-in { animation: fadeIn 0.8s ease-out forwards; }
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
+            from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
         }
     </style>
@@ -44,17 +44,17 @@
         ];
 
         const AVES_DIA = [
-            { nahuatl: "Nexhuitzillin", es: "Pájaro Espina Gris" }, { nahuatl: "Quetzahuitzillin", es: "Pájaro Espina Hermoso" },
+            { nahuatl: "Nexhuitzillin", es: "Pájaro Espina" }, { nahuatl: "Quetzahuitzillin", es: "Pájaro Hermoso" },
             { nahuatl: "Tototzin", es: "Halcón" }, { nahuatl: "Zolin", es: "Codorniz" },
             { nahuatl: "Acalotl", es: "Cuervo" }, { nahuatl: "Chicoatli", es: "Lechuza" },
-            { nahuatl: "Papalotl", es: "Mariposa" }, { nahuatl: "Ixcuauhtli", es: "Águila de Obsidiana" },
+            { nahuatl: "Papalotl", es: "Mariposa" }, { nahuatl: "Ixcuauhtli", es: "Águila Obsidiana" },
             { nahuatl: "Chalchiuhtotolin", es: "Guajolote" }, { nahuatl: "Tecolotl", es: "Tecolote" },
-            { nahuatl: "Alotl", es: "Guacamaya" }, { nahuatl: "Quetzatototl", es: "Pájaro Quetzal" },
+            { nahuatl: "Alotl", es: "Guacamaya" }, { nahuatl: "Quetzatototl", es: "Quetzal" },
             { nahuatl: "Toznene", es: "Papagayo" }
         ];
 
         const SENORES_NOCHE = [{ nombre: "Xiuhtecuhtli" }, { nombre: "Itztli" }, { nombre: "Piziltecuhtli" }, { nombre: "Centeotl" }, { nombre: "Mictlantecuhtli" }, { nombre: "Chalchihuitlicue" }, { nombre: "Tlazoltéotl" }, { nombre: "Tepeyólotl" }, { nombre: "Tláloc" }];
-        const ACOMPANANTES_NOCHE = [{ nahuatl: "Colotl", es: "Escorpión" }, { nahuatl: "Tzinacantli", es: "Murciélago" }, { nahuatl: "Coyotl", es: "Coyote" }, { nahuatl: "Tocatl", es: "Araña" }, { nahuatl: "Tecolotl", es: "Tecolote" }, { nahuatl: "Coatl", es: "Serpiente" }, { nahuatl: "Izpapalotl", es: "Mariposa de Obsidiana" }, { nahuatl: "Ocelotl", es: "Jaguar" }, { nahuatl: "Petlalzocoatl", es: "Ciempiés" }];
+        const ACOMPANANTES_NOCHE = [{ nahuatl: "Colotl" }, { nahuatl: "Tzinacantli" }, { nahuatl: "Coyotl" }, { nahuatl: "Tocatl" }, { nahuatl: "Tecolotl" }, { nahuatl: "Coatl" }, { nahuatl: "Izpapalotl" }, { nahuatl: "Ocelotl" }, { nahuatl: "Petlalzocoatl" }];
         
         const TIME_FRONTIERS = { CALLI: "00:43", TOCHTLI: "06:43", ACATL: "12:43", TECPATL: "18:43" };
         const RESIDUE_TABLE = {
@@ -71,13 +71,12 @@
         };
         const NUMERAL_START = [1, 6, 11, 3, 8, 13, 5, 10, 2, 7, 12, 4, 9];
 
-        // --- COMPONENTES ---
         const CardResult = ({ title, main, sub, icon }) => (
-            <div className="bg-white rounded-3xl p-5 shadow-sm border border-gray-100 flex flex-col items-center justify-center text-center">
-                <div className="mb-2 text-2xl">{icon}</div>
-                <div className="text-[9px] font-bold tracking-widest text-gray-400 uppercase mb-1">{title}</div>
-                <div className="text-sm font-bold text-gray-800 leading-tight">{main}</div>
-                <div className="text-[9px] text-gray-500 font-medium">{sub}</div>
+            <div className="bg-white rounded-3xl p-4 shadow-sm border border-gray-100 flex flex-col items-center justify-center text-center">
+                <div className="text-xl mb-1">{icon}</div>
+                <div className="text-[8px] font-bold tracking-widest text-gray-400 uppercase mb-1">{title}</div>
+                <div className="text-xs font-bold text-gray-800 leading-tight">{main}</div>
+                <div className="text-[8px] text-gray-400 font-medium uppercase">{sub}</div>
             </div>
         );
 
@@ -87,20 +86,13 @@
             useEffect(() => {
                 const params = new URLSearchParams(window.location.search);
                 const f = params.get('fecha'), h = params.get('hora');
-                
-                if (f && h) {
-                    calculate(f, h);
-                } else {
-                    // Si no hay parámetros, regresa al inicio
-                    window.location.href = 'index.html';
-                }
+                if (f && h) calculate(f, h);
+                else window.location.href = 'index.html';
             }, []);
 
             const calculate = (fechaStr, horaStr) => {
                 const [anioI, mesI, diaI] = fechaStr.split('-').map(Number);
                 const [hI, mI] = horaStr.split(':').map(Number);
-                
-                // Determinamos el año base (el ciclo inicia el 12 de marzo)
                 const baseYear = (mesI < 3 || (mesI === 3 && diaI < 12)) ? anioI - 1 : anioI;
                 const residue = baseYear % 52;
                 
@@ -114,13 +106,9 @@
 
                 const [fH, fM] = TIME_FRONTIERS[yearType].split(':').map(Number);
                 let effectiveDay = (hI * 60 + mI < fH * 60 + fM) ? diaI - 1 : diaI;
-                
-                // El Nemontemi ocurre justo antes del 12 de marzo (o 11 si es Tecpatl)
-                // Usamos una lógica de validación basada en el día relativo al inicio
                 let nemStartDay = (yearType === 'ACATL' || yearType === 'TECPATL') ? 6 : 7;
                 let dayIdx = effectiveDay - nemStartDay;
 
-                // VALIDACIÓN CRÍTICA: Si no está en el rango 0-4 (los 5 días), redirigir
                 if (dayIdx < 0 || dayIdx > 4 || mesI !== 3) {
                     window.location.href = 'index.html';
                     return;
@@ -131,10 +119,6 @@
                 const indiceSigno = SIGNOS.findIndex(s => s.nombre === nombreSigno);
                 const finalNumeral = (NUMERAL_START[yearNum - 1] + dayIdx - 1) % 13 + 1;
 
-                const nahualObj = SIGNOS[(indiceSigno + 10) % 20];
-                let idxTrecena = (indiceSigno - (finalNumeral - 1)) % 20;
-                if (idxTrecena < 0) idxTrecena += 20;
-
                 let tonalIndex = -1;
                 for (let i = 0; i < 260; i++) {
                     if (i % 13 === (finalNumeral - 1) && i % 20 === indiceSigno) { tonalIndex = i; break; }
@@ -143,8 +127,9 @@
                 setResultado({
                     numeral: finalNumeral,
                     signo: signoObj,
-                    nahual: nahualObj,
-                    trecena: SIGNOS[idxTrecena],
+                    signoNum: indiceSigno + 1,
+                    nahual: SIGNOS[(indiceSigno + 10) % 20],
+                    trecena: SIGNOS[(indiceSigno - (finalNumeral - 1) + 20) % 20],
                     ave: AVES_DIA[finalNumeral - 1],
                     noche: SENORES_NOCHE[tonalIndex % 9],
                     acomp: ACOMPANANTES_NOCHE[tonalIndex % 9],
@@ -155,57 +140,67 @@
 
             return (
                 <div className="min-h-screen flex items-center justify-center p-4">
-                    <div className="max-w-md w-full bg-white rounded-[2.5rem] shadow-2xl overflow-hidden border border-gray-100 fade-in">
-                        <div className="pt-10 pb-8 px-8 text-center bg-nemontemi-header text-white">
-                            <h1 className="text-3xl font-bold tracking-tight mb-1 uppercase">Nemontemi</h1>
-                            <p className="opacity-60 text-[10px] font-bold uppercase tracking-[0.3em]">Días de Guardia e Introspección</p>
+                    <div className="max-w-md w-full bg-white rounded-[2.5rem] shadow-2xl border border-gray-100 overflow-hidden">
+                        
+                        <div className="pt-10 pb-6 px-8 text-center bg-nemontemi-header text-white">
+                            <h1 className="text-3xl font-bold tracking-tight">Nemontemi</h1>
+                            <p className="opacity-50 text-[10px] font-bold uppercase tracking-[0.3em] mt-1">Días de Guardia</p>
                         </div>
 
-                        <div className="px-6 py-6 space-y-4">
+                        <div className="px-6 py-8">
                             {resultado ? (
-                                <>
-                                    <div className="grid grid-cols-2 gap-3">
-                                        <div className="col-span-1 bg-black rounded-3xl p-6 text-white flex flex-col items-center justify-center shadow-xl">
-                                            <div className="text-[8px] font-bold opacity-50 uppercase tracking-widest mb-2">Tonal</div>
+                                <div className="fade-in space-y-4">
+                                    {/* Card Principal Estilo Index */}
+                                    <div className="bg-white rounded-3xl p-6 border border-gray-100 shadow-xl text-center">
+                                        <div className="w-32 h-32 bg-gray-50 rounded-full flex items-center justify-center mx-auto mb-4 border border-gray-100 shadow-inner">
                                             <img 
-                                                src={`img/signos/${SIGNOS.findIndex(s => s.nombre === resultado.signo.nombre) + 1}.png`} 
-                                                className="w-20 h-20 object-contain my-2 invert" 
+                                                src={`signos/${resultado.signoNum}.png`} 
+                                                className="w-24 h-24 object-contain" 
                                                 alt="Signo"
-                                                onError={(e) => { e.target.style.display='none'; }}
+                                                onError={(e) => { e.target.src = "https://via.placeholder.com/100?text=Nemontemi"; }}
                                             />
-                                            <div className="text-3xl font-black">{resultado.numeral}</div>
-                                            <div className="text-[10px] font-bold uppercase">{resultado.signo.nombre}</div>
                                         </div>
+                                        <h2 className="text-3xl font-black text-gray-900 leading-tight">
+                                            {resultado.numeral} {resultado.signo.nombre}
+                                        </h2>
+                                        <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-6">
+                                            (Día {resultado.diaNem} del Tiempo de Guardia)
+                                        </p>
 
-                                        <div className="space-y-3">
+                                        {/* Grid de Detalles */}
+                                        <div className="grid grid-cols-2 gap-3 text-left">
                                             <CardResult title="Nahual" main={resultado.nahual.nombre} sub={resultado.nahual.es} icon={resultado.nahual.emoji} />
-                                            <CardResult title="Trecena" main={resultado.trecena.nombre} sub="Fuerza Guía" icon={resultado.trecena.emoji} />
-                                        </div>
-                                    </div>
+                                            <CardResult title="Trecena" main={resultado.trecena.nombre} sub="Rige el ciclo" icon={resultado.trecena.emoji} />
+                                            
+                                            <div className="bg-emerald-50 rounded-2xl p-4 border border-emerald-100">
+                                                <span className="text-[8px] font-bold text-emerald-800 uppercase block mb-1">Ave Sagrada</span>
+                                                <p className="text-[11px] font-bold text-emerald-900">{resultado.ave.nahuatl}</p>
+                                                <p className="text-[9px] text-emerald-600 italic">{resultado.ave.es}</p>
+                                            </div>
 
-                                    <div className="grid grid-cols-2 gap-3">
-                                        <div className="bg-emerald-50 rounded-2xl p-4 text-center border border-emerald-100">
-                                            <div className="text-[9px] uppercase font-bold text-gray-400">Ave</div>
-                                            <div className="text-xs font-bold text-gray-800">{resultado.ave.nahuatl}</div>
+                                            <div className="bg-slate-900 rounded-2xl p-4 border border-slate-700 text-white">
+                                                <span className="text-[8px] font-bold text-slate-400 uppercase block mb-1">Señor Noche</span>
+                                                <p className="text-[11px] font-bold">{resultado.noche.nombre}</p>
+                                                <p className="text-[9px] text-indigo-300">{resultado.acomp.nahuatl}</p>
+                                            </div>
                                         </div>
-                                        <div className="bg-slate-900 rounded-2xl p-4 text-center text-white">
-                                            <div className="text-[9px] uppercase font-bold text-slate-500">Señor Noche</div>
-                                            <div className="text-xs font-bold">{resultado.noche.nombre}</div>
-                                        </div>
-                                    </div>
 
-                                    <div className="bg-slate-50 rounded-2xl p-4 text-center border border-slate-100">
-                                        <div className="text-[9px] font-bold text-gray-400 uppercase">Progreso</div>
-                                        <div className="text-xs font-bold text-slate-700 uppercase">{resultado.anio} • Día {resultado.diaNem} de 5</div>
+                                        <div className="mt-6 bg-gray-50 rounded-2xl p-3 border border-gray-100">
+                                            <p className="text-[9px] font-bold text-gray-400 uppercase">Contexto Anual</p>
+                                            <p className="text-xs font-bold text-gray-700 uppercase">{resultado.anio}</p>
+                                        </div>
                                     </div>
 
                                     <button onClick={() => window.location.href='index.html'} 
-                                            className="w-full py-4 rounded-2xl font-bold text-gray-500 border border-gray-100 hover:bg-gray-50 transition-all text-[10px] uppercase tracking-widest">
-                                        Volver al inicio
+                                            className="w-full py-4 rounded-2xl font-bold text-gray-400 border border-gray-100 hover:bg-gray-50 transition-all text-[10px] uppercase tracking-widest">
+                                        ← Salir del Tiempo de Guardia
                                     </button>
-                                </>
+                                </div>
                             ) : (
-                                <div className="py-20 text-center"><p className="text-gray-400 animate-pulse uppercase text-xs font-bold tracking-widest">Validando tiempo sagrado...</p></div>
+                                <div className="py-20 text-center">
+                                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900 mx-auto mb-4"></div>
+                                    <p className="text-gray-400 text-xs font-bold uppercase tracking-widest">Calculando...</p>
+                                </div>
                             )}
                         </div>
                     </div>
