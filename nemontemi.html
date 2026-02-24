@@ -180,14 +180,21 @@
 <img 
   src={`img/signos/${SIGNOS.findIndex(s => s.nombre === resultado.signo.nombre) + 1}.png`} 
   alt={resultado.signo.nombre}
-  className="w-24 h-24 object-contain my-2"
-/>                                            <div className="text-4xl font-black">{resultado.numeral}</div>
+  className="w-24 h-24 object-contain my-3"
+/>
+
+<div className="text-4xl font-black">
+  {resultado.numeral}
+</div>
+
 <div className="text-sm font-bold uppercase tracking-wider mt-2">
   {resultado.signo.nombre}
 </div>
+
 <div className="text-[10px] text-gray-400 uppercase tracking-[0.3em]">
   {resultado.signo.es}
-</div>                                        </div>
+</div>
+                                            </div>
 
                                         <CardResult title="Nahual" main={resultado.nahual.nombre} sub={resultado.nahual.es} icon={resultado.nahual.emoji} />
                                         <CardResult title="Trecena" main={resultado.trecena.nombre} sub="Rige el ciclo" icon={resultado.trecena.emoji} />
