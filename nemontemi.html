@@ -29,46 +29,41 @@
     <script type="text/babel">
         const { useState, useEffect } = React;
 
-        // --- CONSTANTES ---
+        // --- DICCIONARIO DE DESCRIPCIONES ---
+        const DESCRIPCIONES = {
+            "Cipactli": "Representa el origen, la abundancia y la fuerza creadora primordial. Es un día para iniciar proyectos con bases sólidas.",
+            "Ehecatl": "Símbolo de la comunicación, el espíritu y el aliento de vida. Invita a la flexibilidad y a dejar fluir las ideas.",
+            "Calli": "El refugio, la mente y el cuerpo físico. Es un tiempo para mirar hacia adentro y fortalecer nuestro hogar interno.",
+            "Cuetzpalin": "Símbolo de la regeneración y la agilidad. Representa la capacidad de adaptarse y sanar rápidamente.",
+            "Coatl": "La energía vital y la sabiduría terrenal. Día para conectar con el instinto y la transformación espiritual.",
+            "Miquiztli": "No es el fin, sino la transición. Representa la quietud, la reflexión y el soltar lo que ya no sirve.",
+            "Mazatl": "El guía elusivo y sagrado. Representa la intuición, la vigilancia y la conexión con lo divino en la naturaleza.",
+            "Tochtli": "Símbolo de la fertilidad y la autogestión. Invita a la previsión y a disfrutar de los frutos del esfuerzo.",
+            "Atl": "La fuerza emocional y la purificación. Día para limpiar el espíritu y dejar que los sentimientos fluyan.",
+            "Itzcuintli": "El guía fiel del alma. Representa la lealtad inquebrantable, la protección de la manada y el instinto agudo.",
+            "Ozomatli": "La alegría, el arte y el juego. Es un día para celebrar la vida con creatividad y sin complicaciones.",
+            "Malinalli": "La hierba que persiste. Representa la tenacidad, la renovación constante y la fuerza de la comunidad.",
+            "Acatl": "Símbolo de la autoridad espiritual y la rectitud. Día para buscar la sabiduría y elevar la conciencia.",
+            "Ocelotl": "El guerrero nocturno y el misterio. Representa la valentía, el poder oculto y la visión en la oscuridad.",
+            "Cuauhtli": "La visión elevada y la libertad. Es un tiempo para ver el panorama completo y aspirar a lo más alto.",
+            "Cozcaquauhtli": "El limpiador y el sabio anciano. Representa la longevidad, la paciencia y el reciclaje de la energía.",
+            "Ollin": "El movimiento perpetuo y el cambio. Nos recuerda que la vida es un ciclo constante de evolución.",
+            "Tecpatl": "La verdad cortante y la disciplina. Día para tomar decisiones firmes y separar lo real de lo ilusorio.",
+            "Quiahuitl": "La bendición de la lluvia y la fertilidad emocional. Representa el alivio y el crecimiento tras la tormenta.",
+            "Xochitl": "La belleza, el arte y la plenitud. Es el florecimiento del alma y la conexión con el placer sagrado."
+        };
+
         const SIGNOS_DATA = [
-            { n: "Cipactli", es: "Caimán" }, { n: "Ehecatl", es: "Viento" },
-            { n: "Calli", es: "Casa" }, { n: "Cuetzpalin", es: "Lagartija" },
-            { n: "Coatl", es: "Serpiente" }, { n: "Miquiztli", es: "Muerte" },
-            { n: "Mazatl", es: "Venado" }, { n: "Tochtli", es: "Conejo" },
-            { n: "Atl", es: "Agua" }, { n: "Itzcuintli", es: "Perro" },
-            { n: "Ozomatli", es: "Mono" }, { n: "Malinalli", es: "Hierba" },
-            { n: "Acatl", es: "Caña" }, { n: "Ocelotl", es: "Jaguar" },
-            { n: "Cuauhtli", es: "Águila" }, { n: "Cozcaquauhtli", es: "Zopilote" },
-            { n: "Ollin", es: "Movimiento" }, { n: "Tecpatl", es: "Pedernal" },
-            { n: "Quiahuitl", es: "Lluvia" }, { n: "Xochitl", es: "Flor" }
+            { n: "Cipactli", es: "Caimán" }, { n: "Ehecatl", es: "Viento" }, { n: "Calli", es: "Casa" }, { n: "Cuetzpalin", es: "Lagartija" }, { n: "Coatl", es: "Serpiente" },
+            { n: "Miquiztli", es: "Muerte" }, { n: "Mazatl", es: "Venado" }, { n: "Tochtli", es: "Conejo" }, { n: "Atl", es: "Agua" }, { n: "Itzcuintli", es: "Perro" },
+            { n: "Ozomatli", es: "Mono" }, { n: "Malinalli", es: "Hierba" }, { n: "Acatl", es: "Caña" }, { n: "Ocelotl", es: "Jaguar" }, { n: "Cuauhtli", es: "Águila" },
+            { n: "Cozcaquauhtli", es: "Zopilote" }, { n: "Ollin", es: "Movimiento" }, { n: "Tecpatl", es: "Pedernal" }, { n: "Quiahuitl", es: "Lluvia" }, { n: "Xochitl", es: "Flor" }
         ];
 
-        const AVES_DIA = [
-            { nahuatl: "Nexhuitzillin", es: "Pájaro Espina" }, { nahuatl: "Quetzahuitzillin", es: "Pájaro Hermoso" },
-            { nahuatl: "Tototzin", es: "Halcón" }, { nahuatl: "Zolin", es: "Codorniz" },
-            { nahuatl: "Acalotl", es: "Cuervo" }, { nahuatl: "Chicoatli", es: "Lechuza" },
-            { nahuatl: "Papalotl", es: "Mariposa" }, { nahuatl: "Ixcuauhtli", es: "Águila Obsidiana" },
-            { nahuatl: "Chalchiuhtotolin", es: "Guajolote" }, { nahuatl: "Tecolotl", es: "Tecolote" },
-            { nahuatl: "Alotl", es: "Guacamaya" }, { nahuatl: "Quetzatototl", es: "Quetzal" },
-            { nahuatl: "Toznene", es: "Papagayo" }
-        ];
-
+        const AVES_DIA = [{ nahuatl: "Nexhuitzillin", es: "Pájaro Espina" }, { nahuatl: "Quetzahuitzillin", es: "Pájaro Hermoso" }, { nahuatl: "Tototzin", es: "Halcón" }, { nahuatl: "Zolin", es: "Codorniz" }, { nahuatl: "Acalotl", es: "Cuervo" }, { nahuatl: "Chicoatli", es: "Lechuza" }, { nahuatl: "Papalotl", es: "Mariposa" }, { nahuatl: "Ixcuauhtli", es: "Águila Obsidiana" }, { nahuatl: "Chalchiuhtotolin", es: "Guajolote" }, { nahuatl: "Tecolotl", es: "Tecolote" }, { nahuatl: "Alotl", es: "Guacamaya" }, { nahuatl: "Quetzatototl", es: "Quetzal" }, { nahuatl: "Toznene", es: "Papagayo" }];
         const SENORES_NOCHE = [{ n: "Xiuhtecuhtli" }, { n: "Itztli" }, { n: "Piziltecuhtli" }, { n: "Centeotl" }, { n: "Mictlantecuhtli" }, { n: "Chalchihuitlicue" }, { n: "Tlazoltéotl" }, { n: "Tepeyólotl" }, { n: "Tláloc" }];
-        
-        const RESIDUE_TABLE = {
-            CALLI: [37, 25, 13, 1, 41, 29, 17, 5, 45, 33, 21, 9, 49],
-            TOCHTLI: [50, 38, 26, 14, 2, 42, 30, 18, 6, 46, 34, 22, 10],
-            ACATL: [11, 51, 39, 27, 15, 3, 43, 31, 19, 7, 47, 35, 23],
-            TECPATL: [24, 12, 0, 40, 28, 16, 4, 44, 32, 20, 8, 48, 36]
-        };
-
-        const NEMONTEMI_SEQUENCES = {
-            TOCHTLI: ["Cipactli", "Ehecatl", "Calli", "Cuetzpalin", "Coatl"],
-            ACATL: ["Miquiztli", "Mazatl", "Tochtli", "Atl", "Itzcuintli"],
-            TECPATL: ["Ozomatli", "Malinalli", "Acatl", "Ocelotl", "Cuauhtli"],
-            CALLI: ["Cozcaquauhtli", "Ollin", "Tecpatl", "Quiahuitl", "Xochitl"]
-        };
-
+        const RESIDUE_TABLE = { CALLI: [37, 25, 13, 1, 41, 29, 17, 5, 45, 33, 21, 9, 49], TOCHTLI: [50, 38, 26, 14, 2, 42, 30, 18, 6, 46, 34, 22, 10], ACATL: [11, 51, 39, 27, 15, 3, 43, 31, 19, 7, 47, 35, 23], TECPATL: [24, 12, 0, 40, 28, 16, 4, 44, 32, 20, 8, 48, 36] };
+        const NEMONTEMI_SEQUENCES = { TOCHTLI: ["Cipactli", "Ehecatl", "Calli", "Cuetzpalin", "Coatl"], ACATL: ["Miquiztli", "Mazatl", "Tochtli", "Atl", "Itzcuintli"], TECPATL: ["Ozomatli", "Malinalli", "Acatl", "Ocelotl", "Cuauhtli"], CALLI: ["Cozcaquauhtli", "Ollin", "Tecpatl", "Quiahuitl", "Xochitl"] };
         const NUMERAL_START = [1, 6, 11, 3, 8, 13, 5, 10, 2, 7, 12, 4, 9];
 
         const App = () => {
@@ -84,102 +79,94 @@
             const calculate = (fechaStr, horaStr) => {
                 const [y, m, d] = fechaStr.split('-').map(Number);
                 const [hh, mm] = horaStr.split(':').map(Number);
-                
                 const baseYear = (m < 3 || (m === 3 && d < 12)) ? y - 1 : y;
                 const residue = baseYear % 52;
                 
-                let yType = "", yNum = 0;
+                let yType = ""; let yNum = 0;
                 for (const [type, list] of Object.entries(RESIDUE_TABLE)) {
                     const idx = list.indexOf(residue);
                     if (idx !== -1) { yType = type; yNum = idx + 1; break; }
                 }
-
                 if (!yType) return window.location.href = 'index.html';
 
-                // Lógica de frontera de tiempo para Nemontemi
                 const frontiers = { CALLI: [0,43], TOCHTLI: [6,43], ACATL: [12,43], TECPATL: [18,43] };
                 const [fH, fM] = frontiers[yType];
                 let effDay = (hh * 60 + mm < fH * 60 + fM) ? d - 1 : d;
                 let nemStart = (yType === 'ACATL' || yType === 'TECPATL') ? 6 : 7;
                 let dayIdx = effDay - nemStart;
 
-                if (dayIdx < 0 || dayIdx > 4 || m !== 3) {
-                    window.location.href = 'index.html';
-                    return;
-                }
+                if (dayIdx < 0 || dayIdx > 4 || m !== 3) { window.location.href = 'index.html'; return; }
 
                 const sName = NEMONTEMI_SEQUENCES[yType][dayIdx];
                 const sIdx = SIGNOS_DATA.findIndex(s => s.n === sName);
                 const numeral = (NUMERAL_START[yNum - 1] + dayIdx - 1) % 13 + 1;
-
-                // Para encontrar el Señor de la Noche necesitamos el índice absoluto en el Tonalpohualli (0-259)
                 let tonalIndex = 0;
-                for (let i = 0; i < 260; i++) {
-                    if (i % 13 === (numeral - 1) && i % 20 === sIdx) { tonalIndex = i; break; }
-                }
+                for (let i = 0; i < 260; i++) { if (i % 13 === (numeral - 1) && i % 20 === sIdx) { tonalIndex = i; break; } }
 
                 setRes({
                     numeral,
-                    signoNahuatl: sName,
-                    signoEsp: SIGNOS_DATA[sIdx].es,
-                    imgNum: sIdx + 1, // CIPACTLI = 1, etc.
+                    sName,
+                    sEsp: SIGNOS_DATA[sIdx].es,
+                    imgNum: sIdx + 1,
                     diaNem: dayIdx + 1,
+                    desc: DESCRIPCIONES[sName],
                     ave: AVES_DIA[numeral - 1],
                     noche: SENORES_NOCHE[tonalIndex % 9],
-                    anioContexto: `${yNum} ${yType}`
+                    anio: `${yNum} ${yType}`
                 });
             };
 
-            if (!res) return <div className="min-h-screen flex items-center justify-center bg-gray-100 uppercase text-[10px] font-bold tracking-widest text-gray-400">Validando tiempo...</div>;
+            if (!res) return <div className="min-h-screen flex items-center justify-center bg-gray-100 uppercase text-[10px] font-bold tracking-widest text-gray-400">Calculando tiempo sagrado...</div>;
 
             return (
                 <div className="min-h-screen flex items-center justify-center p-4">
                     <div className="max-w-md w-full bg-white rounded-[2.5rem] shadow-2xl border border-gray-100 overflow-hidden fade-in">
                         
                         <div className="pt-10 pb-6 px-8 text-center bg-nemontemi-header text-white">
-                            <h1 className="text-3xl font-bold tracking-tight">Nemontemi</h1>
-                            <p className="opacity-50 text-[10px] font-bold uppercase tracking-[0.3em] mt-1">Días de Guardia</p>
+                            <h1 className="text-3xl font-bold tracking-tight uppercase">Nemontemi</h1>
+                            <p className="opacity-50 text-[10px] font-bold uppercase tracking-[0.3em] mt-1">El Tiempo de Introspección</p>
                         </div>
 
                         <div className="px-6 py-8 text-center">
-                            {/* IMAGEN CORREGIDA - Ruta exacta: signos/X.png */}
                             <div className="w-32 h-32 bg-gray-50 rounded-full flex items-center justify-center mx-auto mb-4 border border-gray-100 shadow-inner">
-                                <img 
-                                    src={`signos/${res.imgNum}.png`} 
-                                    className="w-24 h-24 object-contain" 
-                                    alt={res.signoNahuatl}
-                                    onError={(e) => { e.target.src = "https://via.placeholder.com/100?text=Nemontemi"; }}
-                                />
+                                <img src={`signos/${res.imgNum}.png`} className="w-24 h-24 object-contain" alt={res.sName} />
                             </div>
 
                             <h2 className="text-3xl font-black text-gray-900 leading-tight">
-                                {res.numeral} {res.signoNahuatl}
+                                {res.numeral} {res.sName}
                             </h2>
-                            <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-6">
-                                ({res.signoEsp} • Día {res.diaNem} de 5)
+                            <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-4">
+                                ({res.sEsp} • Día {res.diaNem} de 5)
                             </p>
 
-                            <div className="grid grid-cols-2 gap-3 mt-4 text-left">
-                                <div className="bg-emerald-50 rounded-2xl p-4 border border-emerald-100 col-span-1">
-                                    <span className="text-[8px] font-bold text-emerald-800 uppercase block mb-1">Ave de Acompañamiento</span>
-                                    <p className="text-[11px] font-bold text-emerald-900 leading-tight">{res.ave.nahuatl}</p>
+                            {/* NUEVA SECCIÓN DE DESCRIPCIÓN */}
+                            <div className="mb-6 px-4 py-4 bg-gray-50 rounded-3xl border border-gray-100 italic">
+                                <p className="text-[11px] text-gray-600 leading-relaxed italic">
+                                    "{res.desc}"
+                                </p>
+                            </div>
+
+                            <div className="grid grid-cols-2 gap-3 text-left">
+                                <div className="bg-emerald-50 rounded-2xl p-4 border border-emerald-100">
+                                    <span className="text-[8px] font-bold text-emerald-800 uppercase block mb-1">Ave Sagrada</span>
+                                    <p className="text-[11px] font-bold text-emerald-900">{res.ave.nahuatl}</p>
                                     <p className="text-[9px] text-emerald-600 italic">{res.ave.es}</p>
                                 </div>
-                                <div className="bg-slate-900 rounded-2xl p-4 border border-slate-700 text-white col-span-1">
-                                    <span className="text-[8px] font-bold text-slate-400 uppercase block mb-1">Señor de la Noche</span>
+                                <div className="bg-slate-900 rounded-2xl p-4 border border-slate-700 text-white">
+                                    <span className="text-[8px] font-bold text-slate-400 uppercase block mb-1">Señor Noche</span>
                                     <p className="text-[11px] font-bold text-white">{res.noche.n}</p>
-                                    <p className="text-[9px] text-slate-400 italic">Rige la oscuridad</p>
+                                    <p className="text-[9px] text-slate-400 italic">Protector nocturno</p>
                                 </div>
                             </div>
 
                             <div className="mt-6 bg-gray-50 rounded-2xl p-3 border border-gray-100">
-                                <p className="text-[8px] font-bold text-gray-400 uppercase tracking-tighter">Año del Ciclo Actual</p>
-                                <p className="text-xs font-bold text-gray-700 uppercase">{res.anioContexto}</p>
+                                <p className="text-[8px] font-bold text-gray-400 uppercase tracking-tighter">Contexto Ciclo Solar</p>
+                                <p className="text-xs font-bold text-gray-700 uppercase">{res.anio}</p>
                             </div>
 
                             <button onClick={() => window.location.href='index.html'} 
                                     className="w-full mt-8 py-4 rounded-2xl font-bold text-gray-400 border border-gray-100 hover:bg-gray-50 transition-all text-[10px] uppercase tracking-widest">
-                                ← Volver al Calendario Principal
+                                ← Volver al Inicio
                             </button>
                         </div>
                     </div>
