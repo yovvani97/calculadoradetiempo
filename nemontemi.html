@@ -123,10 +123,18 @@
                 
                 let yearType = "", yearNum = 0;
                 for (const [type, list] of Object.entries(RESIDUE_TABLE)) {
-                    const idx = list.indexOf(residue);
-                    if (idx !== -1) { yearType = type; yearNum = idx + 1; break; }
-                }
+    const idx = list.indexOf(residue);
+    if (idx !== -1) { 
+        yearType = type; 
+        yearNum = idx + 1; 
+        break; 
+    }
+}
 
+if (!yearType) {
+    console.error("No se encontró yearType para residue:", residue);
+    return;
+}
                 const [fH, fM] = TIME_FRONTIERS[yearType].split(':').map(Number);
                 let effectiveDay = (hI * 60 + mI < fH * 60 + fM) ? diaI - 1 : diaI;
                 let nemStartDay = (yearType === 'ACATL' || yearType === 'TECPATL') ? 6 : 7;
