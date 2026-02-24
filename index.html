@@ -195,8 +195,9 @@
         let hora = parseInt(hourStr);
         let minuto = parseInt(minuteStr);
         let fechaInput = new Date(anio, mes - 1, dia, hora, minuto);
-        let residuo = anio % 52;
+        let residuo = ((anio % 52) + 52) % 52;
         let datosAnio = TABLA_ANIOS[residuo];
+        if (!datosAnio) return null;
         
         let diaInicioAnio = 12;
         let horaInicio = 0, minInicio = 43;
@@ -294,7 +295,8 @@
 
             <div className="px-6 py-8">
 
-  {resultado && (
+{resultado && typeof resultado === "object" && (
+    
     <div className="fade-in">
       {resultado.nemontemi ? (
         <div className="bg-red-50 border border-red-100 rounded-3xl p-8 text-center animate-pulse">
@@ -362,6 +364,7 @@
     </script>
 </body>
 </html>
+
 
 
 
