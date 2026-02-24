@@ -293,54 +293,57 @@
             </div>
 
             <div className="px-6 py-8">
-{resultado.tonal.n}
-                <div className="fade-in">
-                  {resultado.nemontemi ? (
-                    <div className="bg-red-50 border border-red-100 rounded-3xl p-8 text-center animate-pulse">
-                      <h2 className="text-2xl font-bold text-red-700">Nemontemi</h2>
-                      <p className="text-red-600/80 text-sm">Días de reflexión. No hay Tonal asignado.</p>
-                    </div>
-                  ) : (
-                    <div className="bg-white rounded-3xl p-6 shadow-2xl border border-gray-100">
-                      <div className="flex flex-col items-center text-center">
-                        <div className="w-40 h-40 bg-gray-50 rounded-full flex items-center justify-center mb-4 shadow-inner">
-                          <img 
-                            src={`signos/${resultado.signoNum}.png`} 
-                            alt={resultado.signo}
-                            className="w-32 h-32 object-contain drop-shadow-lg"
-                            onError={(e) => { e.target.onerror = null; e.target.src = 'https://via.placeholder.com/150?text=Signo'; }} 
-                          />
-                        </div>
-                        <h2 className="text-3xl font-extrabold text-red-900 mb-1">
-                          {INFO_DETALLADA[resultado.signoNum]?.titulo || resultado.signo}
-                        </h2>
-                        <p className="text-sm font-medium text-red-700 uppercase tracking-widest mb-4">
-                          {INFO_DETALLADA[resultado.signoNum]?.significado}
-                        </p>
-                        <p className="text-gray-700 leading-relaxed mb-6 italic text-sm">
-                          "{INFO_DETALLADA[resultado.signoNum]?.desc}"
-                        </p>
-                        <div className="grid grid-cols-1 gap-4 w-full text-left">
-                          <div className="bg-amber-50 p-4 rounded-2xl border-l-4 border-amber-500">
-                            <h4 className="text-amber-900 font-bold text-[10px] uppercase tracking-wider mb-1">🌑 Desafío (Sombra)</h4>
-                            <p className="text-amber-800 text-xs leading-snug">{INFO_DETALLADA[resultado.signoNum]?.sombra}</p>
-                          </div>
-                          <div className="bg-green-50 p-4 rounded-2xl border-l-4 border-green-500">
-                            <h4 className="text-green-900 font-bold text-[10px] uppercase tracking-wider mb-1">✨ Aprendizaje</h4>
-                            <p className="text-green-800 text-xs leading-snug font-medium">{INFO_DETALLADA[resultado.signoNum]?.aprendizaje}</p>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  )}
-                </div>
-              )}
-              {!resultado && !loading && (
-                <p className="text-center text-gray-300 py-10 font-medium">Ingresa tus datos para calcular tu energía sagrada</p>
-              )}
+
+  {resultado && (
+    <div className="fade-in">
+      {resultado.nemontemi ? (
+        <div className="bg-red-50 border border-red-100 rounded-3xl p-8 text-center animate-pulse">
+          <h2 className="text-2xl font-bold text-red-700">Nemontemi</h2>
+          <p className="text-red-600/80 text-sm">
+            Días de reflexión. No hay Tonal asignado.
+          </p>
+        </div>
+      ) : (
+        <div className="bg-white rounded-3xl p-6 shadow-2xl border border-gray-100">
+          <div className="flex flex-col items-center text-center">
+            
+            <div className="w-40 h-40 bg-gray-50 rounded-full flex items-center justify-center mb-4 shadow-inner">
+              <img 
+                src={`signos/${resultado.signoNum}.png`} 
+                alt={resultado.signo}
+                className="w-32 h-32 object-contain drop-shadow-lg"
+              />
             </div>
+
+            <h2 className="text-4xl font-black text-red-900 mb-1 tracking-wide">
+  {resultado.tonal.n} {resultado.tonal.s}
+</h2>
+
+<p className="text-xs text-gray-400 uppercase tracking-[0.3em] mb-3">
+  {resultado.signo}
+</p>
+
+            <p className="text-sm font-medium text-red-700 uppercase tracking-widest mb-4">
+              {INFO_DETALLADA[resultado.signoNum]?.significado}
+            </p>
+
+            <p className="text-gray-700 leading-relaxed mb-6 italic text-sm">
+              "{INFO_DETALLADA[resultado.signoNum]?.desc}"
+            </p>
+
           </div>
         </div>
+      )}
+    </div>
+  )}
+
+  {!resultado && !loading && (
+    <p className="text-center text-gray-300 py-10 font-medium">
+      Ingresa tus datos para calcular tu energía sagrada
+    </p>
+  )}
+
+</div>
       );
     };
 
@@ -359,6 +362,7 @@
     </script>
 </body>
 </html>
+
 
 
 
