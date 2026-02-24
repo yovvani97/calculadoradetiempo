@@ -254,13 +254,24 @@
           const [loading, setLoading] = useState(false);
 
           const handleCalculate = () => {
-            if (!fecha || !hora) return;
-            setLoading(true);
-            setTimeout(() => {
-              setResultado(calcularTonalli(fecha, hora));
-              setLoading(false);
-            }, 600);
-          };
+  if (!fecha || !hora) return;
+  setLoading(true);
+
+  // Lógica de detección rápida de Nemontemi
+  const [y, m, d] = fecha.split('-').map(Number);
+  // El periodo Nemontemi ocurre del 6 al 11 de marzo (mes 3)
+  if (m === 3 && d >= 6 && d <= 11) {
+    setTimeout(() => {
+      window.location.href = `nemontemi.html?fecha=${fecha}&hora=${hora}`;
+    }, 500);
+    return;
+  }
+
+  setTimeout(() => {
+    setResultado(calcularTonalli(fecha, hora));
+    setLoading(false);
+  }, 600);
+};
 
           return (
             <div className="min-h-screen bg-gray-50 font-sans text-gray-900 flex items-center justify-center p-4">
@@ -352,5 +363,6 @@
     </script>
 </body>
 </html>
+
 
 
