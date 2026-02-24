@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora Nemontemi</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Quicksand:wght@300;500&display=swap');
+        :root { --mexica-red: #8B0000; --mexica-gold: #D4AF37; --mexica-stone: #2F2F2F; --mexica-paper: #F4F1EA; }
+        body { font-family: 'Quicksand', sans-serif; background-color: var(--mexica-paper); color: var(--mexica-stone); min-height: 100vh; display: flex; justify-content: center; align-items: center; padding: 20px; }
+        .mexica-card { background: white; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); width: 100%; max-width: 450px; overflow: hidden; border: 2px solid var(--mexica-gold); }
+        .mexica-header { background: #1a1a1a; color: white; padding: 25px; text-align: center; font-family: 'Cinzel', serif; border-bottom: 4px solid var(--mexica-red); }
+        .glyph-icon { font-size: 3rem; color: var(--mexica-red); margin-bottom: 10px; }
+        .btn-mexica { background: var(--mexica-red); color: white; padding: 12px 25px; border-radius: 50px; font-weight: bold; width: 100%; transition: all 0.3s; cursor: pointer; border: none; text-transform: uppercase; }
+        .btn-mexica:hover { background: #a50000; transform: translateY(-2px); }
+        .result-panel { padding: 30px; text-align: center; background: #fafafa; min-height: 250px; display: flex; flex-direction: column; justify-content: center; align-items: center; }
+        .numeral-badge { font-family: 'Cinzel', serif; font-size: 2.5rem; font-weight: bold; color: var(--mexica-red); }
+        .tonal-name { font-size: 1.8rem; text-transform: uppercase; letter-spacing: 2px; }
+    </style>
+</head>
+<body>
+
+<div class="mexica-card">
+    <div class="mexica-header">
+        <i class="fa-solid fa-hourglass-half glyph-icon"></i>
+        <h1 class="text-2xl font-bold">NEMONTEMI</h1>
+        <p class="text-xs opacity-80 uppercase tracking-widest">Días de Silencio Interior</p>
+    </div>
+
+    <div class="p-6 space-y-4 border-b border-dashed border-gray-300">
+        <div>
+            <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Fecha de Nacimiento</label>
+            <input type="date" id="inputDate" class="w-full p-3 border rounded-xl bg-gray-50 outline-none focus:ring-2 focus:ring-red-800">
+        </div>
+        <div>
+            <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Hora de Nacimiento</label>
+            <input type="time" id="inputTime" class="w-full p-3 border rounded-xl bg-gray-50 outline-none focus:ring-2 focus:ring-red-800">
+        </div>
+        <button onclick="calculateNemontemi()" class="btn-mexica">Calcular en Nemontemi</button>
+    </div>
+
+    <div id="resultArea" class="result-panel">
+        <p class="text-gray-400 italic">Solo fechas del 6 al 11 de marzo.</p>
+    </div>
+
+    <div id="backNav" class="hidden p-4 bg-gray-100 text-center">
+        <p class="text-xs mb-2">¿Fecha fuera de Nemontemi?</p>
+        <button onclick="window.location.href='index.html'" class="text-red-800 font-bold text-sm uppercase underline">
+             Ir a Cuenta Normal
+        </button>
+    </div>
+</div>
+
+<script>
+    // Lógica matemática que proporcionaste para Nemontemi
+    const RESIDUE_TABLE = { CALLI: [37, 25, 13, 1, 41, 29, 17, 5, 45, 33, 21, 9, 49], TOCHTLI: [50, 38, 26, 14, 2, 42, 30, 18, 6, 46, 34, 22, 10], ACATL: [11, 51, 39, 27, 15, 3, 43, 31, 19, 7, 47, 35, 23], TECPATL: [24, 12, 0, 40, 28, 16, 4, 44, 32, 20, 8, 48, 36] };
+    const NUMERAL_NEMONTEMI_START = [1, 6, 11, 3, 8, 13, 5, 10, 2, 7, 12, 4, 9];
+    const NEMONTEMI_SEQUENCES = { TOCHTLI: ["Cipactli", "Ehecatl", "Calli", "Cuetzpalin", "Coatl"], ACATL: ["Miquiztli", "Mazatl", "Tochtli", "Atl", "Itzcuintli"], TECPATL: ["Ozomahtli", "Malinalli", "Acatl", "Ocelotl", "Cuauhtli"], CALLI: ["Cozcacuauhtli", "Ollin", "Tecpatl", "Quiahuitl", "Xochitl"] };
+    const TIME_FRONTIERS = { CALLI: "00:43", TOCHTLI: "06:43", ACATL: "12:43", TECPATL: "18:43" };
+
+    // Al cargar, revisar si viene de la página principal
+    window.onload = () => {
+        const urlParams = new URLSearchParams(window.location.search);
+        if(urlParams.get('fecha')) {
+            document.getElementById('inputDate').value = urlParams.get('fecha');
+            document.getElementById('inputTime').value = urlParams.get('hora');
+            calculateNemontemi();
+        }
+    };
+
+    function calculateNemontemi() {
+        const dateVal = document.getElementById('inputDate').value;
+        const timeVal = document.getElementById('inputTime').value;
+        const resultArea = document.getElementById('resultArea');
+        const backNav = document.getElementById('backNav');
+
+        if (!dateVal || !timeVal) return;
+
+        const dateParts = dateVal.split("-");
+        const monthInput = parseInt(dateParts[1]);
+        const dayInput = parseInt(dateParts[2]);
+
+        // Lógica de redirección de regreso: Si NO es marzo o no está en el rango
+        if (monthInput !== 3 || dayInput < 6 || dayInput > 11) {
+            resultArea.innerHTML = "<p class='text-blue-600 font-bold'>Fecha fuera de Nemontemi.<br>Redirigiendo a Cuenta Normal...</p>";
+            setTimeout(() => { window.location.href = "index.html"; }, 1500);
+            return;
+        }
+
+        // --- TU CÁLCULO DE NEMONTEMI CONTINÚA AQUÍ ---
+        const yearInput = parseInt(dateParts[0]);
+        const baseYear = (monthInput < 3 || (monthInput === 3 && dayInput < 12)) ? yearInput - 1 : yearInput;
+        const residue = baseYear % 52;
+
+        let yearType = "";
+        let yearNumeral = 0;
+        for (const [type, list] of Object.entries(RESIDUE_TABLE)) {
+            const index = list.indexOf(residue);
+            if (index !== -1) { yearType = type; yearNumeral = index + 1; break; }
+        }
+
+        const frontierTime = TIME_FRONTIERS[yearType];
+        let effectiveDay = (timeVal < frontierTime) ? dayInput - 1 : dayInput;
+        let nemStartDay = (yearType === 'ACATL' || yearType === 'TECPATL') ? 6 : 7;
+        
+        if (monthInput === 3 && effectiveDay >= nemStartDay && effectiveDay <= 10) {
+            const dayIndex = effectiveDay - nemStartDay;
+            const startNumeral = NUMERAL_NEMONTEMI_START[yearNumeral - 1];
+            const finalNumeral = (startNumeral + dayIndex - 1) % 13 + 1;
+            const finalSign = NEMONTEMI_SEQUENCES[yearType][dayIndex];
+
+            resultArea.innerHTML = `
+                <div class="animate-pulse mb-4 text-xs font-bold text-red-800 bg-red-100 px-3 py-1 rounded-full">DÍA NEMONTEMI</div>
+                <div class="numeral-badge">${finalNumeral}</div>
+                <div class="tonal-name">${finalSign}</div>
+                <p class="text-xs text-gray-500 mt-4 italic">Año ${yearNumeral} ${yearType}</p>
+            `;
+            backNav.classList.remove('hidden');
+        } else {
+            resultArea.innerHTML = "<p class='text-gray-500'>Cargando transición de energía...</p>";
+            setTimeout(() => { window.location.href = "index.html"; }, 1000);
+        }
+    }
+</script>
+</body>
+</html>
