@@ -258,149 +258,120 @@
     </style>
 </head>
 <body>
-
     <nav class="desktop-nav">
-    <div class="nav-content">
-        <div class="logo-container" onclick="navegar('sec-calculadora')">
-    <img src="logo_tiempo_sagrado_horizontal.png" alt="" class="main-logo">
-</div>
+        <div class="nav-content">
+            <div class="logo-container" onclick="navegar('sec-calculadora')">
+                <img src="logo_tiempo_sagrado_horizontal.png" alt="Tiempo Sagrado" class="main-logo">
+            </div>
+            
+            <div class="nav-links">
+                <a onclick="navegar('sec-calculadora')">Calculadora</a>
+                <a onclick="navegar('sec-cuenta')">La Cuenta</a>
+                <a onclick="navegar('sec-nosotros')">Nosotros</a>
+                <a onclick="navegar('sec-rituales')">Rituales</a>
+            </div>
 
-        <div class="nav-links">
-            <a onclick="navegar('sec-calculadora')">Calculadora</a>
-            <a onclick="navegar('sec-cuenta')">La Cuenta</a>
-            <a onclick="navegar('sec-nosotros')">Nosotros</a>
-            <a onclick="navegar('sec-rituales')">Rituales</a>
+            <div class="social-links">
+                <a href="https://facebook.com" target="_blank" title="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
+                <a href="https://instagram.com" target="_blank" title="Instagram"><i class="fa-brands fa-instagram"></i></a>
+                <a href="https://tiktok.com" target="_blank" title="TikTok"><i class="fa-brands fa-tiktok"></i></a>
+            </div>
         </div>
-
-        <div class="social-links">
-    <a href="https://facebook.com" target="_blank" title="Facebook">
-        <i class="fa-brands fa-facebook-f"></i>
-    </a>
-    <a href="https://instagram.com" target="_blank" title="Instagram">
-        <i class="fa-brands fa-instagram"></i>
-    </a>
-    <a href="https://tiktok.com" target="_blank" title="TikTok">
-        <i class="fa-brands fa-tiktok"></i>
-    </a>
-</div>
-    </div>
-</nav>
+    </nav>
 
     <div class="app-wrapper">
         
         <header class="cosmic-banner">
-            <div>
-                <div style="font-weight: 600; font-size: 18px; letter-spacing: -0.5px;" id="reloj-txt">00:00</div>
-                <div style="font-size: 11px; color: #86868b; font-weight: 600;" id="fecha-txt">CARGANDO...</div>
+            <div id="reloj-container">
+                <div style="font-weight: 600; font-size: 17px;" id="reloj-txt">00:00</div>
+                <div style="font-size: 11px; color: #86868b;" id="fecha-txt">Cargando fecha...</div>
             </div>
-            <div style="text-align: right;">
-                <div id="luna-icon" style="font-size: 22px;">🌑</div>
-                <div id="luna-txt" style="font-size: 10px; color: #86868b; font-weight: 700; text-transform: uppercase;">Luna</div>
+            <div id="fase-lunar" style="text-align: right;">
+                <div style="font-size: 20px;" id="luna-icon">🌑</div>
+                <div style="font-size: 10px; color: #86868b; text-transform: uppercase; letter-spacing: 1px;">Luna Nueva</div>
             </div>
         </header>
 
-        <main>
-            <section id="sec-calculadora" class="content-card">
-                <h2 style="margin-top:0;">Tonalpohualli</h2>
-                <div id="root">
-                    <p style="color: #86868b;">Cargando motor de cálculo...</p>
+        <section id="sec-calculadora">
+            <div class="content-card">
+                <h1 style="text-align: center; font-size: 32px; letter-spacing: -1px;">Tonalamatl</h1>
+                <p style="text-align: center; color: #86868b;">Ingresa tu fecha de nacimiento para conocer tu energía vital.</p>
+                <div style="text-align: center; margin-top: 40px; padding: 40px; border: 2px dashed #eee; border-radius: 20px; color: #ccc;">
+                    Espacio para el motor de cálculo
                 </div>
-            </section>
+            </div>
+        </section>
 
-            <section id="sec-cuenta" class="content-card hidden">
-                <h2>La Cuenta del Tiempo</h2>
-                <p style="color: #86868b;">Aquí aparecerán las interpretaciones de los 20 signos y las 13 trecenas.</p>
-            </section>
+        <section id="sec-nosotros" class="hidden">
+            
+            <div class="apple-section bg-legado">
+                <div class="section-content">
+                    <h2>Legado Cósmico</h2>
+                    <p>Nuestros abuelos nos han dejado una sabiduría que trasciende el tiempo; un mapa para entender nuestra conexión con el universo.</p>
+                </div>
+            </div>
 
-            <section id="sec-nosotros" class="hidden">
-    
-    <div class="apple-section bg-legado">
-        <div class="section-content">
-            <h2>Legado Cósmico</h2>
-            <p>Nuestros abuelos nos han heredado una sabiduría que trasciende el tiempo.</p>
-        </div>
+            <div class="apple-section bg-maestro align-left">
+                <div class="section-content">
+                    <h2 style="color: var(--mexica-gold);">Maestro Arturo Meza</h2>
+                    <p>Esta cuenta se basa en las enseñanzas y el rescate histórico del Maestro Arturo Meza Gutiérrez. Un tributo a su labor por la mathesis tolteca.</p>
+                    <p class="discreto">*Esta página es una herramienta de difusión sin fines de lucro.</p>
+                </div>
+            </div>
+
+            <div class="apple-section bg-mapa">
+                <div class="section-content">
+                    <h2>La Interpretación</h2>
+                    <p>El Tonalamatl es un mapa sagrado. Su lectura profunda debe ser realizada por un profesional o un tonalpouhqui experimentado.</p>
+                    <p class="discreto">"Caminar en equilibrio sobre la Tierra."</p>
+                </div>
+            </div>
+
+        </section>
+
+        <section id="sec-cuenta" class="hidden"><div class="content-card"><h2>La Cuenta</h2><p>Próximamente...</p></div></section>
+        <section id="sec-rituales" class="hidden"><div class="content-card"><h2>Rituales</h2><p>Próximamente...</p></div></section>
+
     </div>
 
-    <div class="apple-section bg-maestro align-left">
-        <div class="section-content">
-            <h2 style="color: var(--mexica-gold);">Maestro Arturo Meza</h2>
-            <p>Basado en la cuenta recuperada por el Maestro Arturo Meza Gutiérrez. Un tributo a su labor de rescate de la mathesis tolteca.</p>
-            <p class="discreto">*Esta página no es un sitio oficial, es una herramienta de difusión sin fines de lucro.</p>
-        </div>
-    </div>
-
-    <div class="apple-section bg-mapa">
-        <div class="section-content">
-            <h2>El Mapa Sagrado</h2>
-            <p>La interpretación del Tonalamatl es un arte sagrado que debe ser guiado por profesionales.</p>
-        </div>
-    </div>
-
-</section>
-
-            <section id="sec-rituales" class="content-card hidden">
-                <h2>Rituales</h2>
-                <p style="color: #86868b;">Próximamente: Guías para sintonizar con la energía del día.</p>
-            </section>
-        </main>
-
-        <nav class="bottom-nav">
-            <button class="nav-item active" onclick="navegar('sec-calculadora')">
-                <span>🧮</span> CALCULAR
-            </button>
-            <button class="nav-item" onclick="navegar('sec-cuenta')">
-                <span>📖</span> CUENTA
-            </button>
-            <button class="nav-item" onclick="navegar('sec-rituales')">
-                <span>🌿</span> RITUALES
-            </button>
-            <button class="nav-item" onclick="navegar('sec-nosotros')">
-                <span>👤</span> NOSOTROS
-            </button>
-        </nav>
-    </div>
+    <nav class="bottom-nav">
+        <button class="nav-item active" onclick="navegar('sec-calculadora')">
+            <span class="material-icons-outlined">calendar_month</span>
+            Calculadora
+        </button>
+        <button class="nav-item" onclick="navegar('sec-cuenta')">
+            <span class="material-icons-outlined">auto_stories</span>
+            La Cuenta
+        </button>
+        <button class="nav-item" onclick="navegar('sec-nosotros')">
+            <span class="material-icons-outlined">info</span>
+            Nosotros
+        </button>
+        <button class="nav-item" onclick="navegar('sec-rituales')">
+            <span class="material-icons-outlined">flare</span>
+            Rituales
+        </button>
+    </nav>
 
     <script>
-        // 1. Navegación entre secciones
-        function navegar(id) {
+        function navegar(idSeccion) {
             // Ocultar todas las secciones
-            document.querySelectorAll('section').forEach(sec => sec.classList.add('hidden'));
+            document.querySelectorAll('section').forEach(s => s.classList.add('hidden'));
             // Mostrar la seleccionada
-            document.getElementById(id).classList.remove('hidden');
+            document.getElementById(idSeccion).classList.remove('hidden');
             
             // Actualizar botones del menú móvil
             document.querySelectorAll('.nav-item').forEach(btn => btn.classList.remove('active'));
-            const btnActivo = Array.from(document.querySelectorAll('.nav-item')).find(btn => btn.getAttribute('onclick').includes(id));
-            if(btnActivo) btnActivo.classList.add('active');
+            const index = ['sec-calculadora', 'sec-cuenta', 'sec-nosotros', 'sec-rituales'].indexOf(idSeccion);
+            if(index !== -1) document.querySelectorAll('.nav-item')[index].classList.add('active');
 
-            // Scroll suave arriba
+            // Hacer scroll hacia arriba al cambiar
             window.scrollTo({top: 0, behavior: 'smooth'});
         }
-
-        // 2. Reloj y Luna
-        function actualizarBanner() {
-            const ahora = new Date();
-            document.getElementById('reloj-txt').innerText = ahora.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
-            document.getElementById('fecha-txt').innerText = ahora.toLocaleDateString('es-MX', {weekday: 'short', day: 'numeric', month: 'short'}).toUpperCase();
-
-            const lp = 2551443; 
-            const newMoon = new Date(1970, 0, 7, 20, 35, 0);
-            const phase = ((ahora.getTime() - newMoon.getTime()) / 1000) % lp;
-            const res = Math.floor((phase / lp) * 8);
-            const fases = [
-                {i:'🌑', n:'Nueva'}, {i:'🌒', n:'Creciente'}, {i:'🌓', n:'Cuarto C.'}, {i:'🌔', n:'Gibosa C.'}, 
-                {i:'🌕', n:'Llena'}, {i:'🌖', n:'Gibosa M.'}, {i:'🌗', n:'Cuarto M.'}, {i:'🌘', n:'Menguante'}
-            ];
-            document.getElementById('luna-icon').innerText = fases[res].i;
-            document.getElementById('luna-txt').innerText = fases[res].n;
-        }
-
-        setInterval(actualizarBanner, 1000);
-        actualizarBanner();
     </script>
-
-    </body>
+</body>
 </html>
+
 
 
 
