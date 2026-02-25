@@ -8,6 +8,9 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
     
     <style>
@@ -296,10 +299,7 @@
         </header>
 
         <section id="sec-calculadora">
-    <iframe 
-        src="/calculadora/"
-        style="width:100%; height:1000px; border:none; display:block;">
-    </iframe>
+  <div id="root-calculadora"></div>
 </section>
 
         <section id="sec-nosotros" class="hidden">
@@ -573,9 +573,500 @@
         actualizarReloj();
         setInterval(actualizarReloj, 60000);
     </script>
-    
+    <script type="text/babel">
+  const { useState } = React;
+
+  /* ==========================================================================
+     LÓGICA DEL CALENDARIO AZTECA (MOTOR MATEMÁTICO)  (SIN CAMBIOS)
+     ========================================================================== */
+
+  const SIGNOS = [
+    { nombre: "Cipactli",    es: "Caimán",     emoji: "🐊", img: "signos/1.png"  },
+    { nombre: "Ehecatl",     es: "Viento",     emoji: "🌬️", img: "signos/2.png"  },
+    { nombre: "Calli",       es: "Casa",       emoji: "🏠", img: "signos/3.png"  },
+    { nombre: "Cuetzpalin",  es: "Lagartija",  emoji: "🦎", img: "signos/4.png"  },
+    { nombre: "Coatl",       es: "Serpiente",  emoji: "🐍", img: "signos/5.png"  },
+    { nombre: "Miquiztli",   es: "Muerte",     emoji: "💀", img: "signos/6.png"  },
+    { nombre: "Mazatl",      es: "Venado",     emoji: "🦌", img: "signos/7.png"  },
+    { nombre: "Tochtli",     es: "Conejo",     emoji: "🐇", img: "signos/8.png"  },
+    { nombre: "Atl",         es: "Agua",       emoji: "💧", img: "signos/9.png"  },
+    { nombre: "Itzcuintli",  es: "Perro",      emoji: "🐕", img: "signos/10.png" },
+    { nombre: "Ozomatli",    es: "Mono",       emoji: "🐒", img: "signos/11.png" },
+    { nombre: "Malinalli",   es: "Hierba",     emoji: "🌿", img: "signos/12.png" },
+    { nombre: "Acatl",       es: "Caña",       emoji: "🎋", img: "signos/13.png" },
+    { nombre: "Ocelotl",     es: "Jaguar",     emoji: "🐆", img: "signos/14.png" },
+    { nombre: "Cuauhtli",    es: "Águila",     emoji: "🦅", img: "signos/15.png" },
+    { nombre: "Cozcaquauhtli", es: "Zopilote", emoji: "🦃", img: "signos/16.png" },
+    { nombre: "Ollin",       es: "Movimiento", emoji: "🌀", img: "signos/17.png" },
+    { nombre: "Tecpatl",     es: "Pedernal",   emoji: "🔪", img: "signos/18.png" },
+    { nombre: "Quiahuitl",   es: "Lluvia",     emoji: "🌧️", img: "signos/19.png" },
+    { nombre: "Xochitl",     es: "Flor",       emoji: "🌸", img: "signos/20.png" }
+  ];
+
+  const SENORES_DIA = [
+    { n: 1, nombre: "Xiuhtecuhtli" },
+    { n: 2, nombre: "Tlaltecuhtli" },
+    { n: 3, nombre: "Chalchiuhtlicue" },
+    { n: 4, nombre: "Tonatiuh" },
+    { n: 5, nombre: "Tlazoltéotl" },
+    { n: 6, nombre: "Mictlanteuctli" },
+    { n: 7, nombre: "Centéotl / Xochipilli" },
+    { n: 8, nombre: "Tláloc" },
+    { n: 9, nombre: "Quetzalcóatl" },
+    { n: 10, nombre: "Tezcatlipoca" },
+    { n: 11, nombre: "Yohualtecuhtli" },
+    { n: 12, nombre: "Tlahuizcalpantecuhtli" },
+    { n: 13, nombre: "Citlalicue" }
+  ];
+
+  const AVES_DIA = [
+    { n: 1, nahuatl: "Nexhuitzillin", es: "Pájaro Espina Gris" },
+    { n: 2, nahuatl: "Quetzahuitzillin", es: "Pájaro Espina Hermoso" },
+    { n: 3, nahuatl: "Tototzin", es: "Halcón" },
+    { n: 4, nahuatl: "Zolin", es: "Codorniz" },
+    { n: 5, nahuatl: "Acalotl", es: "Cuervo" },
+    { n: 6, nahuatl: "Chicoatli", es: "Lechuza" },
+    { n: 7, nahuatl: "Papalotl", es: "Mariposa" },
+    { n: 8, nahuatl: "Ixcuauhtli", es: "Águila de Obsidiana" },
+    { n: 9, nahuatl: "Chalchiuhtotolin", es: "Guajolote" },
+    { n: 10, nahuatl: "Tecolotl", es: "Tecolote" },
+    { n: 11, nahuatl: "Alotl", es: "Guacamaya" },
+    { n: 12, nahuatl: "Quetzatototl", es: "Pájaro Quetzal" },
+    { n: 13, nahuatl: "Toznene", es: "Papagayo" }
+  ];
+
+  const SENORES_NOCHE = [
+    { n: 1, nombre: "Xiuhtecuhtli", desc: "Señor del Año, del Calor Celeste" },
+    { n: 2, nombre: "Itztli", desc: "Señor de la Piedra de Obsidiana" },
+    { n: 3, nombre: "Piziltecuhtli", desc: "El Señor Niño" },
+    { n: 4, nombre: "Centeotl", desc: "El Generador del Sustento" },
+    { n: 5, nombre: "Mictlantecuhtli", desc: "El Señor del Lugar del Reposo" },
+    { n: 6, nombre: "Chalchihuitlicue", desc: "La Señora de la Falda de Jade" },
+    { n: 7, nombre: "Tlazoltéotl", desc: "La que Genera por el Cariño" },
+    { n: 8, nombre: "Tepeyólotl", desc: "Nuestro Señor el Corazón del Monte" },
+    { n: 9, nombre: "Tláloc", desc: "Señor del Licor de la Tierra" }
+  ];
+
+  const ACOMPANANTES_NOCHE = [
+    { n: 1, nahuatl: "Colotl", es: "Escorpión" },
+    { n: 2, nahuatl: "Tzinacantli", es: "Murciélago" },
+    { n: 3, nahuatl: "Coyotl", es: "Coyote" },
+    { n: 4, nahuatl: "Tocatl", es: "Araña" },
+    { n: 5, nahuatl: "Tecolotl", es: "Tecolote" },
+    { n: 6, nahuatl: "Coatl", es: "Serpiente" },
+    { n: 7, nahuatl: "Izpapalotl", es: "Mariposa de Obsidiana" },
+    { n: 8, nahuatl: "Ocelotl", es: "Jaguar" },
+    { n: 9, nahuatl: "Petlalzocoatl", es: "Ciempiés / Serpiente de Petate" }
+  ];
+
+  const TABLA_ANIOS = {
+    37: {s:"Calli", n:1, b:1}, 50: {s:"Tochtli", n:1, b:1}, 11: {s:"Acatl", n:1, b:1}, 24: {s:"Tecpatl", n:1, b:1},
+    25: {s:"Calli", n:2, b:10}, 38: {s:"Tochtli", n:2, b:10}, 51: {s:"Acatl", n:2, b:10}, 12: {s:"Tecpatl", n:2, b:10},
+    13: {s:"Calli", n:3, b:6}, 26: {s:"Tochtli", n:3, b:6}, 39: {s:"Acatl", n:3, b:6}, 0: {s:"Tecpatl", n:3, b:6},
+    1: {s:"Calli", n:4, b:2}, 14: {s:"Tochtli", n:4, b:2}, 27: {s:"Acatl", n:4, b:2}, 40: {s:"Tecpatl", n:4, b:2},
+    41: {s:"Calli", n:5, b:11}, 2: {s:"Tochtli", n:5, b:11}, 15: {s:"Acatl", n:5, b:11}, 28: {s:"Tecpatl", n:5, b:11},
+    29: {s:"Calli", n:6, b:7}, 42: {s:"Tochtli", n:6, b:7}, 3: {s:"Acatl", n:6, b:7}, 16: {s:"Tecpatl", n:6, b:7},
+    17: {s:"Calli", n:7, b:3}, 30: {s:"Tochtli", n:7, b:3}, 43: {s:"Acatl", n:7, b:3}, 4: {s:"Tecpatl", n:7, b:3},
+    5: {s:"Calli", n:8, b:12}, 18: {s:"Tochtli", n:8, b:12}, 31: {s:"Acatl", n:8, b:12}, 44: {s:"Tecpatl", n:8, b:12},
+    45: {s:"Calli", n:9, b:8}, 6: {s:"Tochtli", n:9, b:8}, 19: {s:"Acatl", n:9, b:8}, 32: {s:"Tecpatl", n:9, b:8},
+    33: {s:"Calli", n:10, b:4}, 46: {s:"Tochtli", n:10, b:4}, 7: {s:"Acatl", n:10, b:4}, 20: {s:"Tecpatl", n:10, b:4},
+    21: {s:"Calli", n:11, b:13}, 34: {s:"Tochtli", n:11, b:13}, 47: {s:"Acatl", n:11, b:13}, 8: {s:"Tecpatl", n:11, b:13},
+    9: {s:"Calli", n:12, b:9}, 22: {s:"Tochtli", n:12, b:9}, 35: {s:"Acatl", n:12, b:9}, 48: {s:"Tecpatl", n:12, b:9},
+    49: {s:"Calli", n:13, b:5}, 10: {s:"Tochtli", n:13, b:5}, 23: {s:"Acatl", n:13, b:5}, 36: {s:"Tecpatl", n:13, b:5}
+  };
+
+  const VEINTENAS = [
+    { id: 1, nombre: "Atlacahualo", m: 3, d: 12 },
+    { id: 2, nombre: "Tlacaxipehualiztli", m: 4, d: 1 },
+    { id: 3, nombre: "Tozoztontli", m: 4, d: 21 },
+    { id: 4, nombre: "Hueytozoztli", m: 5, d: 11 },
+    { id: 5, nombre: "Toxcatl", m: 5, d: 31 },
+    { id: 6, nombre: "Etzalcualiztli", m: 6, d: 20 },
+    { id: 7, nombre: "Tecuilhuitontli", m: 7, d: 10 },
+    { id: 8, nombre: "Huey Tecuilhuitl", m: 7, d: 30 },
+    { id: 9, nombre: "Tlaxochimaco", m: 8, d: 19 },
+    { id: 10, nombre: "Xocotl Huetzi", m: 9, d: 8 },
+    { id: 11, nombre: "Ochpaniztli", m: 9, d: 28 },
+    { id: 12, nombre: "Teotleco", m: 10, d: 18 },
+    { id: 13, nombre: "Tepeilhuitl", m: 11, d: 7 },
+    { id: 14, nombre: "Quecholli", m: 11, d: 27 },
+    { id: 15, nombre: "Panquetzaliztli", m: 12, d: 17 },
+    { id: 16, nombre: "Atemoztli", m: 1, d: 6 },
+    { id: 17, nombre: "Tititl", m: 1, d: 26 },
+    { id: 18, nombre: "Izcalli", m: 2, d: 15 },
+    { id: 19, nombre: "Nemontemi", m: 3, d: 7 }
+  ];
+
+  const SECUENCIA_VEINTENA = [1, 8, 2, 9, 3, 10, 4, 11, 5, 12, 6, 13, 7];
+
+  function calcularTonalli(fechaStr, horaStr) {
+    if (!fechaStr || !horaStr) return null;
+
+    const [yearStr, monthStr, dayStr] = fechaStr.split('-');
+    const [hourStr, minuteStr] = horaStr.split(':');
+
+    let anio = parseInt(yearStr);
+    let mes = parseInt(monthStr);
+    let dia = parseInt(dayStr);
+    let hora = parseInt(hourStr);
+    let minuto = parseInt(minuteStr);
+
+    let fechaInput = new Date(anio, mes - 1, dia, hora, minuto);
+
+    let residuo = anio % 52;
+    let datosAnio = TABLA_ANIOS[residuo];
+    if (!datosAnio) return { error: "Año fuera de rango o datos faltantes." };
+
+    let diaInicioAnio = 12;
+    let horaInicio = 0, minInicio = 43;
+
+    if (datosAnio.s === "Tochtli") horaInicio = 6;
+    if (datosAnio.s === "Acatl")   horaInicio = 12;
+    if (datosAnio.s === "Tecpatl") { horaInicio = 18; diaInicioAnio = 11; }
+
+    let inicioAnioGregoriano = new Date(anio, 2, diaInicioAnio, horaInicio, minInicio);
+
+    if (fechaInput < inicioAnioGregoriano) {
+      anio -= 1;
+      residuo = anio % 52;
+      datosAnio = TABLA_ANIOS[residuo];
+      diaInicioAnio = 12;
+      if (datosAnio.s === "Calli") { horaInicio = 0; }
+      else if (datosAnio.s === "Tochtli") { horaInicio = 6; }
+      else if (datosAnio.s === "Acatl")   { horaInicio = 12; }
+      else if (datosAnio.s === "Tecpatl") { horaInicio = 18; diaInicioAnio = 11; }
+    }
+
+    let floatNac = hora + (minuto / 60.0);
+    let floatIni = horaInicio + (minInicio / 60.0);
+
+    let fechaCalculo = new Date(fechaInput);
+    let ajustado = false;
+
+    if (floatNac < floatIni) {
+      fechaCalculo.setDate(fechaCalculo.getDate() - 1);
+      ajustado = true;
+    }
+
+    let veintena = null;
+    let shiftDiasTecpatl = (datosAnio.s === "Tecpatl") ? 1 : 0;
+    let candidatos = [];
+
+    for (let v of VEINTENAS) {
+      let yV = anio;
+      if (v.m < 3) yV = anio + 1;
+      if (v.nombre === "Nemontemi") yV = anio + 1;
+
+      let fechaV = new Date(yV, v.m - 1, v.d - shiftDiasTecpatl);
+      if (fechaV <= fechaCalculo) candidatos.push({ v, fechaV });
+    }
+
+    candidatos.sort((a, b) => a.fechaV - b.fechaV);
+    if (candidatos.length === 0) return { error: "Error calculando veintena." };
+
+    let seleccion = candidatos[candidatos.length - 1];
+    veintena = seleccion.v;
+    let fechaInicioVeintena = seleccion.fechaV;
+
+    if (veintena.nombre === "Nemontemi") return { nemontemi: true };
+
+    const diffTime = Math.abs(fechaCalculo - fechaInicioVeintena);
+    const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+
+    let indiceSigno = (0 + diffDays) % 20;
+    let signoObj = SIGNOS[indiceSigno];
+
+    let baseNumeral = datosAnio.b;
+    let idxSecuencia = SECUENCIA_VEINTENA.indexOf(baseNumeral);
+    let shiftVeintena = veintena.id - 1;
+    let idxInicioVeintena = (idxSecuencia + shiftVeintena) % 13;
+    let numeralInicio = SECUENCIA_VEINTENA[idxInicioVeintena];
+
+    let numeral = (numeralInicio + diffDays - 1) % 13 + 1;
+
+    let idxNahual = (indiceSigno + 10) % 20;
+    let nahualObj = SIGNOS[idxNahual];
+
+    let pasosAtras = numeral - 1;
+    let idxTrecena = (indiceSigno - pasosAtras) % 20;
+    if (idxTrecena < 0) idxTrecena += 20;
+    let trecenaObj = SIGNOS[idxTrecena];
+
+    const minutosInicioDia = 6 * 60 + 43;
+    const duracionParte = 720 / 13;
+    let indexSenor = (numeral - 1) % 13;
+    let senorObj = SENORES_DIA[indexSenor];
+    let aveObj = AVES_DIA[indexSenor];
+    let minutosInicioSenor = minutosInicioDia + (indexSenor * duracionParte);
+    let hSenor = Math.floor(minutosInicioSenor / 60);
+    let mSenor = Math.floor(minutosInicioSenor % 60);
+    let horaSenorStr = `${hSenor.toString().padStart(2, '0')}:${mSenor.toString().padStart(2, '0')}`;
+
+    let tonalIndex = -1;
+    for (let i = 0; i < 260; i++) {
+      if (i % 13 === (numeral - 1) && i % 20 === indiceSigno) { tonalIndex = i; break; }
+    }
+
+    let indiceNoche = (tonalIndex % 9);
+    let senorNocheObj = SENORES_NOCHE[indiceNoche];
+    let acompananteObj = ACOMPANANTES_NOCHE[indiceNoche];
+
+    let anioEmoji = SIGNOS.find(s => s.nombre === datosAnio.s)?.emoji || "";
+
+    return {
+      anio: { n: datosAnio.n, s: datosAnio.s, emoji: anioEmoji },
+      tonal: { n: numeral, s: signoObj.nombre, es: signoObj.es, emoji: signoObj.emoji, img: signoObj.img },
+      nahual: { s: nahualObj.nombre, es: nahualObj.es, emoji: nahualObj.emoji, img: nahualObj.img },
+      trecena: { s: trecenaObj.nombre, es: trecenaObj.es, emoji: trecenaObj.emoji, img: trecenaObj.img },
+      tonacatecuhtli: { nombre: senorObj.nombre, hora: horaSenorStr },
+      ave: { nahuatl: aveObj.nahuatl, es: aveObj.es },
+      noche: { ...senorNocheObj, acompanante: acompananteObj },
+      veintena: veintena.nombre,
+      ajuste: ajustado
+    };
+  }
+
+  /* ==========================================================================
+     UI (sin lucide-react)
+     ========================================================================== */
+
+  const ImgIcon = ({ src, alt, className = "" }) => (
+    <img
+      src={src}
+      alt={alt}
+      className={`w-16 h-16 object-contain drop-shadow ${className}`}
+      onError={(e) => { e.currentTarget.style.display = "none"; }}
+    />
+  );
+
+  const CardResult = ({ title, main, sub, iconNode, accentColor = "", delay = "" }) => (
+    <div className={`bg-white rounded-3xl p-6 shadow-sm border border-gray-100 flex flex-col items-center justify-center text-center transform transition-all duration-700 ease-out hover:shadow-md ${delay}`}>
+      <div className={`mb-3 text-4xl ${accentColor}`}>{iconNode}</div>
+      <div className="text-xs font-semibold tracking-widest text-gray-400 uppercase mb-1">{title}</div>
+      <div className="text-2xl font-bold text-gray-800 mb-1">{main}</div>
+      <div className="text-sm text-gray-500 font-medium">{sub}</div>
+    </div>
+  );
+
+  const App = () => {
+    const [fecha, setFecha] = useState("");
+    const [hora, setHora] = useState("");
+    const [resultado, setResultado] = useState(null);
+    const [loading, setLoading] = useState(false);
+
+    const handleCalculate = () => {
+      if (!fecha || !hora) return;
+      setLoading(true);
+      setResultado(null);
+
+      setTimeout(() => {
+        const res = calcularTonalli(fecha, hora);
+        setResultado(res);
+        setLoading(false);
+      }, 600);
+    };
+
+    return (
+      <div className="min-h-screen bg-gray-50 font-sans text-gray-900 flex items-center justify-center p-4">
+        <div className="max-w-md w-full bg-white rounded-[2.5rem] shadow-2xl overflow-hidden border border-gray-100/50">
+
+          <div className="pt-10 pb-6 px-8 text-center">
+            <h1 className="text-3xl font-bold tracking-tight text-gray-900 mb-2">Tonalpohualli</h1>
+            <p className="text-gray-400 text-sm font-medium">Calculadora de Tiempo Sagrado</p>
+          </div>
+
+          <div className="px-8 space-y-5">
+            <div className="space-y-1">
+              <label className="text-xs font-bold text-gray-400 uppercase tracking-wider ml-1">Fecha de Nacimiento</label>
+              <div className="relative group">
+                <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-gray-400 group-focus-within:text-indigo-500 transition-colors">
+                  <span className="text-lg">📅</span>
+                </div>
+                <input
+                  type="date"
+                  value={fecha}
+                  onChange={(e) => setFecha(e.target.value)}
+                  className="block w-full pl-11 pr-4 py-4 bg-gray-50 border-none rounded-2xl text-gray-700 font-medium focus:ring-2 focus:ring-indigo-100 focus:bg-white transition-all outline-none"
+                />
+              </div>
+            </div>
+
+            <div className="space-y-1">
+              <label className="text-xs font-bold text-gray-400 uppercase tracking-wider ml-1">Hora de Nacimiento</label>
+              <div className="relative group">
+                <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-gray-400 group-focus-within:text-indigo-500 transition-colors">
+                  <span className="text-lg">⏰</span>
+                </div>
+                <input
+                  type="time"
+                  value={hora}
+                  onChange={(e) => setHora(e.target.value)}
+                  className="block w-full pl-11 pr-4 py-4 bg-gray-50 border-none rounded-2xl text-gray-700 font-medium focus:ring-2 focus:ring-indigo-100 focus:bg-white transition-all outline-none"
+                />
+              </div>
+            </div>
+
+            <button
+              onClick={handleCalculate}
+              disabled={!fecha || !hora}
+              className={`w-full py-4 mt-4 rounded-2xl font-bold text-white shadow-lg shadow-indigo-200 transition-all duration-300 transform active:scale-95
+                ${(!fecha || !hora) ? 'bg-gray-300 cursor-not-allowed shadow-none' : 'bg-black hover:bg-gray-800'}`}
+            >
+              {loading ? <span className="inline-block animate-spin">🔄</span> : "Revelar Destino"}
+            </button>
+          </div>
+
+          <div className="px-6 py-8 min-h-[300px]">
+            {resultado && (
+              <div className="animate-in fade-in slide-in-from-bottom-4 duration-700">
+
+                {resultado.nemontemi ? (
+                  <div className="bg-red-50 border border-red-100 rounded-3xl p-8 text-center space-y-4">
+                    <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-red-100 text-red-600 mb-2">
+                      <span className="text-3xl">⚠️</span>
+                    </div>
+                    <h2 className="text-2xl font-bold text-red-700">Nemontemi</h2>
+                    <p className="text-red-600/80 font-medium text-sm leading-relaxed">
+                      Naciste en los días vacíos del año. <br/>
+                      Días de reflexión y silencio interior. <br/>
+                      No hay Tonal asignado.
+                    </p>
+                  </div>
+                ) : (
+                  <div className="grid grid-cols-2 gap-4">
+
+                    <CardResult
+                      title="Año (Xihuitl)"
+                      main={`${resultado.anio.n} ${resultado.anio.s}`}
+                      sub="Regente Anual"
+                      iconNode={<span>{resultado.anio.emoji}</span>}
+                      accentColor="text-orange-500"
+                      delay="delay-0"
+                    />
+
+                    <div className="col-span-1 row-span-2 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-3xl p-6 text-white flex flex-col items-center justify-between shadow-xl shadow-indigo-200 transform transition-all hover:scale-[1.02]">
+                      <div className="text-xs font-bold opacity-70 uppercase tracking-widest mt-2">Tu Tonal</div>
+                      <div className="text-center space-y-1">
+                        <div className="my-4">
+                          <ImgIcon src={resultado.tonal.img} alt={resultado.tonal.s} className="w-24 h-24 mx-auto" />
+                        </div>
+                        <div className="text-4xl font-bold tracking-tight">{resultado.tonal.n}</div>
+                        <div className="text-xl font-medium opacity-90">{resultado.tonal.s}</div>
+                        <div className="text-xs font-light opacity-75 italic">{resultado.tonal.es}</div>
+                      </div>
+                      <div className="mt-4 flex items-center space-x-2 text-[10px] bg-white/10 px-3 py-1 rounded-full backdrop-blur-sm">
+                        <span>☀️</span>
+                        <span>Esencia Solar</span>
+                      </div>
+                    </div>
+
+                    <CardResult
+                      title="Nahual"
+                      main={resultado.nahual.s}
+                      sub={resultado.nahual.es}
+                      iconNode={<ImgIcon src={resultado.nahual.img} alt={resultado.nahual.s} className="w-14 h-14" />}
+                      accentColor="text-indigo-900"
+                      delay="delay-100"
+                    />
+
+                    <div className="col-span-2 grid grid-cols-2 gap-3">
+                      <div className="bg-indigo-50 rounded-2xl p-4 flex flex-col items-center justify-center text-center border border-indigo-100 space-y-2">
+                        <div className="bg-white p-2 rounded-xl shadow-sm text-indigo-600">⭐</div>
+                        <div>
+                          <div className="text-[9px] uppercase font-bold text-gray-400 tracking-wider mb-1">Señor del Día</div>
+                          <div className="text-xs font-bold text-gray-800 leading-tight">{resultado.tonacatecuhtli.nombre}</div>
+                          <div className="text-[10px] text-indigo-500 font-medium mt-1">Hora: {resultado.tonacatecuhtli.hora}</div>
+                        </div>
+                      </div>
+
+                      <div className="bg-emerald-50 rounded-2xl p-4 flex flex-col items-center justify-center text-center border border-emerald-100 space-y-2">
+                        <div className="bg-white p-2 rounded-xl shadow-sm text-emerald-600">🪶</div>
+                        <div>
+                          <div className="text-[9px] uppercase font-bold text-gray-400 tracking-wider mb-1">Ave Sagrada</div>
+                          <div className="text-xs font-bold text-gray-800 leading-tight">{resultado.ave.nahuatl}</div>
+                          <div className="text-[10px] text-emerald-600 font-medium italic mt-1">{resultado.ave.es}</div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="col-span-2 bg-slate-900 rounded-2xl p-5 shadow-lg border border-slate-700 relative overflow-hidden text-white">
+                      <div className="absolute -right-6 -top-6 text-slate-800/50 text-8xl">🌙</div>
+
+                      <div className="relative z-10 grid grid-cols-2 gap-4 divide-x divide-slate-700/50">
+
+                        <div className="flex flex-col items-start justify-center space-y-2 pr-2">
+                          <div className="flex items-center space-x-2">
+                            <div className="bg-slate-800 p-2 rounded-full shadow-inner border border-slate-600">🌘</div>
+                            <div className="text-[9px] font-bold text-blue-300 tracking-widest uppercase">Señor de la Noche</div>
+                          </div>
+                          <div>
+                            <div className="text-lg font-bold text-white leading-tight mb-1">{resultado.noche.nombre}</div>
+                            <div className="text-[10px] text-slate-400 font-light leading-snug">{resultado.noche.desc}</div>
+                          </div>
+                        </div>
+
+                        <div className="flex flex-col items-start justify-center space-y-2 pl-4">
+                          <div className="flex items-center space-x-2">
+                            <div className="bg-slate-800 p-2 rounded-full shadow-inner border border-slate-600">👻</div>
+                            <div className="text-[9px] font-bold text-purple-300 tracking-widest uppercase">Acompañante</div>
+                          </div>
+                          <div>
+                            <div className="text-lg font-bold text-white leading-tight mb-1">{resultado.noche.acompanante.nahuatl}</div>
+                            <div className="text-[10px] text-slate-400 font-light italic">{resultado.noche.acompanante.es}</div>
+                          </div>
+                        </div>
+
+                      </div>
+                    </div>
+
+                    <div className="col-span-2 mt-2 bg-gray-50 rounded-2xl p-4 flex items-center justify-between border border-gray-100">
+                      <div className="flex items-center space-x-3">
+                        <div className="bg-white p-2 rounded-xl shadow-sm">
+                          <img src={resultado.trecena.img} alt={resultado.trecena.s} className="w-8 h-8 object-contain" />
+                        </div>
+                        <div>
+                          <div className="text-[10px] uppercase font-bold text-gray-400 tracking-wider">Trecena Regente</div>
+                          <div className="text-sm font-semibold text-gray-700">1 {resultado.trecena.s}</div>
+                        </div>
+                      </div>
+                      <div className="text-[10px] text-gray-400 bg-white px-2 py-1 rounded-lg border border-gray-100">
+                        Veintena: {resultado.veintena}
+                      </div>
+                    </div>
+
+                    {resultado.ajuste && (
+                      <div className="col-span-2 text-center mt-2 flex items-center justify-center space-x-1 text-xs text-amber-600/80 bg-amber-50 py-2 rounded-lg">
+                        <span>ℹ️</span>
+                        <span>Ajuste energético aplicado por horario de nacimiento</span>
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
+            )}
+
+            {!resultado && !loading && (
+              <div className="h-full flex flex-col items-center justify-center text-gray-300 space-y-4 py-12">
+                <div className="w-16 h-16 rounded-full bg-gray-50 flex items-center justify-center">
+                  <span className="opacity-20 text-2xl">🌙</span>
+                </div>
+                <p className="text-sm font-medium">Ingresa tus datos para calcular</p>
+              </div>
+            )}
+          </div>
+
+        </div>
+      </div>
+    );
+  };
+
+  const mount = document.getElementById("root-calculadora");
+  const root = ReactDOM.createRoot(mount);
+  root.render(<App />);
+</script>
 </body>
 </html>
+
 
 
 
