@@ -577,250 +577,66 @@
     <script type="text/babel">
     const { useState } = React;
 
-// --- BASES DE DATOS ---
-const SENORES_NOCHE = ["Xiuhtecuhtli", "Itztli", "Piltzintecuhtli", "Centeotl", "Mictlantecuhtli", "Chalchiuhtlicue", "Tlazolteotl", "Tepeyollotl", "Tlaloc"];
+    // Mantén INFO_DETALLADA si quieres usarla después, o bórrala también.
+    const INFO_DETALLADA = { /* ... */ }; 
 
-const ACOMPANANTES_DIA = [
-    { s: "Xiuhtecuhtli", a: "Cuauhtli (Águila)" }, { s: "Tlaltecuhtli", a: "Zolin (Codorniz)" },
-    { s: "Chalchiuhtlicue", a: "Papalotl (Mariposa)" }, { s: "Tonatiuh", a: "Tototl (Pájaro)" },
-    { s: "Tlazolteotl", a: "Cuauhtli (Águila)" }, { s: "Mictlantecuhtli", a: "Cozcaquauhtli (Zopilote)" },
-    { s: "Xochipilli", a: "Cuetzpalin (Lagartija)" }, { s: "Tlaloc", a: "Chicuatli (Lechuza)" },
-    { s: "Quetzalcoatl", a: "Tzinitzcan (Quetzal)" }, { s: "Tezcatlipoca", a: "Cenotzotz (Murciélago)" },
-    { s: "Mictlancihuatl", a: "Alo (Guacamaya)" }, { s: "Tlahuizcalpantecuhtli", a: "Quetzalcoatl (Hummingbird)" },
-    { s: "Ilamatecuhtli", a: "Huitzitzilin (Colibrí)" }
-];
+    const App = () => {
+      const [fecha, setFecha] = useState("");
+      const [hora, setHora] = useState("");
+      const [resultado, setResultado] = useState(null);
+      const [loading, setLoading] = useState(false);
 
-const SIGNOS = [
-  { n: "Cipactli", es: "Caimán" }, { n: "Ehecatl", es: "Viento" }, 
-  { n: "Calli", es: "Casa" }, { n: "Cuetzpalin", es: "Lagartija" }, 
-  { n: "Coatl", es: "Serpiente" }, { n: "Miquiztli", es: "Muerte" },
-  { n: "Mazatl", es: "Venado" }, { n: "Tochtli", es: "Conejo" }, 
-  { n: "Atl", es: "Agua" }, { n: "Itzcuintli", es: "Perro" }, 
-  { n: "Ozomatli", es: "Mono" }, { n: "Malinalli", es: "Hierba" },
-  { n: "Acatl", es: "Caña" }, { n: "Ocelotl", es: "Jaguar" }, 
-  { n: "Cuauhtli", es: "Águila" }, { n: "Cozcaquauhtli", es: "Zopilote" }, 
-  { n: "Ollin", es: "Movimiento" }, { n: "Tecpatl", es: "Pedernal" },
-  { n: "Quiahuitl", es: "Lluvia" }, { n: "Xochitl", es: "Flor" }
-];
-
-const INFO_DETALLADA = {
-    1: { titulo: "Cipactli", nahual: "Ozomahtli", significado: "Inicio y Fuerza Vital", desc: "Representa el inicio, la fuerza vital y la capacidad de crear.", sombra: "Sentimiento de rechazo.", aprendizaje: "Seguridad interior." },
-    2: { titulo: "Ehecatl", nahual: "Malinalli", significado: "Mente y Palabra", desc: "Simboliza la mente, la palabra y el movimiento invisible.", sombra: "Miedo a perder libertad.", aprendizaje: "Palabra con precisión." },
-    3: { titulo: "Calli", nahual: "Acatl", significado: "Estructura y Estabilidad", desc: "Representa estructura y pensamiento profundo.", sombra: "Rigidez emocional.", aprendizaje: "Construir bases firmes." },
-    4: { titulo: "Cuetzpalin", nahual: "Ocelotl", significado: "Dinamismo y Acción", desc: "Energía dinámica, expresiva y orientada a la acción.", sombra: "Impulsividad.", aprendizaje: "Disciplina y enfoque." },
-    5: { titulo: "Coatl", nahual: "Cuauhtli", significado: "Poder y Transformación", desc: "Signo de poder, transformación y carisma.", sombra: "Luchas de poder.", aprendizaje: "Aceptar los cambios." },
-    6: { titulo: "Miquiztli", nahual: "Cozcaquauhtli", significado: "Trascendencia y Servicio", desc: "No es fin físico, sino transformación social.", sombra: "Victimización.", aprendizaje: "Servicio consciente." },
-    7: { titulo: "Mazatl", nahual: "Ollin", significado: "Sensibilidad y Autenticidad", desc: "Energía pacífica, artística y espiritual.", sombra: "Conflicto de independencia.", aprendizaje: "Equilibrio afectivo." },
-    8: { titulo: "Tochtli", nahual: "Tecpatl", significado: "Percepción y Rapidez", desc: "Rapidez mental y energía perceptiva.", sombra: "Ansiedad o excesos.", aprendizaje: "Autocontrol." },
-    9: { titulo: "Atl", nahual: "Quiahuitl", significado: "Intuición y Emoción", desc: "Simboliza el mundo interior y la empatía.", sombra: "Inestabilidad emocional.", aprendizaje: "Responsabilidad emocional." },
-    10: { titulo: "Itzcuintli", nahual: "Xochitl", significado: "Lealtad y Trabajo", desc: "Lealtad, trabajo en equipo y protección.", sombra: "Obstinación.", aprendizaje: "Liderazgo consciente." },
-    11: { titulo: "Ozomatli", nahual: "Cipactli", significado: "Creatividad y Humor", desc: "Creatividad, humor y talento artístico.", sombra: "Dispersión.", aprendizaje: "Desarrollo profundo." },
-    12: { titulo: "Malinalli", nahual: "Ehecatl", significado: "Resistencia y Purificación", desc: "Crecimiento silencioso y resistencia.", sombra: "Reprimir emociones.", aprendizaje: "Expresión auténtica." },
-    13: { titulo: "Acatl", nahual: "Calli", significado: "Autoridad y Principios", desc: "Energía de autoridad moral y firmeza.", sombra: "Rigidez o moralismo.", aprendizaje: "Flexibilidad social." },
-    14: { titulo: "Ocelotl", nahual: "Cuetzpalin", significado: "Intensidad e Intuición", desc: "Fuerza interior, intuición y espiritualidad profunda.", sombra: "Conflictos internos.", aprendizaje: "Canalización de poder." },
-    15: { titulo: "Cuauhtli", nahual: "Coatl", significado: "Visión y Libertad", desc: "Visión elevada, independencia y ambición.", sombra: "Aislamiento.", aprendizaje: "Vínculos sanos." },
-    16: { titulo: "Cozcaquauhtli", nahual: "Miquiztli", significado: "Sabiduría y Supervivencia", desc: "Sabiduría práctica y conciencia del ciclo.", sombra: "Inseguridad.", aprendizaje: "Confianza profesional." },
-    17: { titulo: "Ollin", nahual: "Mazatl", significado: "Progreso y Cambio", desc: "Mente activa, cambio constante y progreso.", sombra: "Inflexibilidad.", aprendizaje: "Paciencia y adaptación." },
-    18: { titulo: "Tecpatl", nahual: "Tochtli", significado: "Claridad y Precisión", desc: "Cortar ilusiones, claridad y compromiso.", sombra: "Sacrificio excesivo.", aprendizaje: "Equilibrio personal." },
-    19: { titulo: "Quiahuitl", nahual: "Atl", significado: "Filosofía y Sanación", desc: "Fertilidad espiritual y vocación de enseñanza.", sombra: "Cargas ajenas.", aprendizaje: "Formación constante." },
-    20: { titulo: "Xochitl", nahual: "Itzcuintli", significado: "Belleza e Idealismo", desc: "Belleza, amor, arte e idealismo.", sombra: "Decepción constante.", aprendizaje: "Realismo afectivo." }
-};
-
-const TABLA_ANIOS = {
-    37: {s:"Calli", b:1}, 50: {s:"Tochtli", b:1}, 11: {s:"Acatl", b:1}, 24: {s:"Tecpatl", b:1},
-    25: {s:"Calli", b:10}, 38: {s:"Tochtli", b:10}, 51: {s:"Acatl", b:10}, 12: {s:"Tecpatl", b:10},
-    13: {s:"Calli", b:6}, 26: {s:"Tochtli", b:6}, 39: {s:"Acatl", b:6}, 0: {s:"Tecpatl", b:6},
-    1: {s:"Calli", b:2}, 14: {s:"Tochtli", b:2}, 27: {s:"Acatl", b:2}, 40: {s:"Tecpatl", b:2},
-    41: {s:"Calli", b:11}, 2: {s:"Tochtli", b:11}, 15: {s:"Acatl", b:11}, 28: {s:"Tecpatl", b:11},
-    29: {s:"Calli", b:7}, 42: {s:"Tochtli", b:7}, 3: {s:"Acatl", b:7}, 16: {s:"Tecpatl", b:7},
-    17: {s:"Calli", b:3}, 30: {s:"Tochtli", b:3}, 43: {s:"Acatl", b:3}, 4: {s:"Tecpatl", b:3},
-    5: {s:"Calli", b:12}, 18: {s:"Tochtli", b:12}, 31: {s:"Acatl", b:12}, 44: {s:"Tecpatl", b:12},
-    45: {s:"Calli", b:8}, 6: {s:"Tochtli", b:8}, 19: {s:"Acatl", b:8}, 32: {s:"Tecpatl", b:8},
-    33: {s:"Calli", b:4}, 46: {s:"Tochtli", b:4}, 7: {s:"Acatl", b:4}, 20: {s:"Tecpatl", b:4},
-    21: {s:"Calli", b:13}, 34: {s:"Tochtli", b:13}, 47: {s:"Acatl", b:13}, 8: {s:"Tecpatl", b:13},
-    9: {s:"Calli", b:9}, 22: {s:"Tochtli", b:9}, 35: {s:"Acatl", b:9}, 48: {s:"Tecpatl", b:9},
-    49: {s:"Calli", b:5}, 10: {s:"Tochtli", b:5}, 23: {s:"Acatl", b:5}, 36: {s:"Tecpatl", b:5}
-};
-
-const VEINTENAS = [
-    { id: 1, nombre: "Atlacahualo", m: 3, d: 12 }, { id: 2, nombre: "Tlacaxipehualiztli", m: 4, d: 1 },
-    { id: 3, nombre: "Tozoztontli", m: 4, d: 21 }, { id: 4, nombre: "Hueytozoztli", m: 5, d: 11 },
-    { id: 5, nombre: "Toxcatl", m: 5, d: 31 }, { id: 6, nombre: "Etzalcualiztli", m: 6, d: 20 },
-    { id: 7, nombre: "Tecuilhuitontli", m: 7, d: 10 }, { id: 8, nombre: "Huey Tecuilhuitl", m: 7, d: 30 },
-    { id: 9, nombre: "Tlaxochimaco", m: 8, d: 19 }, { id: 10, nombre: "Xocotl Huetzi", m: 9, d: 8 },
-    { id: 11, nombre: "Ochpaniztli", m: 9, d: 28 }, { id: 12, nombre: "Teotleco", m: 10, d: 18 },
-    { id: 13, nombre: "Tepeilhuitl", m: 11, d: 7 }, { id: 14, nombre: "Quecholli", m: 11, d: 27 },
-    { id: 15, nombre: "Panquetzaliztli", m: 12, d: 17 }, { id: 16, nombre: "Atemoztli", m: 1, d: 6 },
-    { id: 17, nombre: "Tititl", m: 1, d: 26 }, { id: 18, nombre: "Izcalli", m: 2, d: 15 },
-    { id: 19, nombre: "Nemontemi", m: 3, d: 7 }
-];
-
-const SECUENCIA_VEINTENA = [1, 8, 2, 9, 3, 10, 4, 11, 5, 12, 6, 13, 7];
-        
-// --- LÓGICA DE CÁLCULO RE-ESTRUCTURADA ---
-function calcularTonalli(fechaStr, horaStr) {
-    if (!fechaStr || !horaStr) return null;
-    const [y, m, d] = fechaStr.split('-').map(Number);
-    const [hh, mm] = horaStr.split(':').map(Number);
-    
-    let fechaInput = new Date(y, m - 1, d, hh, mm);
-    let anio = y;
-
-    // 1. Obtener datos del año del Respaldo Estable
-    let residuo = anio % 52;
-    let datosAnio = TABLA_ANIOS[residuo];
-
-    // 2. Punto crítico: Correlación de inicio de año
-    // Si tu respaldo dice que el 28 de marzo es 3 Ollin, 
-    // el 12 de marzo (inicio de Atlacahualo) debió ser 13 Cuetzpalin o similar.
-    
-    let dIni = 12; 
-    let hIni = 0; // Ajustar a 0 para simplificar si el respaldo no usa minutos exactos
-    
-    if (datosAnio.s === "Tochtli") hIni = 6;
-    if (datosAnio.s === "Acatl") hIni = 12;
-    if (datosAnio.s === "Tecpatl") { hIni = 18; dIni = 11; }
-
-    let inicioAnio = new Date(anio, 2, dIni, hIni, 0);
-    if (fechaInput < inicioAnio) {
-        anio -= 1;
-        datosAnio = TABLA_ANIOS[anio % 52];
-    }
-
-    // 3. Cálculo de diferencia de días (Motor del respaldo)
-    // Usamos el inicio del día (setHours 0,0,0) para evitar desvíos por minutos
-    const inicioDiaReferencia = new Date(fechaInput.getFullYear(), 2, dIni);
-    const diferenciaMilisegundos = fechaInput.getTime() - inicioDiaReferencia.getTime();
-    let diffDays = Math.floor(diferenciaMilisegundos / (1000 * 60 * 60 * 24));
-
-    // Ajuste por hora de cambio de signo (Cargador)
-    if (hh < hIni) {
-        diffDays -= 1;
-    }
-
-    // 4. EL AJUSTE PARA 3 OLLIN:
-    // El índice del signo Ollin es 16 (empezando en 0 para Cipactli)
-    // El índice de diferencia para el 28 de marzo suele ser 16 días desde el 12.
-    let idxSigno = (diffDays + 0) % 20; // Si sale 16, es Ollin. 
-    
-    // Sincronización del número (Trececuena)
-    // Si el respaldo da 3, ajustamos la constante de salto
-    let numBase = SECUENCIA_VEINTENA[(SECUENCIA_VEINTENA.indexOf(datosAnio.b) + (0)) % 13];
-    let numeroFinal = (numBase + diffDays) % 13;
-    if (numeroFinal === 0) numeroFinal = 13;
-
-    return {
-        signoNum: idxSigno + 1,
-        signo: SIGNOS[idxSigno].es,
-        tonal: { 
-            n: numeroFinal, 
-            nahuatl: SIGNOS[idxSigno].n 
-        }
-    };
-}
-
-const CalculadoraMexica = () => {
-    const [fecha, setFecha] = useState("");
-    const [hora, setHora] = useState("");
-    const [res, setRes] = useState(null);
-    const [loading, setLoading] = useState(false);
-
-    const handleCalculate = () => {
+      const handleCalculate = () => {
         if(!fecha || !hora) return;
         setLoading(true);
-        const calc = calcularTonalli(fecha, hora);
-        if (calc && calc.nemontemi) {
-            setTimeout(() => { window.location.href = `nemontemi.html?fecha=${fecha}&hora=${hora}`; }, 600);
-            return;
-        }
-        setTimeout(() => { setRes(calc); setLoading(false); }, 800);
+        
+        // Simulación temporal: Aquí es donde insertarás la nueva calculadora
+        setTimeout(() => {
+          alert("Calculadora en mantenimiento. Fecha ingresada: " + fecha);
+          setLoading(false);
+        }, 600);
+      };
+
+      return (
+        <div className="min-h-screen flex items-center justify-center p-4">
+          <div className="max-w-md w-full bg-white rounded-[2.5rem] shadow-2xl border border-gray-100 overflow-hidden">
+            
+            <div className="pt-10 pb-6 px-8 text-center">
+              <h1 className="text-3xl font-bold text-gray-900 tracking-tight">Tonalpohualli</h1>
+              <p className="text-gray-400 text-[10px] font-bold uppercase tracking-[0.2em] mt-1">Sabiduría Ancestral</p>
+            </div>
+
+            <div className="px-8 space-y-4">
+              <div className="space-y-1">
+                <label className="text-[10px] font-bold text-gray-400 uppercase ml-1">Fecha</label>
+                <input type="date" value={fecha} onChange={(e) => setFecha(e.target.value)} 
+                       className="w-full px-4 py-4 bg-gray-50 rounded-2xl outline-none focus:ring-2 focus:ring-red-100 border-none" />
+              </div>
+              <div className="space-y-1">
+                <label className="text-[10px] font-bold text-gray-400 uppercase ml-1">Hora</label>
+                <input type="time" value={hora} onChange={(e) => setHora(e.target.value)} 
+                       className="w-full px-4 py-4 bg-gray-50 rounded-2xl outline-none focus:ring-2 focus:ring-red-100 border-none" />
+              </div>
+              <button onClick={handleCalculate} disabled={!fecha || !hora}
+                      className={`w-full py-4 rounded-2xl font-bold text-white shadow-lg transition-all active:scale-95 ${!fecha || !hora ? 'bg-gray-300' : 'bg-black hover:bg-gray-800'}`}>
+                {loading ? "Procesando..." : "Revelar Destino"}
+              </button>
+            </div>
+
+            <div className="px-6 py-8 min-h-[120px]">
+              {/* Esta sección queda vacía hasta que conectes la nueva lógica */}
+            </div>
+          </div>
+        </div>
+      );
     };
 
-    return (
-        <div className="flex items-center justify-center p-4">
-            <div className="max-w-md w-full bg-white rounded-[2.5rem] shadow-2xl border border-gray-100 overflow-hidden">
-                <div className="pt-10 pb-6 px-8 text-center">
-                    <h1 className="text-3xl font-bold text-gray-900 tracking-tight">Tonalpohualli</h1>
-                    <p className="text-gray-400 text-[10px] font-bold uppercase tracking-[0.2em] mt-1">Sabiduría Ancestral</p>
-                </div>
-                
-                <div className="px-8 space-y-4">
-                    <div className="space-y-1">
-                        <label className="text-[10px] font-bold text-gray-400 uppercase ml-1">Fecha de Nacimiento</label>
-                        <input type="date" value={fecha} onChange={(e) => setFecha(e.target.value)} 
-                               className="w-full px-4 py-4 bg-gray-50 rounded-2xl outline-none focus:ring-2 focus:ring-red-100 border-none" />
-                    </div>
-                    <div className="space-y-1">
-                        <label className="text-[10px] font-bold text-gray-400 uppercase ml-1">Hora (Aprox)</label>
-                        <input type="time" value={hora} onChange={(e) => setHora(e.target.value)} 
-                               className="w-full px-4 py-4 bg-gray-50 rounded-2xl outline-none focus:ring-2 focus:ring-red-100 border-none" />
-                    </div>
-                    <button onClick={handleCalculate} disabled={!fecha || !hora}
-                            className={`w-full py-4 rounded-2xl font-bold text-white shadow-lg transition-all active:scale-95 ${!fecha || !hora ? 'bg-gray-300' : 'bg-black hover:bg-gray-800'}`}>
-                        {loading ? "Consultando al tiempo..." : "Revelar mi Tonalli"}
-                    </button>
-                </div>
-
-                <div className="px-6 py-8">
-                    {res && (
-                        <div className="animate-[fadeIn_0.5s_ease-out] space-y-4">
-                            <div className="bg-white rounded-3xl p-6 border border-gray-100 shadow-xl text-center">
-                                <div className="w-32 h-32 bg-gray-50 rounded-full flex items-center justify-center mx-auto mb-4 border border-gray-100 shadow-inner">
-                                    <img src={`signos/${res.signoNum}.png`} className="w-24 h-24 object-contain" alt="Signo" />
-                                </div>
-                                
-                                <h2 className="text-3xl font-black text-red-900 leading-tight">
-                                    {res.numeral} {res.signoNombre}
-                                </h2>
-                                <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-4">({res.signoEsp})</p>
-                                
-                                <div className="grid grid-cols-1 gap-2 text-left text-[13px]">
-                                    <div className="bg-gray-50 p-3 rounded-xl flex justify-between">
-                                        <span className="text-gray-500 font-medium">Trecena</span>
-                                        <span className="font-bold text-red-800">{res.trecena}</span>
-                                    </div>
-                                    <div className="bg-gray-50 p-3 rounded-xl flex justify-between">
-                                        <span className="text-gray-500 font-medium">Veintena</span>
-                                        <span className="font-bold">{res.veintena}</span>
-                                    </div>
-                                    <div className="bg-gray-50 p-3 rounded-xl flex justify-between">
-                                        <span className="text-gray-500 font-medium">Año</span>
-                                        <span className="font-bold">{res.anioMex}</span>
-                                    </div>
-                                    <div className="bg-red-50 p-3 rounded-xl flex justify-between">
-                                        <span className="text-red-600 font-medium">Nahual</span>
-                                        <span className="font-bold text-red-900">{INFO_DETALLADA[res.signoNum].nahual}</span>
-                                    </div>
-                                </div>
-
-                                <hr className="my-4 border-gray-100" />
-
-                                <div className="grid grid-cols-2 gap-2 text-left">
-                                    <div className="bg-slate-50 p-3 rounded-xl border-t-2 border-slate-400">
-                                        <span className="text-[9px] font-bold text-slate-500 uppercase block mb-1">🌙 Noche</span>
-                                        <p className="text-[11px] font-bold leading-tight">{res.noche}</p>
-                                    </div>
-                                    <div className="bg-blue-50 p-3 rounded-xl border-t-2 border-blue-400">
-                                        <span className="text-[9px] font-bold text-blue-500 uppercase block mb-1">☀️ Día / Ave</span>
-                                        <p className="text-[11px] font-bold leading-tight">{res.dia}</p>
-                                        <p className="text-[9px] text-blue-800">{res.ave}</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    )}
-                </div>
-            </div>
-        </div>
-    );
-};
-
-const root = ReactDOM.createRoot(document.getElementById('root-calculadora'));
-root.render(<CalculadoraMexica />);
-        
+    const root = ReactDOM.createRoot(document.getElementById('root-calculadora'));
+root.render(<App />);
 </script>
 </body>
 </html>
+
 
 
 
