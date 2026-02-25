@@ -27,9 +27,12 @@
 
         /* Animación del Spinner de Grecas */
         .spinner-azteca {
-            animation: rotateGrecas 0.5s linear infinite;
-            filter: drop-shadow(0 0 8px rgba(0,0,0,0.3));
-        }
+    animation: rotateGrecas 0.5s linear infinite;
+    filter: drop-shadow(0 0 8px rgba(0,0,0,0.3));
+    /* Optimización para altas velocidades */
+    will-change: transform;
+    image-rendering: -webkit-optimize-contrast; 
+}
         @keyframes rotateGrecas {
             from { transform: rotate(0deg); }
             to { transform: rotate(360deg); }
