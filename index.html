@@ -133,6 +133,34 @@
 
         /* Utilidades */
         .hidden { display: none; }
+        /* Estilos para los iconos de redes sociales */
+.social-links {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+    margin-left: 20px;
+    padding-left: 20px;
+    border-left: 1px solid rgba(0,0,0,0.1); /* Separador sutil */
+}
+
+.social-links a {
+    font-size: 18px;
+    color: #86868b; /* Gris Apple */
+    transition: all 0.3s ease;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+}
+
+.social-links a:hover {
+    color: var(--mexica-red); /* Cambia a tu rojo al pasar el mouse */
+    transform: scale(1.1);
+}
+
+/* Ajuste para que el menú superior no se amontone */
+.nav-links {
+    margin-left: auto; /* Empuja los links al centro/derecha */
+}
     </style>
 </head>
 <body>
@@ -243,3 +271,4 @@
 
     </body>
 </html>
+
