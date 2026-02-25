@@ -154,9 +154,16 @@
                     setFechaHeader(fObj.toLocaleDateString('es-MX', {day:'numeric', month:'long', year:'numeric'}));
                     
                     setTimeout(() => {
-                        calculate(f, h);
-                        setLoading(false);
-                    }, 1500);
+  try {
+    calculate(f, h);
+  } catch (e) {
+    // Si algo falla, regresamos al index con la misma fecha/hora
+    window.location.href = `./index.html?fecha=${encodeURIComponent(f)}&hora=${encodeURIComponent(h)}#sec-calculadora`;
+    return;
+  } finally {
+    setLoading(false);
+  }
+}, 1500);
                 } else {
                     window.location.href = 'index.html';
                 }
@@ -179,6 +186,10 @@
                 let effDay = (hh * 60 + mm < fH * 60 + fM) ? d - 1 : d;
                 let nemStart = (yType === 'ACATL' || yType === 'TECPATL') ? 6 : 7;
                 let dayIdx = effDay - nemStart;
+                // ✅ Si no cae en los 5 días (0-4), no es un Nemontemi válido para esta tabla
+if (dayIdx < 0 || dayIdx > 4) {
+  throw new Error("Nemontemi fuera de rango (debe ser 5 días).");
+}
 
                 const sName = NEMONTEMI_SEQUENCES[yType][dayIdx];
                 const sIdx = SIGNOS_DATA.findIndex(s => s.n === sName);
