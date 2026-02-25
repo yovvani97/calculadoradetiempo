@@ -14,7 +14,7 @@
             --apple-text: #1d1d1f;
             --apple-card: #ffffff;
             --mexica-red: #b00e2d;
-            --mexica-gold: #fde047;
+            --navbar-height: 60px;
         }
 
         body {
@@ -23,55 +23,84 @@
             color: var(--apple-text);
             margin: 0;
             padding: 0;
-            line-height: 1.5;
             -webkit-font-smoothing: antialiased;
         }
 
-        /* Contenedor principal */
-        .app-wrapper {
-            max-width: 500px;
-            margin: 0 auto;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-        }
-
-        /* Banner Cósmico */
-        .cosmic-banner {
+        /* --- NAVEGACIÓN PC (Desktop) --- */
+        .desktop-nav {
+            display: none; /* Oculto por defecto en móvil */
+            position: fixed;
+            top: 0;
+            width: 100%;
+            height: var(--navbar-height);
             background: rgba(255, 255, 255, 0.8);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
-            position: sticky;
-            top: 0;
-            z-index: 100;
+            z-index: 1000;
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+        }
+
+        .nav-content {
+            max-width: 1000px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 100%;
+            padding: 0 20px;
+        }
+
+        .nav-links { display: flex; gap: 30px; }
+        .nav-links a {
+            text-decoration: none;
+            color: var(--apple-text);
+            font-size: 14px;
+            font-weight: 400;
+            transition: color 0.3s;
+            cursor: pointer;
+        }
+        .nav-links a:hover { color: var(--mexica-red); }
+
+        /* --- BANNER CÓSMICO --- */
+        .cosmic-banner {
+            background: #fff;
             padding: 12px 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;
             border-bottom: 1px solid rgba(0,0,0,0.05);
+            margin-top: 0;
         }
 
-        /* Tarjeta de Contenido */
+        /* --- CONTENEDOR PRINCIPAL --- */
+        .app-wrapper {
+            max-width: 800px;
+            margin: 0 auto;
+            min-height: 100vh;
+            padding-bottom: 100px; /* Espacio para el nav móvil */
+        }
+
         .content-card {
             background: var(--apple-card);
             margin: 20px;
-            padding: 24px;
+            padding: 30px;
             border-radius: 28px;
             box-shadow: 0 8px 30px rgba(0,0,0,0.04);
+            transition: transform 0.3s ease;
         }
 
-        /* Menú Inferior Estilo iOS */
+        /* --- NAVEGACIÓN MÓVIL (Bottom Bar) --- */
         .bottom-nav {
             position: fixed;
             bottom: 0;
             width: 100%;
-            max-width: 500px;
             background: rgba(255, 255, 255, 0.85);
             backdrop-filter: blur(20px);
             display: flex;
             justify-content: space-around;
-            padding: 12px 0 24px 0; /* Espacio extra abajo para el notch del iPhone */
+            padding: 12px 0 25px 0;
             border-top: 1px solid rgba(0,0,0,0.05);
+            z-index: 1000;
         }
 
         .nav-item {
@@ -80,115 +109,137 @@
             color: #86868b;
             font-size: 10px;
             font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
             display: flex;
             flex-direction: column;
             align-items: center;
             gap: 4px;
+            cursor: pointer;
         }
 
         .nav-item.active { color: var(--mexica-red); }
-        .nav-item span {
-    font-size: 20px;
-    margin-bottom: 2px;
-}
+        .nav-item span { font-size: 22px; }
+
+        /* --- RESPONSIVIDAD (Media Queries) --- */
+        @media (min-width: 768px) {
+            .desktop-nav { display: block; }
+            .bottom-nav { display: none; }
+            .app-wrapper { padding-top: 80px; }
+            .cosmic-banner { 
+                margin: 20px; 
+                border-radius: 20px; 
+                border: 1px solid rgba(0,0,0,0.05);
+            }
+        }
+
+        /* Utilidades */
+        .hidden { display: none; }
     </style>
 </head>
 <body>
+
+    <nav class="desktop-nav">
+        <div class="nav-content">
+            <div style="font-weight: 600; letter-spacing: -0.5px; color: var(--mexica-red);">TIEMPO SAGRADO</div>
+            <div class="nav-links">
+                <a onclick="navegar('sec-calculadora')">Calculadora</a>
+                <a onclick="navegar('sec-cuenta')">La Cuenta</a>
+                <a onclick="navegar('sec-nosotros')">Nosotros</a>
+                <a onclick="navegar('sec-rituales')">Rituales</a>
+            </div>
+        </div>
+    </nav>
+
     <div class="app-wrapper">
         
         <header class="cosmic-banner">
-            <div id="reloj-container">
-                <div style="font-weight: 600; font-size: 17px;" id="reloj-txt">00:00</div>
-                <div style="font-size: 11px; color: #86868b;" id="fecha-txt">Cargando...</div>
+            <div>
+                <div style="font-weight: 600; font-size: 18px; letter-spacing: -0.5px;" id="reloj-txt">00:00</div>
+                <div style="font-size: 11px; color: #86868b; font-weight: 600;" id="fecha-txt">CARGANDO...</div>
             </div>
-            
             <div style="text-align: right;">
-                <div id="luna-icon" style="font-size: 20px;">🌑</div>
-                <div id="luna-txt" style="font-size: 10px; color: #86868b; font-weight: 600;">Luna</div>
+                <div id="luna-icon" style="font-size: 22px;">🌑</div>
+                <div id="luna-txt" style="font-size: 10px; color: #86868b; font-weight: 700; text-transform: uppercase;">Luna</div>
             </div>
         </header>
 
-        <main style="flex: 1; padding-bottom: 80px;">
-            
-            <div id="sec-calculadora" class="content-card">
-                <p style="text-align: center; color: #ccc;">Tu calculadora aparecerá aquí...</p>
-            </div>
+        <main>
+            <section id="sec-calculadora" class="content-card">
+                <h2 style="margin-top:0;">Tonalpohualli</h2>
+                <div id="root">
+                    <p style="color: #86868b;">Cargando motor de cálculo...</p>
+                </div>
+            </section>
 
-            <div id="sec-cuenta" class="content-card" style="display: none;">
-                <h2 style="font-size: 24px; font-weight: 600;">La Cuenta del Tiempo</h2>
-                <p style="color: #86868b;">Aquí irá la interpretación profunda de los Tonallis...</p>
-            </div>
-            
+            <section id="sec-cuenta" class="content-card hidden">
+                <h2>La Cuenta del Tiempo</h2>
+                <p style="color: #86868b;">Aquí aparecerán las interpretaciones de los 20 signos y las 13 trecenas.</p>
+            </section>
+
+            <section id="sec-nosotros" class="content-card hidden">
+                <h2>Quiénes Somos</h2>
+                <p style="color: #86868b;">Investigación dedicada a rescatar la mathesis tolteca y el conocimiento ancestral.</p>
+            </section>
+
+            <section id="sec-rituales" class="content-card hidden">
+                <h2>Rituales</h2>
+                <p style="color: #86868b;">Próximamente: Guías para sintonizar con la energía del día.</p>
+            </section>
         </main>
 
         <nav class="bottom-nav">
             <button class="nav-item active" onclick="navegar('sec-calculadora')">
-                <span>🧮</span> Calcular
+                <span>🧮</span> CALCULAR
             </button>
             <button class="nav-item" onclick="navegar('sec-cuenta')">
-                <span>📖</span> Cuenta
+                <span>📖</span> CUENTA
             </button>
-            <button class="nav-item">
-                <span>🌿</span> Rituales
+            <button class="nav-item" onclick="navegar('sec-rituales')">
+                <span>🌿</span> RITUALES
+            </button>
+            <button class="nav-item" onclick="navegar('sec-nosotros')">
+                <span>👤</span> NOSOTROS
             </button>
         </nav>
     </div>
 
     <script>
-        // Función simple para navegar entre secciones
+        // 1. Navegación entre secciones
         function navegar(id) {
-            document.querySelectorAll('.content-card').forEach(c => c.style.display = 'none');
-            document.getElementById(id).style.display = 'block';
+            // Ocultar todas las secciones
+            document.querySelectorAll('section').forEach(sec => sec.classList.add('hidden'));
+            // Mostrar la seleccionada
+            document.getElementById(id).classList.remove('hidden');
             
-            // Actualizar estado activo en botones
-            document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
-            event.currentTarget.classList.add('active');
-        }
-    </script>
-    <script>
-    function actualizarBanner() {
-        const ahora = new Date();
-        
-        // 1. Actualizar Reloj
-        const horas = ahora.getHours().toString().padStart(2, '0');
-        const minutos = ahora.getMinutes().toString().padStart(2, '0');
-        document.getElementById('reloj-txt').innerText = `${horas}:${minutos}`;
-        
-        // 2. Actualizar Fecha
-        const opciones = { weekday: 'short', day: 'numeric', month: 'short' };
-        document.getElementById('fecha-txt').innerText = ahora.toLocaleDateString('es-MX', opciones).toUpperCase();
+            // Actualizar botones del menú móvil
+            document.querySelectorAll('.nav-item').forEach(btn => btn.classList.remove('active'));
+            const btnActivo = Array.from(document.querySelectorAll('.nav-item')).find(btn => btn.getAttribute('onclick').includes(id));
+            if(btnActivo) btnActivo.classList.add('active');
 
-        // 3. Cálculo de Fase Lunar (Algoritmo de precisión)
-        const getLuna = (date) => {
+            // Scroll suave arriba
+            window.scrollTo({top: 0, behavior: 'smooth'});
+        }
+
+        // 2. Reloj y Luna
+        function actualizarBanner() {
+            const ahora = new Date();
+            document.getElementById('reloj-txt').innerText = ahora.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+            document.getElementById('fecha-txt').innerText = ahora.toLocaleDateString('es-MX', {weekday: 'short', day: 'numeric', month: 'short'}).toUpperCase();
+
             const lp = 2551443; 
             const newMoon = new Date(1970, 0, 7, 20, 35, 0);
-            const phase = ((date.getTime() - newMoon.getTime()) / 1000) % lp;
+            const phase = ((ahora.getTime() - newMoon.getTime()) / 1000) % lp;
             const res = Math.floor((phase / lp) * 8);
             const fases = [
-                {i:'🌑', n:'Nueva'}, {i:'🌒', n:'Creciente'}, 
-                {i:'🌓', n:'Cuarto C.'}, {i:'🌔', n:'Gibosa C.'}, 
-                {i:'🌕', n:'Llena'}, {i:'🌖', n:'Gibosa M.'}, 
-                {i:'🌗', n:'Cuarto M.'}, {i:'🌘', n:'Menguante'}
+                {i:'🌑', n:'Nueva'}, {i:'🌒', n:'Creciente'}, {i:'🌓', n:'Cuarto C.'}, {i:'🌔', n:'Gibosa C.'}, 
+                {i:'🌕', n:'Llena'}, {i:'🌖', n:'Gibosa M.'}, {i:'🌗', n:'Cuarto M.'}, {i:'🌘', n:'Menguante'}
             ];
-            return fases[res];
-        };
+            document.getElementById('luna-icon').innerText = fases[res].i;
+            document.getElementById('luna-txt').innerText = fases[res].n;
+        }
 
-        const luna = getLuna(ahora);
-        document.getElementById('luna-icon').innerText = luna.i;
-        document.getElementById('luna-txt').innerText = luna.n;
-    }
+        setInterval(actualizarBanner, 1000);
+        actualizarBanner();
+    </script>
 
-    // Ejecutar cada segundo
-    setInterval(actualizarBanner, 1000);
-    actualizarBanner(); // Carga inicial
-</script>
-</body>
+    </body>
 </html>
-
-
-
-
-
-
