@@ -295,14 +295,32 @@
         </header>
 
         <section id="sec-calculadora">
-            <div class="content-card">
-                <h1 style="text-align: center; font-size: 32px; letter-spacing: -1px;">Tonalamatl</h1>
-                <p style="text-align: center; color: #86868b;">Ingresa tu fecha de nacimiento para conocer tu energía vital.</p>
-                <div style="text-align: center; margin-top: 40px; padding: 40px; border: 2px dashed #eee; border-radius: 20px; color: #ccc;">
-                    Espacio para el motor de cálculo
-                </div>
+    <div class="content-card" style="text-align: center; max-width: 600px; margin: 20px auto;">
+        <h1 style="font-size: 38px; letter-spacing: -1.5px; margin-bottom: 10px;">Tu Energía Vital</h1>
+        <p style="color: #86868b; font-size: 18px; margin-bottom: 30px;">Ingresa tu fecha de nacimiento para conocer tu signo.</p>
+        
+        <div style="margin-bottom: 30px;">
+            <input type="date" id="fecha-usuario" 
+                style="padding: 15px 25px; border-radius: 15px; border: 1px solid #d2d2d7; font-size: 18px; width: 100%; max-width: 300px; outline: none;">
+        </div>
+
+        <button onclick="TU_FUNCION_DE_CALCULO()" 
+            style="background: #1d1d1f; color: white; border: none; padding: 15px 40px; border-radius: 30px; font-size: 17px; font-weight: 600; cursor: pointer;">
+            Calcular Tonalli
+        </button>
+    </div>
+
+    <div id="resultado-container" class="hidden" style="margin-top: 30px; transition: all 0.5s ease;">
+        <div class="glifo-card" style="max-width: 400px; margin: 0 auto; border: 2px solid var(--mexica-red);">
+            <img id="img-resultado" src="" style="width: 120px; height: 120px; margin: 0 auto 20px auto; display: block;">
+            <h2 id="nombre-resultado" style="font-size: 32px; margin: 0;">Signo</h2>
+            <p id="maya-resultado" style="color: #86868b; font-style: italic;"></p>
+            <div style="background: rgba(0,0,0,0.03); padding: 20px; border-radius: 15px; text-align: left; margin-top: 20px;">
+                <p id="energia-resultado" style="margin: 0; font-size: 16px; line-height: 1.5;"></p>
             </div>
-        </section>
+        </div>
+    </div>
+</section>
 
         <section id="sec-nosotros" class="hidden">
             
@@ -577,6 +595,7 @@
     </script>
 </body>
 </html>
+
 
 
 
