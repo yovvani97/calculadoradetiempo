@@ -860,10 +860,17 @@
       setResultado(null);
 
       setTimeout(() => {
-        const res = calcularTonalli(fecha, hora);
-        setResultado(res);
-        setLoading(false);
-      }, 600);
+  const res = calcularTonalli(fecha, hora);
+
+  // ✅ SI ES NEMONTEMI, ABRE OTRA CALCULADORA
+  if (res && res.nemontemi) {
+    window.location.href = "nemontemi.html"; // misma pestaña
+    return;
+  }
+
+  setResultado(res);
+  setLoading(false);
+}, 600);
     };
 
     return (
@@ -1066,6 +1073,7 @@
 </script>
 </body>
 </html>
+
 
 
 
