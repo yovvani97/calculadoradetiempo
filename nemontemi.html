@@ -185,10 +185,22 @@
                 const [fH, fM] = frontiers[yType];
                 let effDay = (hh * 60 + mm < fH * 60 + fM) ? d - 1 : d;
                 let nemStart = (yType === 'ACATL' || yType === 'TECPATL') ? 6 : 7;
-                let dayIdx = effDay - nemStart;
-                // ✅ Si no cae en los 5 días (0-4), no es un Nemontemi válido para esta tabla
-if (dayIdx < 0 || dayIdx > 4) {
-  throw new Error("Nemontemi fuera de rango (debe ser 5 días).");
+let dayIdx = effDay - nemStart;
+
+/*
+  🔥 LIMBO DE FIN DE AÑO
+  El último día de Nemontemi se alarga hasta que inicia el nuevo año.
+  Si el cálculo da 5 (día 6), en realidad sigue siendo día 5.
+*/
+
+// Si es negativo, no es Nemontemi
+if (dayIdx < 0) {
+  throw new Error("No es Nemontemi.");
+}
+
+// Si se pasa de 4 (por el día largo), lo fijamos al último día
+if (dayIdx > 4) {
+  dayIdx = 4;
 }
 
                 const sName = NEMONTEMI_SEQUENCES[yType][dayIdx];
