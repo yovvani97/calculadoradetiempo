@@ -272,9 +272,9 @@
             </div>
 
             <div class="social-links">
-                <a href="https://facebook.com" target="_blank" title="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
-                <a href="https://instagram.com" target="_blank" title="Instagram"><i class="fa-brands fa-instagram"></i></a>
-                <a href="https://tiktok.com" target="_blank" title="TikTok"><i class="fa-brands fa-tiktok"></i></a>
+                <a href="https://facebook.com" target="_blank"><i class="fa-brands fa-facebook-f"></i></a>
+                <a href="https://instagram.com" target="_blank"><i class="fa-brands fa-instagram"></i></a>
+                <a href="https://tiktok.com" target="_blank"><i class="fa-brands fa-tiktok"></i></a>
             </div>
         </div>
     </nav>
@@ -304,29 +304,32 @@
 
         <section id="sec-nosotros" class="hidden">
             
-            <div class="apple-section bg-legado">
+            <div class="apple-section bg-legado" style="height: 60vh; margin-bottom: 20px;">
                 <div class="section-content">
                     <h2>Legado Cósmico</h2>
-                    <p>Nuestros abuelos nos han dejado una sabiduría que trasciende el tiempo; un mapa para entender nuestra conexión con el universo.</p>
+                    <p>Nuestros abuelos nos han dejado una sabiduría que trasciende el tiempo.</p>
                 </div>
             </div>
 
-            <div class="apple-section bg-maestro align-left">
-                <div class="section-content">
-                    <h2 style="color: var(--mexica-gold);">Maestro Arturo Meza</h2>
-                    <p>Esta cuenta se basa en las enseñanzas y el rescate histórico del Maestro Arturo Meza Gutiérrez. Un tributo a su labor por la mathesis tolteca.</p>
-                    <p class="discreto">*Esta página es una herramienta de difusión sin fines de lucro.</p>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin-bottom: 20px;">
+                
+                <div class="apple-section bg-maestro align-left" style="height: 500px; margin-bottom: 0;">
+                    <div class="section-content">
+                        <h2 style="color: var(--mexica-gold); font-size: 28px;">Maestro Arturo Meza</h2>
+                        <p style="font-size: 16px;">Tributo a su labor de rescate de la mathesis tolteca.</p>
+                        <p class="discreto">*Sitio no oficial.</p>
+                    </div>
                 </div>
-            </div>
 
-            <div class="apple-section bg-mapa">
-                <div class="section-content">
-                    <h2>La Interpretación</h2>
-                    <p>El Tonalamatl es un mapa sagrado. Su lectura profunda debe ser realizada por un profesional o un tonalpouhqui experimentado.</p>
-                    <p class="discreto">"Caminar en equilibrio sobre la Tierra."</p>
+                <div class="apple-section bg-mapa" style="height: 500px; margin-bottom: 0;">
+                    <div class="section-content">
+                        <h2 style="font-size: 28px;">Interpretación</h2>
+                        <p style="font-size: 16px;">Un arte sagrado que debe ser guiado por profesionales.</p>
+                        <p class="discreto">"Caminar en equilibrio."</p>
+                    </div>
                 </div>
-            </div>
 
+            </div>
         </section>
 
         <section id="sec-cuenta" class="hidden"><div class="content-card"><h2>La Cuenta</h2><p>Próximamente...</p></div></section>
@@ -355,61 +358,55 @@
 
     <script>
         function navegar(idSeccion) {
-            // Ocultar todas las secciones
             document.querySelectorAll('section').forEach(s => s.classList.add('hidden'));
-            // Mostrar la seleccionada
             document.getElementById(idSeccion).classList.remove('hidden');
             
-            // Actualizar botones del menú móvil
             document.querySelectorAll('.nav-item').forEach(btn => btn.classList.remove('active'));
             const index = ['sec-calculadora', 'sec-cuenta', 'sec-nosotros', 'sec-rituales'].indexOf(idSeccion);
             if(index !== -1) document.querySelectorAll('.nav-item')[index].classList.add('active');
 
-            // Hacer scroll hacia arriba al cambiar
             window.scrollTo({top: 0, behavior: 'smooth'});
         }
-    </script>
-    <script>
-    function actualizarReloj() {
-        const ahora = new Date();
-        
-        // 1. Hora y Fecha
-        const horas = ahora.getHours().toString().padStart(2, '0');
-        const minutos = ahora.getMinutes().toString().padStart(2, '0');
-        document.getElementById('reloj-txt').textContent = `${horas}:${minutos}`;
 
-        const opciones = { weekday: 'long', day: 'numeric', month: 'long' };
-        let fechaLarga = ahora.toLocaleDateString('es-MX', opciones);
-        fechaLarga = fechaLarga.charAt(0).toUpperCase() + fechaLarga.slice(1);
-        document.getElementById('fecha-txt').textContent = fechaLarga;
+        function actualizarReloj() {
+            const ahora = new Date();
+            
+            // Hora
+            const horas = ahora.getHours().toString().padStart(2, '0');
+            const minutos = ahora.getMinutes().toString().padStart(2, '0');
+            document.getElementById('reloj-txt').textContent = `${horas}:${minutos}`;
 
-        // 2. Cálculo de Fase Lunar Simple
-        const lunas = [
-            { n: "Luna Nueva", i: "🌑" }, { n: "Luna Creciente", i: "🌒" },
-            { n: "Cuarto Creciente", i: "🌓" }, { n: "Gibosa Creciente", i: "🌔" },
-            { n: "Luna Llena", i: "🌕" }, { n: "Gibosa Menguante", i: "🌖" },
-            { n: "Cuarto Menguante", i: "🌗" }, { n: "Luna Menguante", i: "🌘" }
-        ];
-        
-        // Algoritmo simple basado en ciclo de 29.53 días
-        const refDate = new Date(2000, 0, 6); // Luna nueva de referencia
-        const diff = (ahora - refDate) / (1000 * 60 * 60 * 24);
-        const cycle = 29.530588853;
-        const pos = (diff % cycle) / cycle;
-        const index = Math.floor(pos * 8);
-        
-        // Actualizar el HTML de la luna (asegúrate de que los IDs existan)
-        if(document.getElementById('luna-icon')) {
-            document.getElementById('luna-icon').textContent = lunas[index].i;
-            document.getElementById('luna-icon').nextElementSibling.textContent = lunas[index].n;
+            // Fecha
+            const opciones = { weekday: 'long', day: 'numeric', month: 'long' };
+            let fechaLarga = ahora.toLocaleDateString('es-MX', opciones);
+            fechaLarga = fechaLarga.charAt(0).toUpperCase() + fechaLarga.slice(1);
+            document.getElementById('fecha-txt').textContent = fechaLarga;
+
+            // Luna
+            const lunas = [
+                { n: "Luna Nueva", i: "🌑" }, { n: "Luna Creciente", i: "🌒" },
+                { n: "Cuarto Creciente", i: "🌓" }, { n: "Gibosa Creciente", i: "🌔" },
+                { n: "Luna Llena", i: "🌕" }, { n: "Gibosa Menguante", i: "🌖" },
+                { n: "Cuarto Menguante", i: "🌗" }, { n: "Luna Menguante", i: "🌘" }
+            ];
+            const refDate = new Date(2000, 0, 6);
+            const diff = (ahora - refDate) / (1000 * 60 * 60 * 24);
+            const cycle = 29.530588853;
+            const pos = (diff % cycle) / cycle;
+            const index = Math.floor(pos * 8);
+            
+            if(document.getElementById('luna-icon')) {
+                document.getElementById('luna-icon').textContent = lunas[index].i;
+                document.getElementById('luna-icon').nextElementSibling.textContent = lunas[index].n;
+            }
         }
-    }
-    // Ejecutar de inmediato y luego cada minuto
-    actualizarReloj();
-    setInterval(actualizarReloj, 60000);
-</script>
+
+        actualizarReloj();
+        setInterval(actualizarReloj, 60000);
+    </script>
 </body>
 </html>
+
 
 
 
