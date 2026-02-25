@@ -179,6 +179,21 @@
 .nav-links {
     margin-left: auto; /* Empuja los links al centro/derecha */
 }
+        /* Esto controlará el tamaño del logo */
+.main-logo {
+    height: 24px; /* Este es el tamaño ideal estilo Apple */
+    width: auto;
+    display: block;
+    margin: 0 auto; /* Lo centra horizontalmente */
+    transition: opacity 0.2s ease;
+}
+
+.logo-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+}
     </style>
 </head>
 <body>
@@ -187,7 +202,7 @@
     <div class="nav-content">
         <div class="logo-container" onclick="navegar('sec-calculadora')">
     <img src="logo_tiempo_sagrado_horizontal.png" alt="" class="main-logo">
-    </div>
+</div>
 
         <div class="nav-links">
             <a onclick="navegar('sec-calculadora')">Calculadora</a>
@@ -304,6 +319,7 @@
 
     </body>
 </html>
+
 
 
 
