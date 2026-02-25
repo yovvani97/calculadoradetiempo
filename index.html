@@ -95,43 +95,6 @@
 }
     </style>
 </head>
-    <script>
-    function actualizarBanner() {
-        const ahora = new Date();
-        
-        // 1. Actualizar Reloj
-        const horas = ahora.getHours().toString().padStart(2, '0');
-        const minutos = ahora.getMinutes().toString().padStart(2, '0');
-        document.getElementById('reloj-txt').innerText = `${horas}:${minutos}`;
-        
-        // 2. Actualizar Fecha
-        const opciones = { weekday: 'short', day: 'numeric', month: 'short' };
-        document.getElementById('fecha-txt').innerText = ahora.toLocaleDateString('es-MX', opciones).toUpperCase();
-
-        // 3. Cálculo de Fase Lunar (Algoritmo de precisión)
-        const getLuna = (date) => {
-            const lp = 2551443; 
-            const newMoon = new Date(1970, 0, 7, 20, 35, 0);
-            const phase = ((date.getTime() - newMoon.getTime()) / 1000) % lp;
-            const res = Math.floor((phase / lp) * 8);
-            const fases = [
-                {i:'🌑', n:'Nueva'}, {i:'🌒', n:'Creciente'}, 
-                {i:'🌓', n:'Cuarto C.'}, {i:'🌔', n:'Gibosa C.'}, 
-                {i:'🌕', n:'Llena'}, {i:'🌖', n:'Gibosa M.'}, 
-                {i:'🌗', n:'Cuarto M.'}, {i:'🌘', n:'Menguante'}
-            ];
-            return fases[res];
-        };
-
-        const luna = getLuna(ahora);
-        document.getElementById('luna-icon').innerText = luna.i;
-        document.getElementById('luna-txt').innerText = luna.n;
-    }
-
-    // Ejecutar cada segundo
-    setInterval(actualizarBanner, 1000);
-    actualizarBanner(); // Carga inicial
-</script>
 <body>
     <div class="app-wrapper">
         
@@ -184,8 +147,46 @@
             event.currentTarget.classList.add('active');
         }
     </script>
+    <script>
+    function actualizarBanner() {
+        const ahora = new Date();
+        
+        // 1. Actualizar Reloj
+        const horas = ahora.getHours().toString().padStart(2, '0');
+        const minutos = ahora.getMinutes().toString().padStart(2, '0');
+        document.getElementById('reloj-txt').innerText = `${horas}:${minutos}`;
+        
+        // 2. Actualizar Fecha
+        const opciones = { weekday: 'short', day: 'numeric', month: 'short' };
+        document.getElementById('fecha-txt').innerText = ahora.toLocaleDateString('es-MX', opciones).toUpperCase();
+
+        // 3. Cálculo de Fase Lunar (Algoritmo de precisión)
+        const getLuna = (date) => {
+            const lp = 2551443; 
+            const newMoon = new Date(1970, 0, 7, 20, 35, 0);
+            const phase = ((date.getTime() - newMoon.getTime()) / 1000) % lp;
+            const res = Math.floor((phase / lp) * 8);
+            const fases = [
+                {i:'🌑', n:'Nueva'}, {i:'🌒', n:'Creciente'}, 
+                {i:'🌓', n:'Cuarto C.'}, {i:'🌔', n:'Gibosa C.'}, 
+                {i:'🌕', n:'Llena'}, {i:'🌖', n:'Gibosa M.'}, 
+                {i:'🌗', n:'Cuarto M.'}, {i:'🌘', n:'Menguante'}
+            ];
+            return fases[res];
+        };
+
+        const luna = getLuna(ahora);
+        document.getElementById('luna-icon').innerText = luna.i;
+        document.getElementById('luna-txt').innerText = luna.n;
+    }
+
+    // Ejecutar cada segundo
+    setInterval(actualizarBanner, 1000);
+    actualizarBanner(); // Carga inicial
+</script>
 </body>
 </html>
+
 
 
 
