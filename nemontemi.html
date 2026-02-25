@@ -3,39 +3,49 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <link rel="icon" type="image/png" href="logo.png">
-    <link rel="apple-touch-icon" href="logo.png">
-    <link rel="manifest" href="manifest.json">
-    
     <title>Nemontemi: Tiempo de Introspección</title>
-
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 
     <style>
-        body { -webkit-tap-highlight-color: transparent; background-color: #f3f4f6; margin: 0; }
-        .bg-nemontemi-header { background: linear-gradient(135deg, #000000 0%, #2d2d2d 100%); }
+        :root {
+            --apple-bg: #f5f5f7;
+            --apple-text: #1d1d1f;
+            --mexica-red: #b00e2d;
+        }
+        body { 
+            font-family: 'Inter', -apple-system, sans-serif;
+            background-color: var(--apple-bg); 
+            color: var(--apple-text);
+            margin: 0; 
+            -webkit-tap-highlight-color: transparent;
+        }
         
-        /* Animación de entrada para el contenido */
-        .fade-in { animation: fadeIn 0.8s ease-out forwards; }
+        .fade-in { animation: fadeIn 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards; }
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* Animación del Spinner de Grecas */
-        .spinner-azteca {
-    animation: rotateGrecas 0.5s linear infinite;
-    filter: drop-shadow(0 0 8px rgba(0,0,0,0.3));
-    /* Optimización para altas velocidades */
-    will-change: transform;
-    image-rendering: -webkit-optimize-contrast; 
-}
+        .spinner-mexica {
+            animation: rotateGrecas 0.6s linear infinite;
+            will-change: transform;
+        }
         @keyframes rotateGrecas {
             from { transform: rotate(0deg); }
             to { transform: rotate(360deg); }
+        }
+
+        .glass-dark {
+            background: rgba(29, 29, 31, 0.95);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
         }
     </style>
 </head>
@@ -45,27 +55,28 @@
     <script type="text/babel">
         const { useState, useEffect } = React;
 
+        // --- DATA MANTENIDA DE TU LÓGICA ---
         const DESCRIPCIONES = {
-            "Cipactli": "Representa el origen, la abundancia y la fuerza creadora primordial. Es un día para iniciar proyectos con bases sólidas.",
-            "Ehecatl": "Símbolo de la comunicación, el espíritu y el aliento de vida. Invita a la flexibilidad y a dejar fluir las ideas.",
-            "Calli": "El refugio, la mente y el cuerpo físico. Es un tiempo para mirar hacia adentro y fortalecer nuestro hogar interno.",
-            "Cuetzpalin": "Símbolo de la regeneración y la agilidad. Representa la capacidad de adaptarse y sanar rápidamente.",
-            "Coatl": "La energía vital y la sabiduría terrenal. Día para conectar con el instinto y la transformación espiritual.",
-            "Miquiztli": "No es el fin, sino la transición. Representa la quietud, la reflexión y el soltar lo que ya no sirve.",
-            "Mazatl": "El guía elusivo y sagrado. Representa la intuición, la vigilancia y la conexión con lo divino en la naturaleza.",
-            "Tochtli": "Símbolo de la fertilidad y la autogestión. Invita a la previsión y a disfrutar de los frutos del esfuerzo.",
-            "Atl": "La fuerza emocional y la purificación. Día para limpiar el espíritu y dejar que los sentimientos fluyan.",
-            "Itzcuintli": "El guía fiel del alma. Representa la lealtad inquebrantable, la protección de la manada y el instinto agudo.",
-            "Ozomatli": "La alegría, el arte y el juego. Es un día para celebrar la vida con creatividad y sin complicaciones.",
-            "Malinalli": "La hierba que persiste. Representa la tenacidad, la renovación constante y la fuerza de la comunidad.",
-            "Acatl": "Símbolo de la autoridad espiritual y la rectitud. Día para buscar la sabiduría y elevar la conciencia.",
-            "Ocelotl": "El guerrero nocturno y el misterio. Representa la valentía, el poder oculto y la visión en la oscuridad.",
-            "Cuauhtli": "La visión elevada y la libertad. Es un tiempo para ver el panorama completo y aspirar a lo más alto.",
-            "Cozcaquauhtli": "El limpiador y el sabio anciano. Representa la longevidad, la paciencia y el reciclaje de la energía.",
-            "Ollin": "El movimiento perpetuo y el cambio. Nos recuerda que la vida es un ciclo constante de evolución.",
-            "Tecpatl": "La verdad cortante y la disciplina. Día para tomar decisiones firmes y separar lo real de lo ilusorio.",
-            "Quiahuitl": "La bendición de la lluvia y la fertilidad emocional. Representa el alivio y el crecimiento tras la tormenta.",
-            "Xochitl": "La belleza, el arte y la plenitud. Es el florecimiento del alma y la conexión con el placer sagrado."
+            "Cipactli": "Inicio y fuerza creadora primordial. Proyectos con bases sólidas.",
+            "Ehecatl": "Comunicación y espíritu. Invita a la flexibilidad.",
+            "Calli": "Refugio y mente. Fortalece el hogar interno.",
+            "Cuetzpalin": "Regeneración y agilidad. Capacidad de sanar.",
+            "Coatl": "Energía vital y transformación espiritual.",
+            "Miquiztli": "Quietud y reflexión. Soltar lo que ya no sirve.",
+            "Mazatl": "Intuición y vigilancia. Conexión con lo divino.",
+            "Tochtli": "Fertilidad y previsión. Disfrutar los frutos.",
+            "Atl": "Purificación emocional. Limpieza del espíritu.",
+            "Itzcuintli": "Lealtad y protección. El guía fiel del alma.",
+            "Ozomatli": "Alegría y arte. Celebrar la creatividad.",
+            "Malinalli": "Tenacidad y renovación constante.",
+            "Acatl": "Autoridad espiritual y rectitud.",
+            "Ocelotl": "Valentía y visión en la oscuridad.",
+            "Cuauhtli": "Visión elevada y libertad total.",
+            "Cozcaquauhtli": "Sabiduría, paciencia y reciclaje de energía.",
+            "Ollin": "Movimiento perpetuo y evolución constante.",
+            "Tecpatl": "Verdad cortante y decisiones firmes.",
+            "Quiahuitl": "Fertilidad emocional y crecimiento tras la tormenta.",
+            "Xochitl": "Belleza, plenitud y florecimiento del alma."
         };
 
         const SIGNOS_DATA = [
@@ -89,7 +100,6 @@
                 const params = new URLSearchParams(window.location.search);
                 const f = params.get('fecha'), h = params.get('hora');
                 
-                // Efecto de carga mística
                 const timer = setTimeout(() => {
                     if (f && h) {
                         calculate(f, h);
@@ -97,8 +107,7 @@
                     } else {
                         window.location.href = 'index.html';
                     }
-                }, 1500);
-
+                }, 1200);
                 return () => clearTimeout(timer);
             }, []);
 
@@ -137,65 +146,82 @@
                 });
             };
 
-            // PANTALLA DE CARGA ROJA
             if (loading) {
                 return (
                     <div className="min-h-screen flex flex-col items-center justify-center p-6 text-center" style={{ backgroundColor: '#b00e2d' }}>
-                        <div className="relative w-40 h-40 mb-8">
-                            <img 
-                                src="signos/spinner-grecas.png" 
-                                className="w-full h-full object-contain spinner-azteca"
-                                alt="Cargando..."
-                                onError={(e) => { e.target.src = "https://www.svgrepo.com/show/25443/aztec-sun.svg"; }}
-                            />
+                        <div className="w-24 h-24 mb-6">
+                            <svg className="spinner-mexica w-full h-full text-white/20" viewBox="0 0 100 100">
+                                <circle cx="50" cy="50" r="45" fill="none" stroke="currentColor" strokeWidth="2" />
+                                <circle cx="50" cy="50" r="45" fill="none" stroke="white" strokeWidth="4" strokeDasharray="60 200" strokeLinecap="round" />
+                            </svg>
                         </div>
-                        <h2 className="text-white text-xs font-bold uppercase tracking-[0.5em] animate-pulse">
-                            Consultando el Tiempo Sagrado
+                        <h2 className="text-white text-[10px] font-bold uppercase tracking-[0.4em] opacity-80">
+                            Calculando Nemontemi...
                         </h2>
                     </div>
                 );
             }
 
-            // RESULTADOS
             return (
                 <div className="min-h-screen flex items-center justify-center p-4">
-                    <div className="max-w-md w-full bg-white rounded-[2.5rem] shadow-2xl border border-gray-100 overflow-hidden fade-in">
-                        <div className="pt-10 pb-6 px-8 text-center bg-nemontemi-header text-white">
-                            <h1 className="text-3xl font-bold tracking-tight uppercase">Nemontemi</h1>
-                            <p className="opacity-50 text-[10px] font-bold uppercase tracking-[0.3em] mt-1">Días de Guardia</p>
+                    <div className="max-w-md w-full bg-white rounded-[2.8rem] shadow-2xl border border-gray-100 overflow-hidden fade-in">
+                        
+                        {/* Header Estilo Apple Dark */}
+                        <div className="pt-12 pb-8 px-8 text-center glass-dark text-white">
+                            <span className="inline-block px-3 py-1 rounded-full bg-white/10 text-[9px] font-bold uppercase tracking-widest mb-3">
+                                Tiempo de Guardia
+                            </span>
+                            <h1 className="text-4xl font-extrabold tracking-tight">Nemontemi</h1>
+                            <p className="opacity-60 text-[11px] font-medium mt-2">Día {res.diaNem} de 5 • Introspección</p>
                         </div>
-                        <div className="px-6 py-8 text-center">
-                            <div className="w-32 h-32 bg-gray-50 rounded-full flex items-center justify-center mx-auto mb-4 border border-gray-100 shadow-inner">
-                                <img src={`signos/${res.imgNum}.png`} className="w-24 h-24 object-contain" alt={res.sName} />
+
+                        <div className="px-8 py-10 text-center">
+                            {/* Glifo */}
+                            <div className="w-36 h-36 bg-gray-50 rounded-full flex items-center justify-center mx-auto mb-6 border border-gray-100 shadow-inner">
+                                <img src={`img/glifo-${res.imgNum}.png`} className="w-28 h-28 object-contain" alt={res.sName} 
+                                     onError={(e) => { e.target.src = "https://via.placeholder.com/150?text=Nemontemi"; }} />
                             </div>
-                            <h2 className="text-3xl font-black text-gray-900 leading-tight">
+
+                            {/* Título Principal */}
+                            <h2 className="text-4xl font-black text-gray-900 leading-tight">
                                 {res.numeral} {res.sName}
                             </h2>
-                            <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-4">
-                                ({res.sEsp} • Día {res.diaNem} de 5)
+                            <p className="text-[10px] font-bold text-red-700 uppercase tracking-[0.2em] mb-6">
+                                ({res.sEsp})
                             </p>
-                            <div className="mb-6 px-4 py-4 bg-gray-50 rounded-3xl border border-gray-100">
-                                <p className="text-[11px] text-gray-600 leading-relaxed italic">"{res.desc}"</p>
+
+                            {/* Descripción Card */}
+                            <div className="mb-8 p-6 bg-gray-50 rounded-[2rem] border border-gray-100">
+                                <p className="text-sm text-gray-600 leading-relaxed italic">"{res.desc}"</p>
                             </div>
-                            <div className="grid grid-cols-2 gap-3 text-left">
-                                <div className="bg-emerald-50 rounded-2xl p-4 border border-emerald-100">
-                                    <span className="text-[8px] font-bold text-emerald-800 uppercase block mb-1">Ave Sagrada</span>
-                                    <p className="text-[11px] font-bold text-emerald-900 leading-tight">{res.ave.nahuatl}</p>
-                                    <p className="text-[9px] text-emerald-600 italic">{res.ave.es}</p>
+
+                            {/* Grid de Atributos */}
+                            <div className="grid grid-cols-2 gap-4 text-left">
+                                <div className="bg-[#f5f5f7] rounded-3xl p-5 border border-gray-200/50">
+                                    <span className="text-[9px] font-bold text-gray-400 uppercase block mb-1 tracking-tighter">Ave del día</span>
+                                    <p className="text-[13px] font-extrabold text-gray-900">{res.ave.nahuatl}</p>
+                                    <p className="text-[10px] text-gray-500 italic">{res.ave.es}</p>
                                 </div>
-                                <div className="bg-slate-900 rounded-2xl p-4 border border-slate-700 text-white">
-                                    <span className="text-[8px] font-bold text-slate-400 uppercase block mb-1">Señor Noche</span>
-                                    <p className="text-[11px] font-bold text-white leading-tight">{res.noche.n}</p>
-                                    <p className="text-[9px] text-slate-400 italic">Protector nocturno</p>
+                                <div className="bg-[#f5f5f7] rounded-3xl p-5 border border-gray-200/50">
+                                    <span className="text-[9px] font-bold text-gray-400 uppercase block mb-1 tracking-tighter">Señor de la Noche</span>
+                                    <p className="text-[13px] font-extrabold text-gray-900">{res.noche.n}</p>
+                                    <p className="text-[10px] text-gray-500 italic">Guía Nocturno</p>
                                 </div>
                             </div>
-                            <div className="mt-6 bg-gray-50 rounded-2xl p-3 border border-gray-100">
-                                <p className="text-[8px] font-bold text-gray-400 uppercase tracking-tighter">Año del Ciclo Actual</p>
-                                <p className="text-xs font-bold text-gray-700 uppercase">{res.anio}</p>
+
+                            {/* Info Año */}
+                            <div className="mt-8 pt-6 border-t border-gray-100">
+                                <div className="inline-flex items-center gap-2">
+                                    <div className="w-2 h-2 rounded-full bg-red-600 animate-pulse"></div>
+                                    <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">
+                                        Año {res.anio}
+                                    </p>
+                                </div>
                             </div>
+
                             <button onClick={() => window.location.href='index.html'} 
-                                    className="w-full mt-8 py-4 rounded-2xl font-bold text-gray-400 border border-gray-100 hover:bg-gray-50 transition-all text-[10px] uppercase tracking-widest">
-                                ← Volver al Inicio
+                                    className="w-full mt-10 py-5 rounded-2xl font-bold text-gray-900 bg-gray-100 hover:bg-gray-200 transition-all text-xs uppercase tracking-widest active:scale-95">
+                                Volver a la Calculadora
                             </button>
                         </div>
                     </div>
