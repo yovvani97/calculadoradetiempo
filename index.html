@@ -369,8 +369,48 @@
             window.scrollTo({top: 0, behavior: 'smooth'});
         }
     </script>
+    <script>
+    function actualizarReloj() {
+        const ahora = new Date();
+        
+        // 1. Hora y Fecha
+        const horas = ahora.getHours().toString().padStart(2, '0');
+        const minutos = ahora.getMinutes().toString().padStart(2, '0');
+        document.getElementById('reloj-txt').textContent = `${horas}:${minutos}`;
+
+        const opciones = { weekday: 'long', day: 'numeric', month: 'long' };
+        let fechaLarga = ahora.toLocaleDateString('es-MX', opciones);
+        fechaLarga = fechaLarga.charAt(0).toUpperCase() + fechaLarga.slice(1);
+        document.getElementById('fecha-txt').textContent = fechaLarga;
+
+        // 2. Cálculo de Fase Lunar Simple
+        const lunas = [
+            { n: "Luna Nueva", i: "🌑" }, { n: "Luna Creciente", i: "🌒" },
+            { n: "Cuarto Creciente", i: "🌓" }, { n: "Gibosa Creciente", i: "🌔" },
+            { n: "Luna Llena", i: "🌕" }, { n: "Gibosa Menguante", i: "🌖" },
+            { n: "Cuarto Menguante", i: "🌗" }, { n: "Luna Menguante", i: "🌘" }
+        ];
+        
+        // Algoritmo simple basado en ciclo de 29.53 días
+        const refDate = new Date(2000, 0, 6); // Luna nueva de referencia
+        const diff = (ahora - refDate) / (1000 * 60 * 60 * 24);
+        const cycle = 29.530588853;
+        const pos = (diff % cycle) / cycle;
+        const index = Math.floor(pos * 8);
+        
+        // Actualizar el HTML de la luna (asegúrate de que los IDs existan)
+        if(document.getElementById('luna-icon')) {
+            document.getElementById('luna-icon').textContent = lunas[index].i;
+            document.getElementById('luna-icon').nextElementSibling.textContent = lunas[index].n;
+        }
+    }
+    // Ejecutar de inmediato y luego cada minuto
+    actualizarReloj();
+    setInterval(actualizarReloj, 60000);
+</script>
 </body>
 </html>
+
 
 
 
