@@ -12,6 +12,7 @@
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
     
     <style>
     :root {
@@ -860,19 +861,32 @@
       setResultado(null);
 
       setTimeout(() => {
-  const res = calcularTonalli(fecha, hora);
+  try {
+    const res = calcularTonalli(fecha, hora);
 
-  // ✅ SI ES NEMONTEMI, ABRE OTRA CALCULADORA
-  if (res && res.nemontemi) {
-  setLoading(false);
-  window.location.href = `./nemontemi.html?fecha=${encodeURIComponent(fecha)}&hora=${encodeURIComponent(hora)}`;
-  return;
-}
+    // ✅ Si es Nemontemi, redirige con parámetros
+    if (res && res.nemontemi) {
+      window.location.href =
+        `./nemontemi.html?fecha=${encodeURIComponent(fecha)}&hora=${encodeURIComponent(hora)}`;
+      return;
+    }
 
-  setResultado(res);
-  setLoading(false);
+    // ✅ Si hay error, lo mostramos (en vez de quedarse raro)
+    if (res && res.error) {
+      alert(res.error);
+      setResultado(null);
+      return;
+    }
+
+    setResultado(res);
+  } catch (e) {
+    console.error(e);
+    alert("Ocurrió un error calculando. Revisa la fecha/hora.");
+    setResultado(null);
+  } finally {
+    setLoading(false);
+  }
 }, 600);
-    };
 
     return (
       <div className="min-h-screen bg-gray-50 font-sans text-gray-900 flex items-center justify-center p-4">
@@ -929,17 +943,12 @@
               <div className="animate-in fade-in slide-in-from-bottom-4 duration-700">
 
                 {resultado.nemontemi ? (
-                  <div className="bg-red-50 border border-red-100 rounded-3xl p-8 text-center space-y-4">
-                    <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-red-100 text-red-600 mb-2">
-                      <span className="text-3xl">⚠️</span>
-                    </div>
-                    <h2 className="text-2xl font-bold text-red-700">Nemontemi</h2>
-                    <p className="text-red-600/80 font-medium text-sm leading-relaxed">
-                      Naciste en los días vacíos del año. <br/>
-                      Días de reflexión y silencio interior. <br/>
-                      No hay Tonal asignado.
-                    </p>
-                  </div>
+                  <div className="bg-red-50 ...">
+  <h2 className="text-2xl font-bold text-red-700">Nemontemi</h2>
+  <p className="text-red-600/80 text-sm">
+    Redirigiendo a la calculadora Nemontemi…
+  </p>
+</div>
                 ) : (
                   <div className="grid grid-cols-2 gap-4">
 
@@ -1074,6 +1083,7 @@
 </script>
 </body>
 </html>
+
 
 
 
