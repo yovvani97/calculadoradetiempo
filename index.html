@@ -194,6 +194,64 @@
     justify-content: center;
     height: 100%;
 }
+        /* Estilos para las Secciones tipo Apple Home */
+.apple-section {
+    position: relative;
+    width: 100%;
+    height: 80vh; /* Altura visual impactante */
+    margin-bottom: 20px;
+    border-radius: 28px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    background-size: cover;
+    background-position: center;
+    color: white;
+}
+
+.apple-section::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: linear-gradient(to bottom, rgba(0,0,0,0.3), rgba(0,0,0,0.6));
+    z-index: 1;
+}
+
+.section-content {
+    position: relative;
+    z-index: 2;
+    padding: 20px;
+    max-width: 80%;
+}
+
+.apple-section h2 {
+    font-size: 42px;
+    font-weight: 600;
+    margin-bottom: 10px;
+    letter-spacing: -1px;
+}
+
+.apple-section p {
+    font-size: 19px;
+    color: rgba(255,255,255,0.9);
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.apple-section .discreto {
+    font-size: 14px;
+    margin-top: 20px;
+    opacity: 0.7;
+    font-style: italic;
+}
+
+/* Clases específicas para fondos (Carga aquí tus imágenes) */
+.bg-abuelos { background-image: url('URL_DE_IMAGEN_CODICE_O_CIELO'); }
+.bg-maestro { background-image: url('URL_DE_FOTO_ARTURO_MEZA'); }
+.bg-comunidad { background-image: url('URL_DE_IMAGEN_NATURALEZA'); background-color: #000; }
     </style>
 </head>
 <body>
@@ -251,10 +309,32 @@
                 <p style="color: #86868b;">Aquí aparecerán las interpretaciones de los 20 signos y las 13 trecenas.</p>
             </section>
 
-            <section id="sec-nosotros" class="content-card hidden">
-                <h2>Quiénes Somos</h2>
-                <p style="color: #86868b;">Investigación dedicada a rescatar la mathesis tolteca y el conocimiento ancestral.</p>
-            </section>
+            <section id="sec-nosotros" class="hidden">
+    
+    <div class="apple-section bg-abuelos">
+        <div class="section-content">
+            <h2>Legado Cósmico</h2>
+            <p>Nuestros abuelos nos han heredado una sabiduría que trasciende el tiempo.</p>
+        </div>
+    </div>
+
+    <div class="apple-section bg-maestro">
+        <div class="section-content">
+            <h2 style="color: var(--mexica-gold);">Maestro Arturo Meza</h2>
+            <p>Basado en la cuenta recuperada por el Maestro Arturo Meza Gutiérrez. Un tributo a su labor de rescate de la mathesis tolteca.</p>
+            <p class="discreto">*Esta página no es un sitio oficial, es una herramienta de difusión sin fines de lucro.</p>
+        </div>
+    </div>
+
+    <div class="apple-section bg-comunidad">
+        <div class="section-content">
+            <h2>El Mapa Sagrado</h2>
+            <p>La interpretación del Tonalamatl es un arte. Recomendamos siempre acudir con un profesional para un estudio profundo.</p>
+            <p class="discreto">"Conocer nuestro tiempo es comprender la vibración que nos corresponde para caminar en equilibrio."</p>
+        </div>
+    </div>
+
+</section>
 
             <section id="sec-rituales" class="content-card hidden">
                 <h2>Rituales</h2>
@@ -319,6 +399,7 @@
 
     </body>
 </html>
+
 
 
 
