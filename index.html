@@ -2,42 +2,94 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <link rel="icon" type="image/png" href="logo.png">
-    <link rel="apple-touch-icon" href="logo.png">
-    <link rel="manifest" href="manifest.json">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tiempo Sagrado</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
     
-    <title>Tonalpohualli: Tiempo Sagrado</title>
-
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
-    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
-    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-
     <style>
-    body { -webkit-tap-highlight-color: transparent; background-color: #f3f4f6; }
-    
-    /* Animación de entrada para el contenido */
-    .fade-in { animation: fadeIn 0.8s ease-out forwards; }
-    @keyframes fadeIn {
-        from { opacity: 0; transform: translateY(20px); }
-        to { opacity: 1; transform: translateY(0); }
-    }
+        :root {
+            --apple-bg: #f5f5f7;
+            --apple-text: #1d1d1f;
+            --apple-card: #ffffff;
+            --mexica-red: #b00e2d;
+            --mexica-gold: #fde047;
+        }
 
-    /* --- NUEVOS ESTILOS PARA LA CARGA --- */
-    .bg-carga-mexica { background-color: #b00e2d; }
+        body {
+            font-family: 'Inter', -apple-system, sans-serif;
+            background-color: var(--apple-bg);
+            color: var(--apple-text);
+            margin: 0;
+            padding: 0;
+            line-height: 1.5;
+            -webkit-font-smoothing: antialiased;
+        }
 
-    .spinner-azteca {
-        animation: rotateGrecas 0.5s linear infinite;
-        will-change: transform;
-        filter: drop-shadow(0 0 8px rgba(0,0,0,0.3));
-    }
+        /* Contenedor principal */
+        .app-wrapper {
+            max-width: 500px;
+            margin: 0 auto;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
 
-    @keyframes rotateGrecas {
-        from { transform: rotate(0deg); }
-        to { transform: rotate(360deg); }
-    }
-</style>
+        /* Banner Cósmico */
+        .cosmic-banner {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            padding: 12px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+        }
+
+        /* Tarjeta de Contenido */
+        .content-card {
+            background: var(--apple-card);
+            margin: 20px;
+            padding: 24px;
+            border-radius: 28px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.04);
+        }
+
+        /* Menú Inferior Estilo iOS */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            max-width: 500px;
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(20px);
+            display: flex;
+            justify-content: space-around;
+            padding: 12px 0 24px 0; /* Espacio extra abajo para el notch del iPhone */
+            border-top: 1px solid rgba(0,0,0,0.05);
+        }
+
+        .nav-item {
+            border: none;
+            background: none;
+            color: #86868b;
+            font-size: 10px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .nav-item.active { color: var(--mexica-red); }
+    </style>
 </head>
     <script>
     function actualizarBanner() {
@@ -77,223 +129,60 @@
     actualizarBanner(); // Carga inicial
 </script>
 <body>
-    <div id="root"></div>
-
-    <script type="text/babel">
-    const { useState } = React;
-
-    const INFO_DETALLADA = {
-      1: { titulo: "Cipactli", significado: "Inicio y Fuerza Vital", desc: "Representa el inicio, la fuerza vital y la capacidad de crear.", sombra: "Sentimiento de rechazo.", aprendizaje: "Seguridad interior." },
-      2: { titulo: "Ehecatl", significado: "Mente y Palabra", desc: "Simboliza la mente, la palabra y el movimiento invisible.", sombra: "Miedo a perder libertad.", aprendizaje: "Palabra con precisión." },
-      3: { titulo: "Calli", significado: "Estructura y Estabilidad", desc: "Representa estructura y pensamiento profundo.", sombra: "Rigidez emocional.", aprendizaje: "Construir bases firmes." },
-      4: { titulo: "Cuetzpalin", significado: "Dinamismo y Acción", desc: "Energía dinámica, expresiva y orientada a la acción.", sombra: "Impulsividad.", aprendizaje: "Disciplina y enfoque." },
-      5: { titulo: "Coatl", significado: "Poder y Transformación", desc: "Signo de poder, transformación y carisma.", sombra: "Luchas de poder.", aprendizaje: "Aceptar los cambios." },
-      6: { titulo: "Miquiztli", significado: "Trascendencia y Servicio", desc: "No es fin físico, sino transformación social.", sombra: "Victimización.", aprendizaje: "Servicio consciente." },
-      7: { titulo: "Mazatl", significado: "Sensibilidad y Autenticidad", desc: "Energía pacífica, artística y espiritual.", sombra: "Conflicto de independencia.", aprendizaje: "Equilibrio afectivo." },
-      8: { titulo: "Tochtli", significado: "Percepción y Rapidez", desc: "Rapidez mental y energía perceptiva.", sombra: "Ansiedad o excesos.", aprendizaje: "Autocontrol." },
-      9: { titulo: "Atl", significado: "Intuición y Emoción", desc: "Simboliza el mundo interior y la empatía.", sombra: "Inestabilidad emocional.", aprendizaje: "Responsabilidad emocional." },
-      10: { titulo: "Itzcuintli", significado: "Lealtad y Trabajo", desc: "Lealtad, trabajo en equipo y protección.", sombra: "Obstinación.", aprendizaje: "Liderazgo consciente." },
-      11: { titulo: "Ozomatli", significado: "Creatividad y Humor", desc: "Creatividad, humor y talento artístico.", sombra: "Dispersión.", aprendizaje: "Desarrollo profundo." },
-      12: { titulo: "Malinalli", significado: "Resistencia y Purificación", desc: "Crecimiento silencioso y resistencia.", sombra: "Reprimir emociones.", aprendizaje: "Expresión auténtica." },
-      13: { titulo: "Acatl", significado: "Autoridad y Principios", desc: "Energía de autoridad moral y firmeza.", sombra: "Rigidez o moralismo.", aprendizaje: "Flexibilidad social." },
-      14: { titulo: "Ocelotl", significado: "Intensidad e Intuición", desc: "Fuerza interior, intuición y espiritualidad profunda.", sombra: "Conflictos internos.", aprendizaje: "Canalización de poder." },
-      15: { titulo: "Cuauhtli", significado: "Visión y Libertad", desc: "Visión elevada, independencia y ambición.", sombra: "Aislamiento.", aprendizaje: "Vínculos sanos." },
-      16: { titulo: "Cozcaquauhtli", significado: "Sabiduría y Supervivencia", desc: "Sabiduría práctica y conciencia del ciclo.", sombra: "Inseguridad.", aprendizaje: "Confianza profesional." },
-      17: { titulo: "Ollin", significado: "Progreso y Cambio", desc: "Mente activa, cambio constante y progreso.", sombra: "Inflexibilidad.", aprendizaje: "Paciencia y adaptación." },
-      18: { titulo: "Tecpatl", significado: "Claridad y Precisión", desc: "Cortar ilusiones, claridad y compromiso.", sombra: "Sacrificio excesivo.", aprendizaje: "Equilibrio personal." },
-      19: { titulo: "Quiahuitl", significado: "Filosofía y Sanación", desc: "Fertilidad espiritual y vocación de enseñanza.", sombra: "Cargas ajenas.", aprendizaje: "Formación constante." },
-      20: { titulo: "Xochitl", significado: "Belleza e Idealismo", desc: "Belleza, amor, arte e idealismo.", sombra: "Decepción constante.", aprendizaje: "Realismo afectivo." }
-    };
-
-    const SIGNOS = [
-      { n: "Cipactli", es: "Caimán" }, { n: "Ehecatl", es: "Viento" }, { n: "Calli", es: "Casa" },
-      { n: "Cuetzpalin", es: "Lagartija" }, { n: "Coatl", es: "Serpiente" }, { n: "Miquiztli", es: "Muerte" },
-      { n: "Mazatl", es: "Venado" }, { n: "Tochtli", es: "Conejo" }, { n: "Atl", es: "Agua" },
-      { n: "Itzcuintli", es: "Perro" }, { n: "Ozomatli", es: "Mono" }, { n: "Malinalli", es: "Hierba" },
-      { n: "Acatl", es: "Caña" }, { n: "Ocelotl", es: "Jaguar" }, { n: "Cuauhtli", es: "Águila" },
-      { n: "Cozcaquauhtli", es: "Zopilote" }, { n: "Ollin", es: "Movimiento" }, { n: "Tecpatl", es: "Pedernal" },
-      { n: "Quiahuitl", es: "Lluvia" }, { n: "Xochitl", es: "Flor" }
-    ];
-
-    const TABLA_ANIOS = {
-      37: {s:"Calli", b:1}, 50: {s:"Tochtli", b:1}, 11: {s:"Acatl", b:1}, 24: {s:"Tecpatl", b:1},
-      25: {s:"Calli", b:10}, 38: {s:"Tochtli", b:10}, 51: {s:"Acatl", b:10}, 12: {s:"Tecpatl", b:10},
-      13: {s:"Calli", b:6}, 26: {s:"Tochtli", b:6}, 39: {s:"Acatl", b:6}, 0: {s:"Tecpatl", b:6},
-      1: {s:"Calli", b:2}, 14: {s:"Tochtli", b:2}, 27: {s:"Acatl", b:2}, 40: {s:"Tecpatl", b:2},
-      41: {s:"Calli", b:11}, 2: {s:"Tochtli", b:11}, 15: {s:"Acatl", b:11}, 28: {s:"Tecpatl", b:11},
-      29: {s:"Calli", b:7}, 42: {s:"Tochtli", b:7}, 3: {s:"Acatl", b:7}, 16: {s:"Tecpatl", b:7},
-      17: {s:"Calli", b:3}, 30: {s:"Tochtli", b:3}, 43: {s:"Acatl", b:3}, 4: {s:"Tecpatl", b:3},
-      5: {s:"Calli", b:12}, 18: {s:"Tochtli", b:12}, 31: {s:"Acatl", b:12}, 44: {s:"Tecpatl", b:12},
-      45: {s:"Calli", b:8}, 6: {s:"Tochtli", b:8}, 19: {s:"Acatl", b:8}, 32: {s:"Tecpatl", b:8},
-      33: {s:"Calli", b:4}, 46: {s:"Tochtli", b:4}, 7: {s:"Acatl", b:4}, 20: {s:"Tecpatl", b:4},
-      21: {s:"Calli", b:13}, 34: {s:"Tochtli", b:13}, 47: {s:"Acatl", b:13}, 8: {s:"Tecpatl", b:13},
-      9: {s:"Calli", b:9}, 22: {s:"Tochtli", b:9}, 35: {s:"Acatl", b:9}, 48: {s:"Tecpatl", b:9},
-      49: {s:"Calli", b:5}, 10: {s:"Tochtli", b:5}, 23: {s:"Acatl", b:5}, 36: {s:"Tecpatl", b:5}
-    };
-
-    const VEINTENAS = [
-      { id: 1, nombre: "Atlacahualo", m: 3, d: 12 }, { id: 2, nombre: "Tlacaxipehualiztli", m: 4, d: 1 },
-      { id: 3, nombre: "Tozoztontli", m: 4, d: 21 }, { id: 4, nombre: "Hueytozoztli", m: 5, d: 11 },
-      { id: 5, nombre: "Toxcatl", m: 5, d: 31 }, { id: 6, nombre: "Etzalcualiztli", m: 6, d: 20 },
-      { id: 7, nombre: "Tecuilhuitontli", m: 7, d: 10 }, { id: 8, nombre: "Huey Tecuilhuitl", m: 7, d: 30 },
-      { id: 9, nombre: "Tlaxochimaco", m: 8, d: 19 }, { id: 10, nombre: "Xocotl Huetzi", m: 9, d: 8 },
-      { id: 11, nombre: "Ochpaniztli", m: 9, d: 28 }, { id: 12, nombre: "Teotleco", m: 10, d: 18 },
-      { id: 13, nombre: "Tepeilhuitl", m: 11, d: 7 }, { id: 14, nombre: "Quecholli", m: 11, d: 27 },
-      { id: 15, nombre: "Panquetzaliztli", m: 12, d: 17 }, { id: 16, nombre: "Atemoztli", m: 1, d: 6 },
-      { id: 17, nombre: "Tititl", m: 1, d: 26 }, { id: 18, nombre: "Izcalli", m: 2, d: 15 },
-      { id: 19, nombre: "Nemontemi", m: 3, d: 7 }
-    ];
-
-    const SECUENCIA_VEINTENA = [1, 8, 2, 9, 3, 10, 4, 11, 5, 12, 6, 13, 7];
-
-    function calcularTonalli(fechaStr, horaStr) {
-        if (!fechaStr || !horaStr) return null;
-        const [y, m, d] = fechaStr.split('-').map(Number);
-        const [hh, mm] = horaStr.split(':').map(Number);
+    <div class="app-wrapper">
         
-        let anio = y;
-        let fechaInput = new Date(y, m - 1, d, hh, mm);
-        let residuo = anio % 52;
-        let datosAnio = TABLA_ANIOS[residuo];
-        
-        let dIni = 12, hIni = 0, mIni = 43;
-        if (datosAnio.s === "Tochtli") hIni = 6;
-        if (datosAnio.s === "Acatl") hIni = 12;
-        if (datosAnio.s === "Tecpatl") { hIni = 18; dIni = 11; }
-        
-        let inicioAnio = new Date(anio, 2, dIni, hIni, mIni);
-        if (fechaInput < inicioAnio) {
-            anio -= 1;
-            datosAnio = TABLA_ANIOS[anio % 52];
-        }
-
-        let fNac = hh + (mm / 60), fIni = hIni + (mIni / 60);
-        let fCalc = new Date(fechaInput);
-        if (fNac < fIni) fCalc.setDate(fCalc.getDate() - 1);
-
-        let candidatos = VEINTENAS.map(v => {
-            let yV = (v.m < 3 || v.nombre === "Nemontemi") ? anio + 1 : anio;
-            let fV = new Date(yV, v.m - 1, v.d - (datosAnio.s === "Tecpatl" ? 1 : 0));
-            return { v, fV };
-        }).filter(item => item.fV <= fCalc).sort((a, b) => b.fV - a.fV);
-
-        let seleccion = candidatos[0];
-        if (seleccion.v.nombre === "Nemontemi") return { nemontemi: true };
-
-        const diffDays = Math.floor(Math.abs(fCalc - seleccion.fV) / 86400000);
-        let idxSigno = diffDays % 20;
-        let numIni = SECUENCIA_VEINTENA[(SECUENCIA_VEINTENA.indexOf(datosAnio.b) + (seleccion.v.id - 1)) % 13];
-        
-        return {
-            signoNum: idxSigno + 1,
-            signo: SIGNOS[idxSigno].es,
-            tonal: { n: (numIni + diffDays - 1) % 13 + 1, nahuatl: SIGNOS[idxSigno].n }
-        };
-    }
-
-    const App = () => {
-      const [fecha, setFecha] = useState("");
-      const [hora, setHora] = useState("");
-      const [resultado, setResultado] = useState(null);
-      const [loading, setLoading] = useState(false);
-
-      const handleCalculate = () => {
-        if(!fecha || !hora) return;
-        setLoading(true);
-        
-        // --- DETECCIÓN Y REDIRECCIÓN NEMONTEMI ---
-        const calc = calcularTonalli(fecha, hora);
-        
-        if (calc && calc.nemontemi) {
-            setTimeout(() => {
-                window.location.href = `nemontemi.html?fecha=${fecha}&hora=${hora}`;
-            }, 600);
-            return;
-        }
-
-        setTimeout(() => {
-          setResultado(calc);
-          setLoading(false);
-        }, 600);
-      };
-
-      return (
-        <div className="min-h-screen flex items-center justify-center p-4">
-          <div className="max-w-md w-full bg-white rounded-[2.5rem] shadow-2xl border border-gray-100 overflow-hidden">
+        <header class="cosmic-banner">
+            <div id="reloj-container">
+                <div style="font-weight: 600; font-size: 17px;" id="reloj-txt">00:00</div>
+                <div style="font-size: 11px; color: #86868b;" id="fecha-txt">Cargando...</div>
+            </div>
             
-            <div className="pt-10 pb-6 px-8 text-center">
-              <h1 className="text-3xl font-bold text-gray-900 tracking-tight">Tonalpohualli</h1>
-              <p className="text-gray-400 text-[10px] font-bold uppercase tracking-[0.2em] mt-1">Sabiduría Ancestral</p>
+            <div style="text-align: right;">
+                <div id="luna-icon" style="font-size: 20px;">🌑</div>
+                <div id="luna-txt" style="font-size: 10px; color: #86868b; font-weight: 600;">Luna</div>
+            </div>
+        </header>
+
+        <main style="flex: 1; padding-bottom: 80px;">
+            
+            <div id="sec-calculadora" class="content-card">
+                <p style="text-align: center; color: #ccc;">Tu calculadora aparecerá aquí...</p>
             </div>
 
-            <div className="px-8 space-y-4">
-              <div className="space-y-1">
-                <label className="text-[10px] font-bold text-gray-400 uppercase ml-1">Fecha</label>
-                <input type="date" value={fecha} onChange={(e) => setFecha(e.target.value)} 
-                       className="w-full px-4 py-4 bg-gray-50 rounded-2xl outline-none focus:ring-2 focus:ring-red-100 border-none" />
-              </div>
-              <div className="space-y-1">
-                <label className="text-[10px] font-bold text-gray-400 uppercase ml-1">Hora</label>
-                <input type="time" value={hora} onChange={(e) => setHora(e.target.value)} 
-                       className="w-full px-4 py-4 bg-gray-50 rounded-2xl outline-none focus:ring-2 focus:ring-red-100 border-none" />
-              </div>
-              <button onClick={handleCalculate} disabled={!fecha || !hora}
-                      className={`w-full py-4 rounded-2xl font-bold text-white shadow-lg transition-all active:scale-95 ${!fecha || !hora ? 'bg-gray-300' : 'bg-black hover:bg-gray-800'}`}>
-                {loading ? "Procesando..." : "Revelar Destino"}
-              </button>
+            <div id="sec-cuenta" class="content-card" style="display: none;">
+                <h2 style="font-size: 24px; font-weight: 600;">La Cuenta del Tiempo</h2>
+                <p style="color: #86868b;">Aquí irá la interpretación profunda de los Tonallis...</p>
             </div>
+            
+        </main>
 
-            <div className="px-6 py-8 min-h-[120px]">
-              {resultado && (
-                <div className="fade-in">
-                    <div className="bg-white rounded-3xl p-6 border border-gray-100 shadow-xl text-center">
-                      <div className="w-32 h-32 bg-gray-50 rounded-full flex items-center justify-center mx-auto mb-4 border border-gray-100 shadow-inner">
-                        <img 
-                          src={`signos/${resultado.signoNum}.png`} 
-                          className="w-24 h-24 object-contain" 
-                          alt="Signo"
-                          onError={(e) => { e.target.src = "https://via.placeholder.com/100?text=Signo"; }}
-                        />
-                      </div>
-                      <h2 className="text-3xl font-black text-red-900 leading-tight">
-                        {resultado.tonal.n} {INFO_DETALLADA[resultado.signoNum].titulo}
-                      </h2>
-                      <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-4">
-                        ({resultado.signo})
-                      </p>
-                      
-                      <p className="text-xs font-bold text-red-700 uppercase tracking-widest mb-2">
-                        {INFO_DETALLADA[resultado.signoNum].significado}
-                      </p>
-                      
-                      <p className="text-gray-600 text-sm italic mb-6 leading-relaxed">
-                        "{INFO_DETALLADA[resultado.signoNum].desc}"
-                      </p>
+        <nav class="bottom-nav">
+            <button class="nav-item active" onclick="navegar('sec-calculadora')">
+                <span>🧮</span> Calcular
+            </button>
+            <button class="nav-item" onclick="navegar('sec-cuenta')">
+                <span>📖</span> Cuenta
+            </button>
+            <button class="nav-item">
+                <span>🌿</span> Rituales
+            </button>
+        </nav>
+    </div>
 
-                      <div className="grid grid-cols-2 gap-3 text-left">
-                        <div className="bg-amber-50 p-4 rounded-2xl border-l-4 border-amber-400">
-                          <span className="text-[9px] font-bold text-amber-800 uppercase block mb-1">🌑 Sombra</span>
-                          <p className="text-[11px] text-amber-900 leading-tight">{INFO_DETALLADA[resultado.signoNum].sombra}</p>
-                        </div>
-                        <div className="bg-green-50 p-4 rounded-2xl border-l-4 border-green-400">
-                          <span className="text-[9px] font-bold text-green-800 uppercase block mb-1">✨ Aprendizaje</span>
-                          <p className="text-[11px] text-green-900 leading-tight">{INFO_DETALLADA[resultado.signoNum].aprendizaje}</p>
-                        </div>
-                      </div>
-                    </div>
-                </div>
-              )}
-            </div>
-          </div>
-        </div>
-      );
-    };
-
-    const root = ReactDOM.createRoot(document.getElementById('root'));
-    root.render(<App />);
+    <script>
+        // Función simple para navegar entre secciones
+        function navegar(id) {
+            document.querySelectorAll('.content-card').forEach(c => c.style.display = 'none');
+            document.getElementById(id).style.display = 'block';
+            
+            // Actualizar estado activo en botones
+            document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
+            event.currentTarget.classList.add('active');
+        }
     </script>
 </body>
 </html>
+
 
 
 
