@@ -8,9 +8,6 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
-    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
-    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
     
     <style>
@@ -299,9 +296,11 @@
         </header>
 
         <section id="sec-calculadora">
-    <div id="root-calculadora"></div> 
-        
-        </section>
+    <iframe 
+        src="AQUI_VA_LA_URL_DE_TU_CALCULADORA_NUEVA"
+        style="width:100%; height:1000px; border:none; display:block;">
+    </iframe>
+</section>
 
         <section id="sec-nosotros" class="hidden">
             
@@ -574,131 +573,10 @@
         actualizarReloj();
         setInterval(actualizarReloj, 60000);
     </script>
-    <script type="text/babel">
-    const { useState } = React;
-
-    // --- LÓGICA MATEMÁTICA REAL ---
-    const calcularTonalli = (fechaStr, horaStr) => {
-        // 1. Configurar fecha (ajuste de zona horaria)
-        const fechaSeleccionada = new Date(fechaStr + 'T' + horaStr);
-        
-        // 2. Fecha de referencia (Correlación para que 28/03/1997 sea 3 Ollin)
-        // Usamos una fecha base conocida. 
-        const fechaBase = new Date('1997-03-28T12:00:00');
-        const numBase = 3;      // 3
-        const glifoBase = 16;   // Ollin es el signo 17 (índice 16)
-
-        // 3. Calcular diferencia de días
-        const diferenciaMs = fechaSeleccionada - fechaBase;
-        const diferenciaDias = Math.floor(diferenciaMs / (1000 * 60 * 60 * 24));
-
-        // 4. Definir los 20 glifos en orden
-        const glifos = [
-            { nombre: "Cipactli", icon: "🐊", color: "text-red-600" },
-            { nombre: "Ehecatl", icon: "🌬️", color: "text-blue-400" },
-            { nombre: "Calli", icon: "🏠", color: "text-gray-700" },
-            { nombre: "Cuetzpalin", icon: "🦎", color: "text-green-500" },
-            { nombre: "Coatl", icon: "🐍", color: "text-green-600" },
-            { nombre: "Miquiztli", icon: "💀", color: "text-gray-500" },
-            { nombre: "Mazatl", icon: "🦌", color: "text-orange-700" },
-            { nombre: "Tochtli", icon: "🐰", color: "text-amber-500" },
-            { nombre: "Atl", icon: "💧", color: "text-blue-600" },
-            { nombre: "Itzcuintli", icon: "🐕", color: "text-orange-900" },
-            { nombre: "Ozomahtli", icon: "🐒", color: "text-yellow-800" },
-            { nombre: "Malinalli", icon: "🌿", color: "text-green-800" },
-            { nombre: "Acatl", icon: "🎋", color: "text-amber-600" },
-            { nombre: "Ocelotl", icon: "🐆", color: "text-orange-600" },
-            { nombre: "Cuauhtli", icon: "🦅", color: "text-blue-800" },
-            { nombre: "Cozcacuauhtli", icon: "🦉", color: "text-gray-600" },
-            { nombre: "Ollin", icon: "🌀", color: "text-red-700" },
-            { nombre: "Tecpatl", icon: "🔪", color: "text-blue-300" },
-            { nombre: "Quiahuitl", icon: "🌧️", color: "text-blue-500" },
-            { nombre: "Xochitl", icon: "🌺", color: "text-pink-500" }
-        ];
-
-        // 5. Calcular el numeral (Ciclo de 13)
-        let n = (numBase + (diferenciaDias % 13)) % 13;
-        if (n <= 0) n += 13;
-
-        // 6. Calcular el glifo (Ciclo de 20)
-        let g = (glifoBase + (diferenciaDias % 20)) % 20;
-        if (g < 0) g += 20;
-
-        const resultadoGlifo = glifos[g];
-
-        // 7. Lógica Nemontemi (Ajuste simple para días de transición)
-        // Si tu lógica requiere nemontemi.html, actívalo aquí:
-        const mes = fechaSeleccionada.getMonth();
-        const dia = fechaSeleccionada.getDate();
-        if (mes === 1 && dia >= 21 && dia <= 25) { // Ejemplo Feb 21-25
-             return { nemontemi: true };
-        }
-
-        return {
-            numero: n,
-            signo: resultadoGlifo.nombre,
-            icon: resultadoGlifo.icon,
-            color: resultadoGlifo.color,
-            nemontemi: false
-        };
-    };
-
-    // --- COMPONENTE VISUAL ---
-    const CardResult = ({ title, main, sub, icon, accentColor }) => (
-      <div className="bg-white/40 backdrop-blur-md rounded-3xl p-6 border border-white/50 flex flex-col items-center shadow-sm">
-        <div className={`text-4xl mb-2 ${accentColor}`}>{icon}</div>
-        <div className="text-[10px] font-bold text-gray-500 uppercase">{title}</div>
-        <div className="text-xl font-bold text-gray-800">{main}</div>
-        <div className="text-xs text-gray-500">{sub}</div>
-      </div>
-    );
-
-    const App = () => {
-      const [fecha, setFecha] = useState("");
-      const [hora, setHora] = useState("12:00");
-      const [resultado, setResultado] = useState(null);
-
-      const handleCalculate = () => {
-        const res = calcularTonalli(fecha, hora);
-        if (res.nemontemi) {
-            window.location.href = "nemontemi.html";
-        } else {
-            setResultado(res);
-        }
-      };
-
-      return (
-        <div className="p-4 max-w-md mx-auto">
-          <div className="bg-white/30 backdrop-blur-xl rounded-[2.5rem] p-8 shadow-2xl border border-white/40">
-            <h2 className="text-2xl font-bold text-center mb-6">Calculadora Sagrada</h2>
-            
-            <div className="space-y-4">
-              <input type="date" value={fecha} onChange={(e) => setFecha(e.target.value)} 
-                     className="w-full p-4 rounded-2xl bg-white/60 border-none outline-none" />
-              <input type="time" value={hora} onChange={(e) => setHora(e.target.value)} 
-                     className="w-full p-4 rounded-2xl bg-white/60 border-none outline-none" />
-              <button onClick={handleCalculate}
-                      className="w-full py-4 bg-black text-white rounded-2xl font-bold">
-                Revelar Destino
-              </button>
-            </div>
-
-            {resultado && (
-              <div className="mt-8 grid grid-cols-2 gap-4">
-                <CardResult title="Numeral" main={resultado.numero} sub="Tonal" icon="🔢" />
-                <CardResult title="Signo" main={resultado.signo} sub="Energía" icon={resultado.icon} accentColor={resultado.color} />
-              </div>
-            )}
-          </div>
-        </div>
-      );
-    };
-
-    const root = ReactDOM.createRoot(document.getElementById('root-calculadora'));
-    root.render(<App />);
-</script>
+    
 </body>
 </html>
+
 
 
 
