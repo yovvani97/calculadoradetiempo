@@ -166,16 +166,31 @@
 <body>
 
     <nav class="desktop-nav">
-        <div class="nav-content">
-            <div style="font-weight: 600; letter-spacing: -0.5px; color: var(--mexica-red);">TIEMPO SAGRADO</div>
-            <div class="nav-links">
-                <a onclick="navegar('sec-calculadora')">Calculadora</a>
-                <a onclick="navegar('sec-cuenta')">La Cuenta</a>
-                <a onclick="navegar('sec-nosotros')">Nosotros</a>
-                <a onclick="navegar('sec-rituales')">Rituales</a>
-            </div>
+    <div class="nav-content">
+        <div style="font-weight: 600; letter-spacing: -0.5px; color: var(--mexica-red); cursor: pointer;" onclick="navegar('sec-calculadora')">
+            TIEMPO SAGRADO
         </div>
-    </nav>
+
+        <div class="nav-links">
+            <a onclick="navegar('sec-calculadora')">Calculadora</a>
+            <a onclick="navegar('sec-cuenta')">La Cuenta</a>
+            <a onclick="navegar('sec-nosotros')">Nosotros</a>
+            <a onclick="navegar('sec-rituales')">Rituales</a>
+        </div>
+
+        <div class="social-links">
+            <a href="https://facebook.com" target="_blank" title="Facebook">
+                <i class="fab fa-facebook-f"></i> <span style="font-size: 16px;">FB</span>
+            </a>
+            <a href="https://instagram.com" target="_blank" title="Instagram">
+                <span style="font-size: 16px;">IG</span>
+            </a>
+            <a href="https://tiktok.com" target="_blank" title="TikTok">
+                <span style="font-size: 16px;">TK</span>
+            </a>
+        </div>
+    </div>
+</nav>
 
     <div class="app-wrapper">
         
@@ -271,4 +286,5 @@
 
     </body>
 </html>
+
 
