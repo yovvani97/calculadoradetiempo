@@ -856,37 +856,38 @@
     const [loading, setLoading] = useState(false);
 
     const handleCalculate = () => {
-      if (!fecha || !hora) return;
-      setLoading(true);
+  if (!fecha || !hora) return;
+  setLoading(true);
+  setResultado(null);
+
+  setTimeout(() => {
+    try {
+      const res = calcularTonalli(fecha, hora);
+
+      // ✅ Si es Nemontemi, redirige con parámetros
+      if (res && res.nemontemi) {
+        window.location.href =
+          `./nemontemi.html?fecha=${encodeURIComponent(fecha)}&hora=${encodeURIComponent(hora)}`;
+        return;
+      }
+
+      // ✅ Si hay error, lo mostramos
+      if (res && res.error) {
+        alert(res.error);
+        setResultado(null);
+        return;
+      }
+
+      setResultado(res);
+    } catch (e) {
+      console.error(e);
+      alert("Ocurrió un error calculando. Revisa la fecha/hora.");
       setResultado(null);
-
-      setTimeout(() => {
-  try {
-    const res = calcularTonalli(fecha, hora);
-
-    // ✅ Si es Nemontemi, redirige con parámetros
-    if (res && res.nemontemi) {
-      window.location.href =
-        `./nemontemi.html?fecha=${encodeURIComponent(fecha)}&hora=${encodeURIComponent(hora)}`;
-      return;
+    } finally {
+      setLoading(false);
     }
-
-    // ✅ Si hay error, lo mostramos (en vez de quedarse raro)
-    if (res && res.error) {
-      alert(res.error);
-      setResultado(null);
-      return;
-    }
-
-    setResultado(res);
-  } catch (e) {
-    console.error(e);
-    alert("Ocurrió un error calculando. Revisa la fecha/hora.");
-    setResultado(null);
-  } finally {
-    setLoading(false);
-  }
-}, 600);
+  }, 600);
+};
 
     return (
       <div className="min-h-screen bg-gray-50 font-sans text-gray-900 flex items-center justify-center p-4">
@@ -1083,6 +1084,7 @@
 </script>
 </body>
 </html>
+
 
 
 
