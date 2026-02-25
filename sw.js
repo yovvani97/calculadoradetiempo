@@ -3,13 +3,10 @@ const assets = [
   './',
   './index.html',
   './nemontemi.html',
-  './logo.png',
+  './logo.png', // <--- Verifica que esté aquí
   './manifest.json',
-  './signos/spinner-grecas.png', // IMPORTANTE: Añadimos la greca
-  'https://cdn.tailwindcss.com',
-  'https://unpkg.com/react@18/umd/react.production.min.js',
-  'https://unpkg.com/react-dom@18/umd/react-dom.production.min.js',
-  'https://unpkg.com/@babel/standalone/babel.min.js'
+  './signos/spinner-grecas.png',
+  // ... resto de links
 ];
 
 // Instalación
