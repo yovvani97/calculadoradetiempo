@@ -591,13 +591,16 @@ const ACOMPANANTES_DIA = [
 ];
 
 const SIGNOS = [
-    { n: "Cipactli", es: "Caimán" }, { n: "Ehecatl", es: "Viento" }, { n: "Calli", es: "Casa" },
-    { n: "Cuetzpalin", es: "Lagartija" }, { n: "Coatl", es: "Serpiente" }, { n: "Miquiztli", es: "Muerte" },
-    { n: "Mazatl", es: "Venado" }, { n: "Tochtli", es: "Conejo" }, { n: "Atl", es: "Agua" },
-    { n: "Itzcuintli", es: "Perro" }, { n: "Ozomatli", es: "Mono" }, { n: "Malinalli", es: "Hierba" },
-    { n: "Acatl", es: "Caña" }, { n: "Ocelotl", es: "Jaguar" }, { n: "Cuauhtli", es: "Águila" },
-    { n: "Cozcaquauhtli", es: "Zopilote" }, { n: "Ollin", es: "Movimiento" }, { n: "Tecpatl", es: "Pedernal" },
-    { n: "Quiahuitl", es: "Lluvia" }, { n: "Xochitl", es: "Flor" }
+  { n: "Cipactli", es: "Caimán" }, { n: "Ehecatl", es: "Viento" }, 
+  { n: "Calli", es: "Casa" }, { n: "Cuetzpalin", es: "Lagartija" }, 
+  { n: "Coatl", es: "Serpiente" }, { n: "Miquiztli", es: "Muerte" },
+  { n: "Mazatl", es: "Venado" }, { n: "Tochtli", es: "Conejo" }, 
+  { n: "Atl", es: "Agua" }, { n: "Itzcuintli", es: "Perro" }, 
+  { n: "Ozomatli", es: "Mono" }, { n: "Malinalli", es: "Hierba" },
+  { n: "Acatl", es: "Caña" }, { n: "Ocelotl", es: "Jaguar" }, 
+  { n: "Cuauhtli", es: "Águila" }, { n: "Cozcaquauhtli", es: "Zopilote" }, 
+  { n: "Ollin", es: "Movimiento" }, { n: "Tecpatl", es: "Pedernal" },
+  { n: "Quiahuitl", es: "Lluvia" }, { n: "Xochitl", es: "Flor" }
 ];
 
 const INFO_DETALLADA = {
@@ -653,32 +656,42 @@ const VEINTENAS = [
 ];
 
 const SECUENCIA_VEINTENA = [1, 8, 2, 9, 3, 10, 4, 11, 5, 12, 6, 13, 7];
-
+        
 // --- LÓGICA DE CÁLCULO RE-ESTRUCTURADA ---
 function calcularTonalli(fechaStr, horaStr) {
     if (!fechaStr || !horaStr) return null;
     const [y, m, d] = fechaStr.split('-').map(Number);
     const [hh, mm] = horaStr.split(':').map(Number);
+    
     let anio = y;
     let fechaInput = new Date(y, m - 1, d, hh, mm);
+    
+    // 1. Encontrar cargador del año
     let residuo = anio % 52;
     let datosAnio = TABLA_ANIOS[residuo];
-    let dIni = 12, hIni = 0, mIni = 43;
+    
+    // 2. Ajuste de inicio de año según el signo cargador
+    let dIni = 12, hIni = 0.716; // 00:43 min aprox
+    if (datosAnio.s === "Tochtli") hIni = 6.716;
+    if (datosAnio.s === "Acatl") hIni = 12.716;
+    if (datosAnio.s === "Tecpatl") { hIni = 18.716; dIni = 11; }
+    
+    let inicioAnio = new Date(anio, 2, dIni, Math.floor(hIni), 43);
 
-    if (datosAnio.s === "Tochtli") hIni = 6;
-    if (datosAnio.s === "Acatl") hIni = 12;
-    if (datosAnio.s === "Tecpatl") { hIni = 18; dIni = 11; }
-
-    let inicioAnio = new Date(anio, 2, dIni, hIni, mIni);
+    // Si la fecha es antes del año mexica, usamos el año anterior
     if (fechaInput < inicioAnio) {
         anio -= 1;
         datosAnio = TABLA_ANIOS[anio % 52];
     }
 
-    let fNac = hh + (mm / 60), fIni = hIni + (mIni / 60);
+    // 3. Determinación del día exacto (ajuste por hora de nacimiento)
+    let fNac = hh + (mm / 60);
     let fCalc = new Date(fechaInput);
-    if (fNac < fIni) fCalc.setDate(fCalc.getDate() - 1);
+    if (fNac < hIni) {
+        fCalc.setDate(fCalc.getDate() - 1);
+    }
 
+    // 4. Buscar la Veintena correspondiente
     let candidatos = VEINTENAS.map(v => {
         let yV = (v.m < 3 || v.nombre === "Nemontemi") ? anio + 1 : anio;
         let fV = new Date(yV, v.m - 1, v.d - (datosAnio.s === "Tecpatl" ? 1 : 0));
@@ -686,34 +699,25 @@ function calcularTonalli(fechaStr, horaStr) {
     }).filter(item => item.fV <= fCalc).sort((a, b) => b.fV - a.fV);
 
     let seleccion = candidatos[0];
+
+    // 5. Manejo de Nemontemi (Días de silencio)
     if (seleccion.v.nombre === "Nemontemi") return { nemontemi: true };
 
-    const diffDays = Math.floor(Math.abs(fCalc - seleccion.fV) / 86400000);
+    // 6. Cálculo final del Tonalli (Signo y Número)
+    const milisegundosPorDia = 86400000;
+    const diffDays = Math.floor(Math.abs(fCalc.setHours(0,0,0,0) - seleccion.fV.setHours(0,0,0,0)) / milisegundosPorDia);
     
-    // Cálculo preciso de Signo y Numeral basado en el inicio del año (Tonalpohualli)
-    // Para el Tonalpohualli usamos una referencia fija conocida: 12 Marzo 2024 = 1 Cipactli
-    const refTonal = new Date(2024, 2, 12, 0, 43);
-    const diffTonal = Math.floor((fCalc - refTonal) / 86400000);
-    
-    let idxSigno = (diffTonal % 20 + 20) % 20;
-    let numeral = (diffTonal % 13 + 13) % 13 + 1;
-
-    // Acompañantes
-    const sNoche = SENORES_NOCHE[(diffTonal % 9 + 9) % 9];
-    const sDiaInfo = ACOMPANANTES_DIA[(numeral - 1)];
-    const trecenaIdx = (idxSigno - (numeral - 1) + 20) % 20;
+    let idxSigno = diffDays % 20;
+    let numBase = SECUENCIA_VEINTENA[(SECUENCIA_VEINTENA.indexOf(datosAnio.b) + (seleccion.v.id - 1)) % 13];
+    let numeroFinal = (numBase + diffDays - 1) % 13 + 1;
 
     return {
         signoNum: idxSigno + 1,
-        numeral: numeral,
-        signoNombre: SIGNOS[idxSigno].n,
-        signoEsp: SIGNOS[idxSigno].es,
-        trecena: SIGNOS[trecenaIdx].n,
-        noche: sNoche,
-        dia: sDiaInfo.s,
-        ave: sDiaInfo.a,
-        veintena: seleccion.v.nombre,
-        anioMex: `${datosAnio.b} ${datosAnio.s}`
+        signo: SIGNOS[idxSigno].es,
+        tonal: { 
+            n: numeroFinal, 
+            nahuatl: SIGNOS[idxSigno].n 
+        }
     };
 }
 
@@ -819,6 +823,7 @@ root.render(<CalculadoraMexica />);
 </script>
 </body>
 </html>
+
 
 
 
