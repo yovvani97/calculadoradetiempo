@@ -15,13 +15,29 @@
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 
     <style>
-        body { -webkit-tap-highlight-color: transparent; background-color: #f3f4f6; }
-        .fade-in { animation: fadeIn 0.8s ease-out forwards; }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-    </style>
+    body { -webkit-tap-highlight-color: transparent; background-color: #f3f4f6; }
+    
+    /* Animación de entrada para el contenido */
+    .fade-in { animation: fadeIn 0.8s ease-out forwards; }
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* --- NUEVOS ESTILOS PARA LA CARGA --- */
+    .bg-carga-mexica { background-color: #b00e2d; }
+
+    .spinner-azteca {
+        animation: rotateGrecas 0.5s linear infinite;
+        will-change: transform;
+        filter: drop-shadow(0 0 8px rgba(0,0,0,0.3));
+    }
+
+    @keyframes rotateGrecas {
+        from { transform: rotate(0deg); }
+        to { transform: rotate(360deg); }
+    }
+</style>
 </head>
 <body>
     <div id="root"></div>
@@ -241,4 +257,5 @@
     </script>
 </body>
 </html>
+
 
