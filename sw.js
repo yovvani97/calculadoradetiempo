@@ -1,4 +1,4 @@
-const CACHE_NAME = 'tonalpohualli-v6'; // Subimos a v6 para forzar la actualización
+const CACHE_NAME = 'tonalpohualli-v7';
 const assets = [
   './',
   './index.html',
