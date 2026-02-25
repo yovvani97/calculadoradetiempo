@@ -10,252 +10,246 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
     <style>
-        :root {
-            --apple-bg: #f5f5f7;
-            --apple-text: #1d1d1f;
-            --apple-card: #ffffff;
-            --mexica-red: #b00e2d;
-            --navbar-height: 60px;
-        }
+    :root {
+        --apple-bg: #f5f5f7;
+        --apple-text: #1d1d1f;
+        --apple-card: #ffffff;
+        --mexica-red: #b00e2d;
+        --mexica-gold: #d4af37;
+        --navbar-height: 60px;
+    }
 
-        body {
-            font-family: 'Inter', -apple-system, sans-serif;
-            background-color: var(--apple-bg);
-            color: var(--apple-text);
-            margin: 0;
-            padding: 0;
-            -webkit-font-smoothing: antialiased;
-        }
+    body {
+        font-family: 'Inter', -apple-system, sans-serif;
+        background-color: var(--apple-bg);
+        color: var(--apple-text);
+        margin: 0;
+        padding: 0;
+        -webkit-font-smoothing: antialiased;
+    }
 
-        /* --- NAVEGACIÓN PC (Desktop) --- */
-        .desktop-nav {
-            display: none; /* Oculto por defecto en móvil */
-            position: fixed;
-            top: 0;
-            width: 100%;
-            height: var(--navbar-height);
-            background: rgba(255, 255, 255, 0.8);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            z-index: 1000;
-            border-bottom: 1px solid rgba(0,0,0,0.05);
-        }
+    /* --- NAVEGACIÓN --- */
+    .desktop-nav {
+        display: none;
+        position: fixed;
+        top: 0;
+        width: 100%;
+        height: var(--navbar-height);
+        background: rgba(255, 255, 255, 0.8);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        z-index: 1000;
+        border-bottom: 1px solid rgba(0,0,0,0.05);
+    }
 
-        .nav-content {
-            max-width: 1000px;
-            margin: 0 auto;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            height: 100%;
-            padding: 0 20px;
-        }
+    .nav-content {
+        max-width: 1000px;
+        margin: 0 auto;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        height: 100%;
+        padding: 0 20px;
+    }
 
-        .nav-links { display: flex; gap: 30px; }
-        .nav-links a {
-            text-decoration: none;
-            color: var(--apple-text);
-            font-size: 14px;
-            font-weight: 400;
-            transition: color 0.3s;
-            cursor: pointer;
-        }
-        .nav-links a:hover { color: var(--mexica-red); }
+    .nav-links { 
+        display: flex; 
+        gap: 25px; 
+        margin-left: auto;
+    }
 
-        /* --- BANNER CÓSMICO --- */
-        .cosmic-banner {
-            background: #fff;
-            padding: 12px 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px solid rgba(0,0,0,0.05);
-            margin-top: 0;
-        }
+    .nav-links a {
+        text-decoration: none;
+        color: var(--apple-text);
+        font-size: 14px;
+        font-weight: 400;
+        transition: color 0.3s;
+        cursor: pointer;
+    }
 
-        /* --- CONTENEDOR PRINCIPAL --- */
-        .app-wrapper {
-            max-width: 800px;
-            margin: 0 auto;
-            min-height: 100vh;
-            padding-bottom: 100px; /* Espacio para el nav móvil */
-        }
+    .nav-links a:hover { color: var(--mexica-red); }
 
-        .content-card {
-            background: var(--apple-card);
-            margin: 20px;
-            padding: 30px;
-            border-radius: 28px;
-            box-shadow: 0 8px 30px rgba(0,0,0,0.04);
-            transition: transform 0.3s ease;
-        }
+    .social-links {
+        display: flex;
+        gap: 15px;
+        align-items: center;
+        margin-left: 30px;
+        padding-left: 20px;
+        border-left: 1px solid rgba(0,0,0,0.1);
+    }
 
-        /* --- NAVEGACIÓN MÓVIL (Bottom Bar) --- */
-        .bottom-nav {
-            position: fixed;
-            bottom: 0;
-            width: 100%;
-            background: rgba(255, 255, 255, 0.85);
-            backdrop-filter: blur(20px);
-            display: flex;
-            justify-content: space-around;
-            padding: 12px 0 25px 0;
-            border-top: 1px solid rgba(0,0,0,0.05);
-            z-index: 1000;
-        }
+    .social-links a {
+        text-decoration: none;
+        color: #86868b;
+        transition: color 0.2s ease;
+    }
 
-        .nav-item {
-            border: none;
-            background: none;
-            color: #86868b;
-            font-size: 10px;
-            font-weight: 600;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 4px;
-            cursor: pointer;
-        }
+    .social-links a:hover { color: var(--mexica-red); }
 
-        .nav-item.active { color: var(--mexica-red); }
-        .nav-item span { font-size: 22px; }
+    .main-logo {
+        height: 40px; /* Tamaño ajustado para balance */
+        width: auto;
+        display: block;
+        transition: opacity 0.2s ease;
+        cursor: pointer;
+    }
 
-        /* --- RESPONSIVIDAD (Media Queries) --- */
-        @media (min-width: 768px) {
-            .desktop-nav { display: block; }
-            .bottom-nav { display: none; }
-            .app-wrapper { padding-top: 80px; }
-            .cosmic-banner { 
-                margin: 20px; 
-                border-radius: 20px; 
-                border: 1px solid rgba(0,0,0,0.05);
-            }
-        }
+    /* --- BANNER CÓSMICO --- */
+    .cosmic-banner {
+        background: #fff;
+        padding: 12px 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 1px solid rgba(0,0,0,0.05);
+    }
 
-        /* Utilidades */
-        .hidden { display: none; }
-        /* Estilos para los iconos de redes sociales */
-/* Estilos para los iconos de redes sociales */
-.social-links {
-    display: flex;
-    gap: 15px;
-    align-items: center;
-    margin-left: 30px; /* Espacio entre el menú y las redes */
-    padding-left: 20px;
-    border-left: 1px solid rgba(0,0,0,0.1); /* Línea divisoria elegante */
-}
+    /* --- CONTENEDOR PRINCIPAL --- */
+    .app-wrapper {
+        max-width: 1000px; /* Un poco más ancho para el grid */
+        margin: 0 auto;
+        min-height: 100vh;
+        padding-bottom: 100px;
+    }
 
-.social-links a {
-    text-decoration: none;
-    color: #86868b; /* Gris Apple */
-    display: flex;
-    align-items: center;
-    transition: color 0.2s ease;
-}
+    .content-card {
+        background: var(--apple-card);
+        margin: 20px;
+        padding: 30px;
+        border-radius: 28px;
+        box-shadow: 0 8px 30px rgba(0,0,0,0.04);
+    }
 
-.social-links a:hover {
-    color: var(--mexica-red);
-}
+    /* --- SECCIONES TIPO APPLE (NOSOTROS) --- */
+    .apple-section {
+        position: relative;
+        width: 100%;
+        border-radius: 28px;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        background-size: cover;
+        background-position: center;
+        color: white;
+    }
 
-.social-links a i {
-    font-size: 18px; /* Tamaño del icono */
-}
+    .apple-section::after {
+        content: '';
+        position: absolute;
+        top: 0; left: 0; width: 100%; height: 100%;
+        background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.2) 100%);
+        z-index: 1;
+    }
 
-.social-links a span {
-    font-size: 11px; 
-    font-weight: 600;
-    margin-left: 6px;
-    opacity: 0.6;
-}
+    .apple-section.align-left {
+        align-items: flex-start;
+        text-align: left;
+    }
 
-/* Ajuste para que el menú superior no se amontone */
-.nav-links {
-    margin-left: auto; /* Empuja los links a la derecha */
-    display: flex;
-    gap: 25px;
-}
+    .apple-section.align-left::after {
+        background: linear-gradient(to right, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.4) 50%, rgba(0,0,0,0) 100%);
+    }
 
-/* Ajuste para que el menú superior no se amontone */
-.nav-links {
-    margin-left: auto; /* Empuja los links al centro/derecha */
-}
-        /* Esto controlará el tamaño del logo */
-.main-logo {
-    height: 60px; /* Este es el tamaño ideal estilo Apple */
-    width: auto;
-    display: block;
-    margin: 0 auto; /* Lo centra horizontalmente */
-    transition: opacity 0.2s ease;
-}
+    .section-content {
+        position: relative;
+        z-index: 2;
+        padding: 40px;
+        max-width: 80%;
+    }
 
-.logo-container {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 100%;
-}
-        /* Estilos para las Secciones tipo Apple Home */
-.apple-section {
-    position: relative;
-    width: 100%;
-    height: 80vh; /* Altura visual impactante */
-    margin-bottom: 20px;
-    border-radius: 28px;
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    background-size: cover;
-    background-position: center;
-    color: white;
-}
+    .apple-section.align-left .section-content {
+        margin-left: 5%;
+        max-width: 50%;
+    }
 
-.apple-section::after {
-    content: '';
-    position: absolute;
-    top: 0; 
-    left: 0; 
-    width: 100%; 
-    height: 100%;
-    /* Degradado de negro a transparente de abajo hacia arriba */
-    background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.2) 100%);
-    z-index: 1;
-}
+    .apple-section h2 { font-size: 42px; font-weight: 600; margin-bottom: 10px; letter-spacing: -1px; }
+    .apple-section p { font-size: 19px; line-height: 1.4; text-wrap: balance; margin-bottom: 10px; }
+    .apple-section .discreto { font-size: 13px; opacity: 0.7; font-style: italic; }
 
-.apple-section.align-left::after {
-    background: linear-gradient(to right, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.4) 50%, rgba(0,0,0,0) 100%);
-}
-        .section-content {
-    position: relative;
-    z-index: 2; /* Mayor que el z-index del ::after */
-}
-        .apple-section p {
-    font-size: 19px;
-    color: rgba(255,255,255,0.9);
-    line-height: 1.4;
-    font-weight: 400;
-    text-wrap: balance;
-}
+    /* --- LA CUENTA (GRID DE SIGNOS) --- */
+    .cuenta-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 20px;
+        padding: 20px 0;
+    }
 
-/* También te recomiendo añadir este para los títulos (h2) */
-.apple-section h2 {
-    font-size: 42px;
-    font-weight: 600;
-    margin-bottom: 10px;
-    letter-spacing: -1px;
-}
+    .glifo-card {
+        background: var(--apple-card);
+        border-radius: 22px;
+        padding: 25px;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        border: 1px solid rgba(0,0,0,0.05);
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+    }
 
-/* Mejora para que las imágenes de fondo se vean bien */
-.bg-maestro { 
-    background-image: url('img/maestro-arturo.jpg'); 
-    background-position: right center; /* Asegura que el Maestro siempre se vea */
-}
+    .glifo-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 12px 40px rgba(0,0,0,0.08);
+    }
 
-.bg-legado { background-image: url('img/bg-legado.jpg'); }
-.bg-mapa { background-image: url('img/bg-mapa.jpg'); }
-    </style>
+    .rumbo-tag {
+        font-size: 10px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        padding: 4px 12px;
+        border-radius: 20px;
+        width: fit-content;
+    }
+
+    .tag-norte { background: #f5f5f7; color: #1d1d1f; border: 1px solid #d2d2d7; }
+    .tag-oeste { background: #1d1d1f; color: #fff; }
+    .tag-este { background: #ffebee; color: #b00e2d; }
+    .tag-sur { background: #e3f2fd; color: #1976d2; }
+
+    .glifo-titulo { font-size: 20px; font-weight: 600; margin: 0; }
+    .glifo-maya { font-size: 13px; color: #86868b; margin-top: -8px; display: block; }
+    .glifo-desc { font-size: 14px; line-height: 1.5; color: #424245; }
+
+    /* --- NAVEGACIÓN MÓVIL --- */
+    .bottom-nav {
+        position: fixed;
+        bottom: 0;
+        width: 100%;
+        background: rgba(255, 255, 255, 0.85);
+        backdrop-filter: blur(20px);
+        display: flex;
+        justify-content: space-around;
+        padding: 12px 0 25px 0;
+        border-top: 1px solid rgba(0,0,0,0.05);
+        z-index: 1000;
+    }
+
+    .nav-item {
+        border: none; background: none; color: #86868b;
+        font-size: 10px; font-weight: 600;
+        display: flex; flex-direction: column; align-items: center; gap: 4px;
+    }
+
+    .nav-item.active { color: var(--mexica-red); }
+    .nav-item span { font-size: 24px; }
+
+    /* --- MEDIA QUERIES --- */
+    @media (min-width: 768px) {
+        .desktop-nav { display: block; }
+        .bottom-nav { display: none; }
+        .app-wrapper { padding-top: 80px; }
+        .cosmic-banner { margin: 20px; border-radius: 20px; border: 1px solid rgba(0,0,0,0.05); }
+    }
+
+    .hidden { display: none; }
+
+    /* Fondos */
+    .bg-maestro { background-image: url('img/maestro-arturo.jpg'); background-position: right center; }
+    .bg-legado { background-image: url('img/bg-legado.jpg'); }
+    .bg-mapa { background-image: url('img/bg-mapa.jpg'); }
+</style>
 </head>
 <body>
     <nav class="desktop-nav">
@@ -332,7 +326,148 @@
             </div>
         </section>
 
-        <section id="sec-cuenta" class="hidden"><div class="content-card"><h2>La Cuenta</h2><p>Próximamente...</p></div></section>
+<section id="sec-cuenta" class="hidden">
+    <div style="padding: 20px;">
+        <h2 style="font-size: 34px; letter-spacing: -1px; margin-bottom: 10px;">Los 20 Signos</h2>
+        <p style="color: #86868b; margin-bottom: 30px;">El Tonalamatl se divide en cuatro rumbos cósmicos.</p>
+
+        <h3 style="border-bottom: 1px solid #eee; padding-bottom: 10px; margin-top: 40px;">Norte — Aire y Mente</h3>
+        <div class="cuenta-grid">
+            <div class="glifo-card">
+                <span class="rumbo-tag tag-norte">Blanco — Norte</span>
+                <h4 class="glifo-titulo">Cipactli / Ozomahtli</h4>
+                <span class="glifo-maya">Maya: Imix</span>
+                <p class="glifo-desc">Energía primordial, inicio creativo, gestación de proyectos. Procesos internos y purificación mental.</p>
+            </div>
+            <div class="glifo-card">
+                <span class="rumbo-tag tag-norte">Blanco — Norte</span>
+                <h4 class="glifo-titulo">Coatl / Cuauhtli</h4>
+                <span class="glifo-maya">Maya: Chicchan</span>
+                <p class="glifo-desc">Fuerza vital instintiva que puede elevarse a conciencia superior.</p>
+            </div>
+            <div class="glifo-card">
+                <span class="rumbo-tag tag-norte">Blanco — Norte</span>
+                <h4 class="glifo-titulo">Atl / Quiahuitl</h4>
+                <span class="glifo-maya">Maya: Muluk</span>
+                <p class="glifo-desc">Purificación emocional, limpieza a través de experiencias intensas.</p>
+            </div>
+            <div class="glifo-card">
+                <span class="rumbo-tag tag-norte">Blanco — Norte</span>
+                <h4 class="glifo-titulo">Acatl / Calli</h4>
+                <span class="glifo-maya">Maya: Ben</span>
+                <p class="glifo-desc">Dirección espiritual, rectitud, eje de crecimiento personal.</p>
+            </div>
+            <div class="glifo-card">
+                <span class="rumbo-tag tag-norte">Blanco — Norte</span>
+                <h4 class="glifo-titulo">Ollin / Mazatl</h4>
+                <span class="glifo-maya">Maya: Caban</span>
+                <p class="glifo-desc">Movimiento, evolución constante, cambios inevitables.</p>
+            </div>
+        </div>
+
+        <h3 style="border-bottom: 1px solid #eee; padding-bottom: 10px; margin-top: 40px;">Oeste — Misterio y Transformación</h3>
+        <div class="cuenta-grid">
+            <div class="glifo-card">
+                <span class="rumbo-tag tag-oeste">Negro — Oeste</span>
+                <h4 class="glifo-titulo">Ehecatl / Malinalli</h4>
+                <span class="glifo-maya">Maya: Ik’</span>
+                <p class="glifo-desc">Movimiento del espíritu, palabra que transforma. Introspección profunda.</p>
+            </div>
+            <div class="glifo-card">
+                <span class="rumbo-tag tag-oeste">Negro — Oeste</span>
+                <h4 class="glifo-titulo">Miquiztli / Cozcacuauhtli</h4>
+                <span class="glifo-maya">Maya: Cimi</span>
+                <p class="glifo-desc">Muerte simbólica y renacimiento consciente.</p>
+            </div>
+            <div class="glifo-card">
+                <span class="rumbo-tag tag-oeste">Negro — Oeste</span>
+                <h4 class="glifo-titulo">Itzcuintli / Xochitl</h4>
+                <span class="glifo-maya">Maya: Oc</span>
+                <p class="glifo-desc">Lealtad, guía espiritual, amor protector.</p>
+            </div>
+            <div class="glifo-card">
+                <span class="rumbo-tag tag-oeste">Negro — Oeste</span>
+                <h4 class="glifo-titulo">Ocelotl / Cuetzpalin</h4>
+                <span class="glifo-maya">Maya: Ix</span>
+                <p class="glifo-desc">Poder mágico, intuición profunda, energía nocturna.</p>
+            </div>
+            <div class="glifo-card">
+                <span class="rumbo-tag tag-oeste">Negro — Oeste</span>
+                <h4 class="glifo-titulo">Tecpatl / Tochtli</h4>
+                <span class="glifo-maya">Maya: Etznab</span>
+                <p class="glifo-desc">Verdad revelada, corte de ilusiones, claridad.</p>
+            </div>
+        </div>
+
+        <h3 style="border-bottom: 1px solid #eee; padding-bottom: 10px; margin-top: 40px;">Este — Nacimiento y Acción</h3>
+        <div class="cuenta-grid">
+            <div class="glifo-card">
+                <span class="rumbo-tag tag-este">Rojo — Este</span>
+                <h4 class="glifo-titulo">Calli</h4>
+                <span class="glifo-maya">Maya: Akbal</span>
+                <p class="glifo-desc">Orden, estructura, protección y bases sólidas.</p>
+            </div>
+            <div class="glifo-card">
+                <span class="rumbo-tag tag-este">Rojo — Este</span>
+                <h4 class="glifo-titulo">Mazatl</h4>
+                <span class="glifo-maya">Maya: Manik’</span>
+                <p class="glifo-desc">Equilibrio, sensibilidad, conexión natural.</p>
+            </div>
+            <div class="glifo-card">
+                <span class="rumbo-tag tag-este">Rojo — Este</span>
+                <h4 class="glifo-titulo">Ozomahtli</h4>
+                <span class="glifo-maya">Maya: Chuen</span>
+                <p class="glifo-desc">Creatividad, arte, juego y tejido del destino.</p>
+            </div>
+            <div class="glifo-card">
+                <span class="rumbo-tag tag-este">Rojo — Este</span>
+                <h4 class="glifo-titulo">Cuauhtli</h4>
+                <span class="glifo-maya">Maya: Men</span>
+                <p class="glifo-desc">Visión elevada, liderazgo, estrategia.</p>
+            </div>
+            <div class="glifo-card">
+                <span class="rumbo-tag tag-este">Rojo — Este</span>
+                <h4 class="glifo-titulo">Quiahuitl</h4>
+                <span class="glifo-maya">Maya: Cauac</span>
+                <p class="glifo-desc">Tormenta transformadora, fertilidad, renovación.</p>
+            </div>
+        </div>
+
+        <h3 style="border-bottom: 1px solid #eee; padding-bottom: 10px; margin-top: 40px;">Sur — Maduración y Experiencia</h3>
+        <div class="cuenta-grid">
+            <div class="glifo-card">
+                <span class="rumbo-tag tag-sur">Azul — Sur</span>
+                <h4 class="glifo-titulo">Cuetzpalin</h4>
+                <span class="glifo-maya">Maya: Kan</span>
+                <p class="glifo-desc">Adaptabilidad, expansión, energía vital en desarrollo.</p>
+            </div>
+            <div class="glifo-card">
+                <span class="rumbo-tag tag-sur">Azul — Sur</span>
+                <h4 class="glifo-titulo">Tochtli</h4>
+                <span class="glifo-maya">Maya: Lamat</span>
+                <p class="glifo-desc">Fertilidad, abundancia, sensibilidad emocional.</p>
+            </div>
+            <div class="glifo-card">
+                <span class="rumbo-tag tag-sur">Azul — Sur</span>
+                <h4 class="glifo-titulo">Malinalli</h4>
+                <span class="glifo-maya">Maya: Eb</span>
+                <p class="glifo-desc">Camino humano, aprendizaje a través de pruebas.</p>
+            </div>
+            <div class="glifo-card">
+                <span class="rumbo-tag tag-sur">Azul — Sur</span>
+                <h4 class="glifo-titulo">Cozcacuauhtli</h4>
+                <span class="glifo-maya">Maya: Cib</span>
+                <p class="glifo-desc">Sabiduría ancestral, memoria y perdón.</p>
+            </div>
+            <div class="glifo-card">
+                <span class="rumbo-tag tag-sur">Azul — Sur</span>
+                <h4 class="glifo-titulo">Xochitl</h4>
+                <span class="glifo-maya">Maya: Ahau / Ajaw</span>
+                <p class="glifo-desc">Iluminación, belleza, culminación solar.</p>
+            </div>
+        </div>
+    </div>
+</section>
         <section id="sec-rituales" class="hidden"><div class="content-card"><h2>Rituales</h2><p>Próximamente...</p></div></section>
 
     </div>
@@ -406,6 +541,7 @@
     </script>
 </body>
 </html>
+
 
 
 
