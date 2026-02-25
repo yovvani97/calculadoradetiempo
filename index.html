@@ -864,9 +864,10 @@
 
   // ✅ SI ES NEMONTEMI, ABRE OTRA CALCULADORA
   if (res && res.nemontemi) {
-    window.location.href = "nemontemi.html"; // misma pestaña
-    return;
-  }
+  setLoading(false);
+  window.location.href = `./nemontemi.html?fecha=${encodeURIComponent(fecha)}&hora=${encodeURIComponent(hora)}`;
+  return;
+}
 
   setResultado(res);
   setLoading(false);
@@ -1073,6 +1074,7 @@
 </script>
 </body>
 </html>
+
 
 
 
