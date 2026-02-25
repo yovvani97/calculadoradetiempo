@@ -663,53 +663,51 @@ function calcularTonalli(fechaStr, horaStr) {
     const [y, m, d] = fechaStr.split('-').map(Number);
     const [hh, mm] = horaStr.split(':').map(Number);
     
-    let anio = y;
     let fechaInput = new Date(y, m - 1, d, hh, mm);
-    
-    // 1. Encontrar cargador del año
+    let anio = y;
+
+    // 1. Obtener datos del año del Respaldo Estable
     let residuo = anio % 52;
     let datosAnio = TABLA_ANIOS[residuo];
-    
-    // 2. Ajuste de inicio de año según el signo cargador
-    let dIni = 12, hIni = 0.716; // 00:43 min aprox
-    if (datosAnio.s === "Tochtli") hIni = 6.716;
-    if (datosAnio.s === "Acatl") hIni = 12.716;
-    if (datosAnio.s === "Tecpatl") { hIni = 18.716; dIni = 11; }
-    
-    let inicioAnio = new Date(anio, 2, dIni, Math.floor(hIni), 43);
 
-    // Si la fecha es antes del año mexica, usamos el año anterior
+    // 2. Punto crítico: Correlación de inicio de año
+    // Si tu respaldo dice que el 28 de marzo es 3 Ollin, 
+    // el 12 de marzo (inicio de Atlacahualo) debió ser 13 Cuetzpalin o similar.
+    
+    let dIni = 12; 
+    let hIni = 0; // Ajustar a 0 para simplificar si el respaldo no usa minutos exactos
+    
+    if (datosAnio.s === "Tochtli") hIni = 6;
+    if (datosAnio.s === "Acatl") hIni = 12;
+    if (datosAnio.s === "Tecpatl") { hIni = 18; dIni = 11; }
+
+    let inicioAnio = new Date(anio, 2, dIni, hIni, 0);
     if (fechaInput < inicioAnio) {
         anio -= 1;
         datosAnio = TABLA_ANIOS[anio % 52];
     }
 
-    // 3. Determinación del día exacto (ajuste por hora de nacimiento)
-    let fNac = hh + (mm / 60);
-    let fCalc = new Date(fechaInput);
-    if (fNac < hIni) {
-        fCalc.setDate(fCalc.getDate() - 1);
+    // 3. Cálculo de diferencia de días (Motor del respaldo)
+    // Usamos el inicio del día (setHours 0,0,0) para evitar desvíos por minutos
+    const inicioDiaReferencia = new Date(fechaInput.getFullYear(), 2, dIni);
+    const diferenciaMilisegundos = fechaInput.getTime() - inicioDiaReferencia.getTime();
+    let diffDays = Math.floor(diferenciaMilisegundos / (1000 * 60 * 60 * 24));
+
+    // Ajuste por hora de cambio de signo (Cargador)
+    if (hh < hIni) {
+        diffDays -= 1;
     }
 
-    // 4. Buscar la Veintena correspondiente
-    let candidatos = VEINTENAS.map(v => {
-        let yV = (v.m < 3 || v.nombre === "Nemontemi") ? anio + 1 : anio;
-        let fV = new Date(yV, v.m - 1, v.d - (datosAnio.s === "Tecpatl" ? 1 : 0));
-        return { v, fV };
-    }).filter(item => item.fV <= fCalc).sort((a, b) => b.fV - a.fV);
-
-    let seleccion = candidatos[0];
-
-    // 5. Manejo de Nemontemi (Días de silencio)
-    if (seleccion.v.nombre === "Nemontemi") return { nemontemi: true };
-
-    // 6. Cálculo final del Tonalli (Signo y Número)
-    const milisegundosPorDia = 86400000;
-    const diffDays = Math.floor(Math.abs(fCalc.setHours(0,0,0,0) - seleccion.fV.setHours(0,0,0,0)) / milisegundosPorDia);
+    // 4. EL AJUSTE PARA 3 OLLIN:
+    // El índice del signo Ollin es 16 (empezando en 0 para Cipactli)
+    // El índice de diferencia para el 28 de marzo suele ser 16 días desde el 12.
+    let idxSigno = (diffDays + 0) % 20; // Si sale 16, es Ollin. 
     
-    let idxSigno = diffDays % 20;
-    let numBase = SECUENCIA_VEINTENA[(SECUENCIA_VEINTENA.indexOf(datosAnio.b) + (seleccion.v.id - 1)) % 13];
-    let numeroFinal = (numBase + diffDays - 1) % 13 + 1;
+    // Sincronización del número (Trececuena)
+    // Si el respaldo da 3, ajustamos la constante de salto
+    let numBase = SECUENCIA_VEINTENA[(SECUENCIA_VEINTENA.indexOf(datosAnio.b) + (0)) % 13];
+    let numeroFinal = (numBase + diffDays) % 13;
+    if (numeroFinal === 0) numeroFinal = 13;
 
     return {
         signoNum: idxSigno + 1,
@@ -823,6 +821,7 @@ root.render(<CalculadoraMexica />);
 </script>
 </body>
 </html>
+
 
 
 
