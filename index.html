@@ -135,27 +135,44 @@
         /* Utilidades */
         .hidden { display: none; }
         /* Estilos para los iconos de redes sociales */
+/* Estilos para los iconos de redes sociales */
 .social-links {
     display: flex;
     gap: 15px;
     align-items: center;
-    margin-left: 20px;
+    margin-left: 30px; /* Espacio entre el menú y las redes */
     padding-left: 20px;
-    border-left: 1px solid rgba(0,0,0,0.1); /* Separador sutil */
+    border-left: 1px solid rgba(0,0,0,0.1); /* Línea divisoria elegante */
 }
 
 .social-links a {
-    font-size: 18px;
-    color: #86868b; /* Gris Apple */
-    transition: all 0.3s ease;
     text-decoration: none;
+    color: #86868b; /* Gris Apple */
     display: flex;
     align-items: center;
+    transition: color 0.2s ease;
 }
 
 .social-links a:hover {
-    color: var(--mexica-red); /* Cambia a tu rojo al pasar el mouse */
-    transform: scale(1.1);
+    color: var(--mexica-red);
+}
+
+.social-links a i {
+    font-size: 18px; /* Tamaño del icono */
+}
+
+.social-links a span {
+    font-size: 11px; 
+    font-weight: 600;
+    margin-left: 6px;
+    opacity: 0.6;
+}
+
+/* Ajuste para que el menú superior no se amontone */
+.nav-links {
+    margin-left: auto; /* Empuja los links a la derecha */
+    display: flex;
+    gap: 25px;
 }
 
 /* Ajuste para que el menú superior no se amontone */
@@ -287,6 +304,7 @@
 
     </body>
 </html>
+
 
 
 
