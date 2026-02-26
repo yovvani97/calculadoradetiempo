@@ -586,8 +586,13 @@
     </script>
     
     <script src="/js/preload.js"></script>
+<script src="js/preload.js"></script>
 <script>
-window.APP_READY_PROMISE = window.preloadSignos();
+  // Si preloadSignos existe, lo usamos.
+  // Si no existe, NO rompemos la página.
+  window.APP_READY_PROMISE = (typeof window.preloadSignos === "function")
+    ? window.preloadSignos()
+    : Promise.resolve();
 </script>
     
     <script type="text/babel">
@@ -867,7 +872,7 @@ const { useState, useEffect } = React;
 
   const App = () => {
 
-  const [ready, setReady] = useState(window.APP_READY || false);
+  const [ready, setReady] = useState(false);
 
   const [fecha, setFecha] = useState("");
   const [hora, setHora] = useState("");
@@ -1133,6 +1138,7 @@ if (!ready) {
 </script>
 </body>
 </html>
+
 
 
 
