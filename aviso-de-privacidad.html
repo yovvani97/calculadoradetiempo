@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="es-MX">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Aviso de Privacidad | Tiempo Sagrado</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+
+  <link rel="icon" type="image/png" href="/favicon.png">
+  <link rel="shortcut icon" href="/favicon.png">
+  <link rel="apple-touch-icon" href="/favicon.png">
+  <meta name="theme-color" content="#b00e2d">
+
+  <meta name="description" content="Aviso de Privacidad de Tiempo Sagrado." />
+
+  <style>
+    :root{
+      --apple-bg:#f5f5f7;
+      --apple-text:#1d1d1f;
+      --apple-card:#ffffff;
+      --mexica-red:#b00e2d;
+      --mexica-gold:#d4af37;
+      --navbar-height:60px;
+    }
+    *{box-sizing:border-box}
+    body{
+      font-family:'Inter', -apple-system, sans-serif;
+      background:var(--apple-bg);
+      color:var(--apple-text);
+      margin:0;
+      -webkit-font-smoothing:antialiased;
+    }
+
+    /* Top bar */
+    .topbar{
+      position:sticky;
+      top:0;
+      z-index:1000;
+      height:var(--navbar-height);
+      background:rgba(255,255,255,0.85);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom:1px solid rgba(0,0,0,0.06);
+      display:flex;
+      align-items:center;
+    }
+    .topbar .inner{
+      max-width:1000px;
+      width:100%;
+      margin:0 auto;
+      padding:0 16px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+    }
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      text-decoration:none;
+      color:inherit;
+    }
+    .brand img{
+      height:36px;
+      width:auto;
+      display:block;
+    }
+    .back{
+      text-decoration:none;
+      color:var(--mexica-red);
+      font-weight:600;
+      font-size:14px;
+      padding:10px 12px;
+      border-radius:14px;
+      border:1px solid rgba(176,14,45,0.18);
+      background:rgba(176,14,45,0.06);
+      transition: transform .15s ease, background .15s ease;
+      white-space:nowrap;
+    }
+    .back:active{transform:scale(0.98)}
+    .back:hover{background:rgba(176,14,45,0.10)}
+
+    /* Layout */
+    .wrap{
+      max-width:1000px;
+      margin:0 auto;
+      padding:22px 16px 80px;
+    }
+    .hero{
+      background: linear-gradient(135deg, rgba(176,14,45,0.10), rgba(212,175,55,0.10));
+      border:1px solid rgba(0,0,0,0.06);
+      border-radius:28px;
+      padding:26px;
+      margin-top:16px;
+    }
+    .hero h1{
+      margin:0 0 8px;
+      font-size:34px;
+      letter-spacing:-1px;
+    }
+    .hero p{
+      margin:0;
+      color:#424245;
+      line-height:1.5;
+      font-size:15px;
+      max-width:70ch;
+    }
+
+    .card{
+      margin-top:18px;
+      background:var(--apple-card);
+      border:1px solid rgba(0,0,0,0.06);
+      border-radius:28px;
+      padding:22px;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.04);
+    }
+    h2{
+      font-size:18px;
+      margin:0 0 10px;
+      letter-spacing:-0.2px;
+    }
+    p, li{
+      color:#424245;
+      line-height:1.6;
+      font-size:14px;
+    }
+    ul{margin:10px 0 0 18px}
+    .muted{
+      color:#86868b;
+      font-size:12px;
+      margin-top:10px;
+    }
+
+    .grid{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:14px;
+      margin-top:10px;
+    }
+    .mini{
+      border:1px solid rgba(0,0,0,0.06);
+      border-radius:22px;
+      padding:16px;
+      background:#fff;
+    }
+    .mini strong{color:#1d1d1f}
+
+    .footer{
+      margin-top:18px;
+      text-align:center;
+      color:#86868b;
+      font-size:12px;
+    }
+    .footer a{
+      color:var(--mexica-red);
+      text-decoration:none;
+      font-weight:600;
+    }
+
+    @media (max-width: 760px){
+      .hero h1{font-size:26px}
+      .grid{grid-template-columns:1fr}
+      .brand img{height:34px}
+      .wrap{padding-bottom:90px}
+    }
+  </style>
+</head>
+
+<body>
+
+  <header class="topbar">
+    <div class="inner">
+      <a class="brand" href="index.html" aria-label="Volver a Tiempo Sagrado">
+        <img src="logo_tiempo_sagrado_horizontal.png" alt="Tiempo Sagrado" />
+      </a>
+      <a class="back" href="index.html">← Volver</a>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <section class="hero">
+      <h1>Aviso de Privacidad</h1>
+      <p>
+        Este Aviso de Privacidad describe cómo se tratan los datos personales en el sitio
+        <strong>Tiempo Sagrado</strong>. Recomendamos leerlo completo.
+      </p>
+      <div class="muted">
+        Última actualización: <span id="fecha-actualizacion">2026-02-25</span>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>1) Responsable</h2>
+      <p>
+        El responsable del tratamiento de datos personales en este sitio es:
+        <strong>Tiempo Sagrado</strong>.
+      </p>
+      <p>
+        Contacto: <strong>tucorreo@dominio.com</strong> (reemplaza este correo por el tuyo).
+      </p>
+    </section>
+
+    <section class="card">
+      <h2>2) Datos personales que se recaban</h2>
+      <p>
+        En general, este sitio puede funcionar sin que proporciones datos personales directamente.
+        Sin embargo, podrían recabarse:
+      </p>
+      <ul>
+        <li><strong>Datos de navegación</strong> (por ejemplo: tipo de dispositivo, navegador, páginas visitadas), mediante cookies o herramientas similares.</li>
+        <li><strong>Datos de contacto</strong> si decides escribirnos (por ejemplo: correo y nombre, dependiendo de lo que envíes).</li>
+        <li><strong>Datos proporcionados en formularios</strong>, en caso de que se habiliten funciones futuras.</li>
+      </ul>
+      <p class="muted">
+        Nota: La calculadora utiliza fecha y hora ingresadas para mostrar resultados, pero no implica necesariamente que esos datos se almacenen, a menos que se indique explícitamente.
+      </p>
+    </section>
+
+    <section class="card">
+      <h2>3) Finalidades del tratamiento</h2>
+      <div class="grid">
+        <div class="mini">
+          <strong>Finalidades primarias</strong>
+          <ul>
+            <li>Operar el sitio y sus funciones.</li>
+            <li>Brindar la experiencia de la calculadora y contenidos.</li>
+            <li>Atender dudas o mensajes que nos envíes.</li>
+          </ul>
+        </div>
+        <div class="mini">
+          <strong>Finalidades secundarias</strong>
+          <ul>
+            <li>Mejorar el contenido y diseño del sitio.</li>
+            <li>Estadísticas generales (analítica).</li>
+            <li>Seguridad y prevención de abuso.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>4) Cookies y tecnologías similares</h2>
+      <p>
+        El sitio puede utilizar cookies o tecnologías similares para mejorar tu experiencia, recordar preferencias
+        y/o generar estadísticas de uso.
+      </p>
+      <p>
+        Puedes deshabilitarlas desde tu navegador. Algunas funciones podrían verse afectadas.
+      </p>
+    </section>
+
+    <section class="card">
+      <h2>5) Transferencias</h2>
+      <p>
+        No compartimos tus datos personales con terceros, salvo que sea necesario para operar el sitio (por ejemplo,
+        servicios de hosting) o cuando exista obligación legal.
+      </p>
+    </section>
+
+    <section class="card">
+      <h2>6) Seguridad</h2>
+      <p>
+        Implementamos medidas razonables de seguridad para proteger la información. Aun así, ningún sistema es 100% infalible.
+      </p>
+    </section>
+
+    <section class="card">
+      <h2>7) Derechos ARCO</h2>
+      <p>
+        Puedes solicitar acceso, rectificación, cancelación u oposición (ARCO) respecto a tus datos personales,
+        así como revocar tu consentimiento (cuando aplique), enviando un correo a:
+        <strong>tucorreo@dominio.com</strong>
+      </p>
+      <p class="muted">
+        Incluye tu nombre, la solicitud específica y un medio para responderte.
+      </p>
+    </section>
+
+    <section class="card">
+      <h2>8) Cambios al aviso</h2>
+      <p>
+        Este aviso puede modificarse para reflejar mejoras o cambios legales/técnicos. La versión vigente se mostrará en esta página.
+      </p>
+    </section>
+
+    <div class="footer">
+      © <span id="anio"></span> Tiempo Sagrado · <a href="index.html">Inicio</a>
+    </div>
+  </main>
+
+  <script>
+    // Año automático en footer
+    document.getElementById("anio").textContent = new Date().getFullYear();
+
+    // Si quieres que la fecha de actualización se actualice sola (opcional):
+    // document.getElementById("fecha-actualizacion").textContent =
+    //   new Date().toISOString().slice(0,10);
+  </script>
+
+</body>
+</html>
