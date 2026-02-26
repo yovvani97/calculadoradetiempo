@@ -584,6 +584,15 @@
         actualizarReloj();
         setInterval(actualizarReloj, 60000);
     </script>
+    <script type="module">
+import { preloadSignos } from './js/preload.js';
+
+window.APP_READY = false;
+
+preloadSignos().then(() => {
+  window.APP_READY = true;
+});
+</script>
     <script type="text/babel">
   const { useState } = React;
 
@@ -860,10 +869,26 @@
   );
 
   const App = () => {
-    const [fecha, setFecha] = useState("");
-    const [hora, setHora] = useState("");
-    const [resultado, setResultado] = useState(null);
-    const [loading, setLoading] = useState(false);
+
+  const [ready, setReady] = useState(window.APP_READY || false);
+
+  const [fecha, setFecha] = useState("");
+  const [hora, setHora] = useState("");
+  const [resultado, setResultado] = useState(null);
+  const [loading, setLoading] = useState(false);
+
+      useEffect(() => {
+  if (!ready) {
+    const interval = setInterval(() => {
+      if (window.APP_READY) {
+        setReady(true);
+        clearInterval(interval);
+      }
+    }, 50);
+
+    return () => clearInterval(interval);
+  }
+}, [ready]);
 
     const handleCalculate = () => {
   if (!fecha || !hora) return;
@@ -898,7 +923,18 @@
     }
   }, 600);
 };
-
+if (!ready) {
+  return (
+    <div className="min-h-screen flex items-center justify-center bg-black text-white">
+      <div className="text-center space-y-6 animate-pulse">
+        <img src="signos/17.png" className="w-24 mx-auto opacity-70" />
+        <p className="tracking-[0.4em] text-xs uppercase">
+          Preparando la Cuenta del Tiempo
+        </p>
+      </div>
+    </div>
+  );
+}
     return (
       <div className="min-h-screen bg-gray-50 font-sans text-gray-900 flex items-center justify-center p-4">
         <div className="max-w-md w-full bg-white rounded-[2.5rem] shadow-2xl overflow-hidden border border-gray-100/50">
@@ -1094,6 +1130,7 @@
 </script>
 </body>
 </html>
+
 
 
 
