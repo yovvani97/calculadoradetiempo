@@ -710,7 +710,49 @@
         mobileMenu.classList.add('hidden');
     }
 }
+// ✅ Menú hamburguesa móvil
+function toggleMenu(force) {
+  const menu = document.getElementById("mobile-menu");
+  if (!menu) return;
 
+  // force = true abre, force = false cierra, undefined alterna
+  const shouldOpen = (typeof force === "boolean")
+    ? force
+    : menu.classList.contains("hidden");
+
+  if (shouldOpen) menu.classList.remove("hidden");
+  else menu.classList.add("hidden");
+}
+
+// ✅ Cerrar menú si tocas fuera (móvil)
+document.addEventListener("click", (e) => {
+  const menu = document.getElementById("mobile-menu");
+  const burger = document.querySelector(".hamburger");
+  if (!menu || !burger) return;
+
+  const clickDentroMenu = menu.contains(e.target);
+  const clickEnBurger = burger.contains(e.target);
+
+  if (!clickDentroMenu && !clickEnBurger) {
+    menu.classList.add("hidden");
+  }
+});
+
+// ✅ Cerrar menú con ESC
+document.addEventListener("keydown", (e) => {
+  if (e.key === "Escape") {
+    const menu = document.getElementById("mobile-menu");
+    if (menu) menu.classList.add("hidden");
+  }
+});
+
+// ✅ Si cambias a escritorio, cierra el menú
+window.addEventListener("resize", () => {
+  if (window.innerWidth >= 768) {
+    const menu = document.getElementById("mobile-menu");
+    if (menu) menu.classList.add("hidden");
+  }
+});
     function actualizarReloj() {
       const ahora = new Date();
 
@@ -1278,4 +1320,5 @@
   </script>
 </body>
 </html>
+
 
