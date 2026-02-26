@@ -584,14 +584,12 @@
         actualizarReloj();
         setInterval(actualizarReloj, 60000);
     </script>
+    
     <script src="/js/preload.js"></script>
 <script>
-window.APP_READY = false;
-
-window.preloadSignos().then(() => {
-  window.APP_READY = true;
-});
+window.APP_READY_PROMISE = window.preloadSignos();
 </script>
+    
     <script type="text/babel">
 const { useState, useEffect } = React;
         
@@ -877,17 +875,15 @@ const { useState, useEffect } = React;
   const [loading, setLoading] = useState(false);
 
       useEffect(() => {
-  if (!ready) {
-    const interval = setInterval(() => {
-      if (window.APP_READY) {
-        setReady(true);
-        clearInterval(interval);
-      }
-    }, 50);
-
-    return () => clearInterval(interval);
+  if (window.APP_READY_PROMISE) {
+    window.APP_READY_PROMISE.then(() => {
+      setReady(true);
+    });
+  } else {
+    // fallback si algo falla
+    setReady(true);
   }
-}, [ready]);
+}, []);
 
     const handleCalculate = () => {
   if (!fecha || !hora) return;
@@ -1137,6 +1133,7 @@ if (!ready) {
 </script>
 </body>
 </html>
+
 
 
 
