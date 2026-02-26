@@ -282,6 +282,11 @@
     justify-content: center;
     position: relative;
   }
+    /* Empuja el contenido hacia abajo para que no se meta debajo del header fijo */
+  .app-wrapper {
+    padding-top: calc(var(--navbar-height) + 10px);
+  }
+}
 
   /* Logo centrado y más grande */
   .main-logo {
@@ -1320,5 +1325,6 @@ window.addEventListener("resize", () => {
   </script>
 </body>
 </html>
+
 
 
