@@ -1,331 +1,713 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <link rel="icon" type="image/png" href="logo.png">
-    <link rel="apple-touch-icon" href="logo.png">
-    
-    <title>Nemontemi: Tiempo de Introspección</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
-    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
-    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;900&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
+  <title>Nemontemi: Tiempo de Introspección</title>
 
-    <style>
-        :root {
-            --apple-bg: #f5f5f7;
-            --apple-text: #1d1d1f;
-            --mexica-red: #b00e2d;
-            --navbar-height: 60px;
-        }
+  <!-- Fonts + Icons (igual que index) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet" />
 
-        body { 
-            font-family: 'Inter', -apple-system, sans-serif;
-            background-color: var(--apple-bg); 
-            margin: 0; 
-            -webkit-tap-highlight-color: transparent;
-        }
+  <!-- React + Babel + Tailwind (igual stack) -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 
-        /* --- NAVEGACIÓN --- */
-        .desktop-nav {
-            display: none;
-            position: fixed;
-            top: 0; width: 100%; height: var(--navbar-height);
-            background: rgba(255, 255, 255, 0.8);
-            backdrop-filter: blur(20px);
-            z-index: 1000;
-            border-bottom: 1px solid rgba(0,0,0,0.05);
-        }
-        .nav-content {
-            max-width: 1000px; margin: 0 auto;
-            display: flex; justify-content: space-between; align-items: center;
-            height: 100%; padding: 0 20px;
-        }
-        .nav-links a {
-            text-decoration: none; color: var(--apple-text);
-            font-size: 14px; margin-left: 25px; cursor: pointer; font-weight: 500;
-        }
-        .main-logo { height: 32px; cursor: pointer; }
+  <!-- Favicons + theme (igual que index) -->
+  <link rel="icon" type="image/png" href="/favicon.png">
+  <link rel="shortcut icon" href="/favicon.png">
+  <link rel="apple-touch-icon" href="/favicon.png">
+  <meta name="theme-color" content="#b00e2d">
 
-        /* --- HEADER TIPO APPLE --- */
-        .cosmic-banner {
-            background: #fff; padding: 12px 20px;
-            display: flex; justify-content: space-between; align-items: center;
-            border-bottom: 1px solid rgba(0,0,0,0.05);
-            margin-bottom: 20px;
-        }
+  <style>
+    :root {
+      --apple-bg: #f5f5f7;
+      --apple-text: #1d1d1f;
+      --apple-card: #ffffff;
+      --mexica-red: #b00e2d;
+      --mexica-gold: #d4af37;
+      --navbar-height: 60px;
+    }
 
-        /* --- ANIMACIONES --- */
-        .fade-in { animation: fadeIn 0.8s ease-out forwards; }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
+    body {
+      font-family: 'Inter', -apple-system, sans-serif;
+      background-color: var(--apple-bg);
+      color: var(--apple-text);
+      margin: 0;
+      padding: 0;
+      -webkit-font-smoothing: antialiased;
+      -webkit-tap-highlight-color: transparent;
+    }
 
-        .spinner-azteca {
-            animation: rotateGrecas 0.6s linear infinite;
-            will-change: transform;
-        }
-        @keyframes rotateGrecas {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
-        }
+    /* ===============================
+       NAV (igual que index)
+       =============================== */
+    .desktop-nav {
+      display: none;
+      position: fixed;
+      top: 0;
+      width: 100%;
+      height: var(--navbar-height);
+      background: rgba(255, 255, 255, 0.8);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      z-index: 1000;
+      border-bottom: 1px solid rgba(0,0,0,0.05);
+    }
 
-        /* --- MOBILE NAV --- */
-        .bottom-nav {
-            position: fixed; bottom: 0; width: 100%;
-            background: rgba(255, 255, 255, 0.85);
-            backdrop-filter: blur(20px);
-            display: flex; justify-content: space-around;
-            padding: 12px 0 25px 0; border-top: 1px solid rgba(0,0,0,0.05);
-            z-index: 1000;
-        }
-        .nav-item {
-            border: none; background: none; color: #86868b;
-            font-size: 10px; font-weight: 600;
-            display: flex; flex-direction: column; align-items: center; gap: 4px;
-        }
+    .nav-content {
+      max-width: 1000px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      height: 100%;
+      padding: 0 20px;
+      position: relative;
+    }
 
-        @media (min-width: 768px) {
-            .desktop-nav { display: block; }
-            .bottom-nav { display: none; }
-            .app-container { padding-top: 80px; }
-            .cosmic-banner { border-radius: 20px; margin: 20px auto; max-width: 1000px; }
-        }
-    </style>
+    .nav-links {
+      display: flex;
+      gap: 25px;
+      margin-left: auto;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      color: var(--apple-text);
+      font-size: 14px;
+      font-weight: 400;
+      transition: color 0.3s;
+      cursor: pointer;
+    }
+    .nav-links a:hover { color: var(--mexica-red); }
+
+    .social-links {
+      display: flex;
+      gap: 15px;
+      align-items: center;
+      margin-left: 30px;
+      padding-left: 20px;
+      border-left: 1px solid rgba(0,0,0,0.1);
+    }
+
+    .social-links a {
+      text-decoration: none;
+      color: #86868b;
+      transition: color 0.2s ease;
+    }
+    .social-links a:hover { color: var(--mexica-red); }
+
+    .main-logo {
+      height: 40px;
+      width: auto;
+      display: block;
+      transition: opacity 0.2s ease;
+      cursor: pointer;
+    }
+
+    /* Hamburguesa (solo móvil) */
+    .hamburger {
+      display: none;
+      position: absolute;
+      right: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 44px;
+      height: 44px;
+      border: 1px solid rgba(0,0,0,0.08);
+      background: rgba(255,255,255,0.9);
+      border-radius: 14px;
+      cursor: pointer;
+      padding: 10px;
+    }
+
+    .hamburger span {
+      display: block;
+      height: 2px;
+      background: #1d1d1f;
+      border-radius: 2px;
+      margin: 5px 0;
+    }
+
+    .mobile-menu {
+      position: fixed;
+      top: var(--navbar-height);
+      left: 12px;
+      right: 12px;
+      background: rgba(255,255,255,0.92);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(0,0,0,0.08);
+      border-radius: 22px;
+      padding: 12px;
+      z-index: 1200;
+      box-shadow: 0 12px 40px rgba(0,0,0,0.10);
+    }
+
+    .mobile-menu a {
+      display: block;
+      padding: 12px 14px;
+      border-radius: 16px;
+      text-decoration: none;
+      color: var(--apple-text);
+      font-weight: 600;
+      font-size: 14px;
+      cursor: pointer;
+    }
+
+    .mobile-menu a:hover {
+      background: rgba(176,14,45,0.08);
+      color: var(--mexica-red);
+    }
+
+    .mobile-social {
+      margin-top: 8px;
+      padding-top: 8px;
+      border-top: 1px solid rgba(0,0,0,0.06);
+    }
+    .mobile-social a i { margin-right: 8px; color: #86868b; }
+
+    /* ===============================
+       HEADER (banner reloj+luna) igual que index
+       =============================== */
+    .cosmic-banner {
+      background: #fff;
+      padding: 12px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid rgba(0,0,0,0.05);
+    }
+
+    /* Layout wrapper igual index */
+    .app-wrapper {
+      max-width: 1000px;
+      margin: 0 auto;
+      min-height: 100vh;
+      padding-bottom: 110px; /* para que bottom-nav no tape */
+    }
+
+    /* Bottom nav igual index */
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      display: flex;
+      justify-content: space-around;
+      padding: 12px 0 25px 0;
+      border-top: 1px solid rgba(0,0,0,0.05);
+      z-index: 1000;
+    }
+
+    .nav-item {
+      border: none;
+      background: none;
+      color: #86868b;
+      font-size: 10px;
+      font-weight: 600;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      cursor: pointer;
+    }
+
+    .nav-item.active { color: var(--mexica-red); }
+    .nav-item span { font-size: 24px; }
+
+    /* Util */
+    .hidden { display: none; }
+
+    /* Animaciones existentes */
+    .fade-in { animation: fadeIn 0.8s ease-out forwards; }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .spinner-azteca {
+      animation: rotateGrecas 0.6s linear infinite;
+      will-change: transform;
+    }
+    @keyframes rotateGrecas {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    /* ===============================
+       RESPONSIVE (igual que index)
+       =============================== */
+    @media (min-width: 768px) {
+      .desktop-nav { display: block; }
+      .bottom-nav { display: none; }
+      .app-wrapper { padding-top: 80px; }
+      .cosmic-banner {
+        margin: 20px;
+        border-radius: 20px;
+        border: 1px solid rgba(0,0,0,0.05);
+      }
+    }
+
+    @media (max-width: 767px) {
+      /* En móvil ocultamos links/redes */
+      .nav-links, .social-links { display: none !important; }
+
+      .nav-content {
+        justify-content: center;
+      }
+
+      /* Empuja el contenido hacia abajo para no encimarse con header fijo */
+      .app-wrapper {
+        padding-top: calc(var(--navbar-height) + 10px);
+      }
+
+      /* Logo centrado y más grande */
+      .main-logo { height: 48px; }
+
+      /* Hamburguesa visible */
+      .hamburger { display: block; }
+    }
+
+    /* Banner reloj + luna responsive */
+    @media (max-width: 767px) {
+      .cosmic-banner {
+        margin: 12px;
+        border-radius: 18px;
+        border: 1px solid rgba(0,0,0,0.06);
+        gap: 10px;
+        justify-content: space-between;
+      }
+
+      #reloj-txt { font-size: 18px !important; }
+      #fecha-txt { font-size: 11px !important; }
+
+      #luna-icon { font-size: 18px !important; }
+      #luna-nombre {
+        font-size: 9px !important;
+        letter-spacing: 0.8px !important;
+      }
+    }
+  </style>
 </head>
+
 <body>
+  <!-- NAV SUPERIOR (igual index) -->
+  <nav class="desktop-nav">
+    <div class="nav-content">
+      <div class="logo-container" onclick="goToIndex('sec-calculadora')">
+        <img src="logo_tiempo_sagrado_horizontal.png" alt="Tiempo Sagrado" class="main-logo" />
+      </div>
+
+      <div class="nav-links">
+        <a onclick="goToIndex('sec-calculadora')">Calculadora</a>
+        <a onclick="goToIndex('sec-cuenta')">La Cuenta</a>
+        <a onclick="goToIndex('sec-nosotros')">Nosotros</a>
+        <a onclick="goToIndex('sec-rituales')">Rituales</a>
+      </div>
+
+      <div class="social-links">
+        <a href="https://facebook.com" target="_blank" rel="noopener"><i class="fa-brands fa-facebook-f"></i></a>
+        <a href="https://instagram.com" target="_blank" rel="noopener"><i class="fa-brands fa-instagram"></i></a>
+        <a href="https://tiktok.com" target="_blank" rel="noopener"><i class="fa-brands fa-tiktok"></i></a>
+      </div>
+
+      <!-- Botón hamburguesa (solo móvil) -->
+      <button class="hamburger" aria-label="Abrir menú" onclick="toggleMenu()">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+
+    <!-- Menú móvil desplegable -->
+    <div id="mobile-menu" class="mobile-menu hidden">
+      <a onclick="goToIndex('sec-calculadora'); toggleMenu(false)">Calculadora</a>
+      <a onclick="goToIndex('sec-cuenta'); toggleMenu(false)">La Cuenta</a>
+      <a onclick="goToIndex('sec-nosotros'); toggleMenu(false)">Nosotros</a>
+      <a onclick="goToIndex('sec-rituales'); toggleMenu(false)">Rituales</a>
+
+      <div class="mobile-social">
+        <a href="https://facebook.com" target="_blank" rel="noopener"><i class="fa-brands fa-facebook-f"></i> Facebook</a>
+        <a href="https://instagram.com" target="_blank" rel="noopener"><i class="fa-brands fa-instagram"></i> Instagram</a>
+        <a href="https://tiktok.com" target="_blank" rel="noopener"><i class="fa-brands fa-tiktok"></i> TikTok</a>
+      </div>
+    </div>
+  </nav>
+
+  <div class="app-wrapper">
+    <!-- BANNER (igual index, debajo del logo y sin encimarse) -->
+    <header class="cosmic-banner">
+      <div id="reloj-container">
+        <div style="font-weight: 600; font-size: 17px;" id="reloj-txt">00:00</div>
+        <div style="font-size: 11px; color: #86868b;" id="fecha-txt">Cargando fecha...</div>
+      </div>
+
+      <div id="fase-lunar" style="text-align: right;">
+        <div style="font-size: 20px;" id="luna-icon">🌑</div>
+        <div id="luna-nombre" style="font-size: 10px; color: #86868b; text-transform: uppercase; letter-spacing: 1px;">Luna Nueva</div>
+      </div>
+    </header>
+
+    <!-- React App -->
     <div id="root"></div>
+  </div>
 
-    <script type="text/babel">
-        const { useState, useEffect } = React;
+  <!-- BOTTOM NAV (igual index, activo en Calculadora) -->
+  <nav class="bottom-nav">
+    <button class="nav-item active" onclick="goToIndex('sec-calculadora')">
+      <span class="material-icons-outlined">calendar_month</span>
+      Calculadora
+    </button>
+    <button class="nav-item" onclick="goToIndex('sec-cuenta')">
+      <span class="material-icons-outlined">auto_stories</span>
+      La Cuenta
+    </button>
+    <button class="nav-item" onclick="goToIndex('sec-nosotros')">
+      <span class="material-icons-outlined">info</span>
+      Nosotros
+    </button>
+    <button class="nav-item" onclick="goToIndex('sec-rituales')">
+      <span class="material-icons-outlined">flare</span>
+      Rituales
+    </button>
+  </nav>
 
-        const DESCRIPCIONES = {
-            "Cipactli": "Representa el origen, la abundancia y la fuerza creadora primordial. Es un día para iniciar proyectos con bases sólidas.",
-            "Ehecatl": "Símbolo de la comunicación, el espíritu y el aliento de vida. Invita a la flexibilidad y a dejar fluir las ideas.",
-            "Calli": "El refugio, la mente y el cuerpo físico. Es un tiempo para mirar hacia adentro y fortalecer nuestro hogar interno.",
-            "Cuetzpalin": "Símbolo de la regeneración y la agilidad. Representa la capacidad de adaptarse y sanar rápidamente.",
-            "Coatl": "La energía vital y la sabiduría terrenal. Día para conectar con el instinto y la transformación espiritual.",
-            "Miquiztli": "No es el fin, sino la transición. Representa la quietud, la reflexión y el soltar lo que ya no sirve.",
-            "Mazatl": "El guía elusivo y sagrado. Representa la intuición, la vigilancia y la conexión con lo divino en la naturaleza.",
-            "Tochtli": "Símbolo de la fertilidad y la autogestión. Invita a la previsión y a disfrutar de los frutos del esfuerzo.",
-            "Atl": "La fuerza emocional y la purificación. Día para limpiar el espíritu y dejar que los sentimientos fluyan.",
-            "Itzcuintli": "El guía fiel del alma. Representa la lealtad inquebrantable, la protección de la manada y el instinto agudo.",
-            "Ozomatli": "La alegría, el arte y el juego. Es un día para celebrar la vida con creatividad y sin complicaciones.",
-            "Malinalli": "La hierba que persiste. Representa la tenacidad, la renovación constante y la fuerza de la comunidad.",
-            "Acatl": "Símbolo de la autoridad espiritual y la rectitud. Día para buscar la sabiduría y elevar la conciencia.",
-            "Ocelotl": "El guerrero nocturno y el misterio. Representa la valentía, el poder oculto y la visión en la oscuridad.",
-            "Cuauhtli": "La visión elevada y la libertad. Es un tiempo para ver el panorama completo y aspirar a lo más alto.",
-            "Cozcaquauhtli": "El limpiador y el sabio anciano. Representa la longevidad, la paciencia y el reciclaje de la energía.",
-            "Ollin": "El movimiento perpetuo y el cambio. Nos recuerda que la vida es un ciclo constante de evolución.",
-            "Tecpatl": "La verdad cortante y la disciplina. Día para tomar decisiones firmes y separar lo real de lo ilusorio.",
-            "Quiahuitl": "La bendición de la lluvia y la fertilidad emocional. Representa el alivio y el crecimiento tras la tormenta.",
-            "Xochitl": "La belleza, el arte y el plenitud. Es el florecimiento del alma y la conexión con el placer sagrado."
-        };
+  <!-- JS NAV + MENU (igual comportamiento que index) -->
+  <script>
+    function goToIndex(sectionId) {
+      // Conservamos fecha/hora si vienen en query para regresar consistente
+      const params = new URLSearchParams(window.location.search);
+      const f = params.get("fecha");
+      const h = params.get("hora");
 
-        const SIGNOS_DATA = [
-            { n: "Cipactli", es: "Caimán" }, { n: "Ehecatl", es: "Viento" }, { n: "Calli", es: "Casa" }, { n: "Cuetzpalin", es: "Lagartija" }, { n: "Coatl", es: "Serpiente" },
-            { n: "Miquiztli", es: "Muerte" }, { n: "Mazatl", es: "Venado" }, { n: "Tochtli", es: "Conejo" }, { n: "Atl", es: "Agua" }, { n: "Itzcuintli", es: "Perro" },
-            { n: "Ozomatli", es: "Mono" }, { n: "Malinalli", es: "Hierba" }, { n: "Acatl", es: "Caña" }, { n: "Ocelotl", es: "Jaguar" }, { n: "Cuauhtli", es: "Águila" },
-            { n: "Cozcaquauhtli", es: "Zopilote" }, { n: "Ollin", es: "Movimiento" }, { n: "Tecpatl", es: "Pedernal" }, { n: "Quiahuitl", es: "Lluvia" }, { n: "Xochitl", es: "Flor" }
-        ];
+      const base = `./index.html#${sectionId}`;
+      if (f && h) {
+        // Mantiene query (por si en index quieres leerla luego)
+        window.location.href = `./index.html?fecha=${encodeURIComponent(f)}&hora=${encodeURIComponent(h)}#${sectionId}`;
+      } else {
+        window.location.href = base;
+      }
+    }
 
-        const AVES_DIA = [{ nahuatl: "Nexhuitzillin", es: "Pájaro Espina" }, { nahuatl: "Quetzahuitzillin", es: "Pájaro Hermoso" }, { nahuatl: "Tototzin", es: "Halcón" }, { nahuatl: "Zolin", es: "Codorniz" }, { nahuatl: "Acalotl", es: "Cuervo" }, { nahuatl: "Chicoatli", es: "Lechuza" }, { nahuatl: "Papalotl", es: "Mariposa" }, { nahuatl: "Ixcuauhtli", es: "Águila Obsidiana" }, { nahuatl: "Chalchiuhtotolin", es: "Guajolote" }, { nahuatl: "Tecolotl", es: "Tecolote" }, { nahuatl: "Alotl", es: "Guacamaya" }, { nahuatl: "Quetzatototl", es: "Quetzal" }, { nahuatl: "Toznene", es: "Papagayo" }];
-        const SENORES_NOCHE = [{ n: "Xiuhtecuhtli" }, { n: "Itztli" }, { n: "Piziltecuhtli" }, { n: "Centeotl" }, { n: "Mictlantecuhtli" }, { n: "Chalchihuitlicue" }, { n: "Tlazoltéotl" }, { n: "Tepeyólotl" }, { n: "Tláloc" }];
-        const RESIDUE_TABLE = { CALLI: [37, 25, 13, 1, 41, 29, 17, 5, 45, 33, 21, 9, 49], TOCHTLI: [50, 38, 26, 14, 2, 42, 30, 18, 6, 46, 34, 22, 10], ACATL: [11, 51, 39, 27, 15, 3, 43, 31, 19, 7, 47, 35, 23], TECPATL: [24, 12, 0, 40, 28, 16, 4, 44, 32, 20, 8, 48, 36] };
-        const NEMONTEMI_SEQUENCES = { TOCHTLI: ["Cipactli", "Ehecatl", "Calli", "Cuetzpalin", "Coatl"], ACATL: ["Miquiztli", "Mazatl", "Tochtli", "Atl", "Itzcuintli"], TECPATL: ["Ozomatli", "Malinalli", "Acatl", "Ocelotl", "Cuauhtli"], CALLI: ["Cozcaquauhtli", "Ollin", "Tecpatl", "Quiahuitl", "Xochitl"] };
-        const NUMERAL_START = [1, 6, 11, 3, 8, 13, 5, 10, 2, 7, 12, 4, 9];
+    function toggleMenu(force) {
+      const menu = document.getElementById("mobile-menu");
+      if (!menu) return;
 
-        const App = () => {
-            const [res, setRes] = useState(null);
-            const [loading, setLoading] = useState(true);
-            const [fechaHeader, setFechaHeader] = useState("");
+      const shouldOpen = (typeof force === "boolean")
+        ? force
+        : menu.classList.contains("hidden");
 
-            useEffect(() => {
-                const params = new URLSearchParams(window.location.search);
-                const f = params.get('fecha'), h = params.get('hora');
-                
-                if (f && h) {
-                    const fObj = new Date(f + 'T00:00:00');
-                    setFechaHeader(fObj.toLocaleDateString('es-MX', {day:'numeric', month:'long', year:'numeric'}));
-                    
-                    setTimeout(() => {
-  try {
-    calculate(f, h);
-  } catch (e) {
-    // Si algo falla, regresamos al index con la misma fecha/hora
-    window.location.href = `./index.html?fecha=${encodeURIComponent(f)}&hora=${encodeURIComponent(h)}#sec-calculadora`;
-    return;
-  } finally {
-    setLoading(false);
-  }
-}, 1500);
-                } else {
-                    window.location.href = 'index.html';
-                }
-            }, []);
+      if (shouldOpen) menu.classList.remove("hidden");
+      else menu.classList.add("hidden");
+    }
 
-            const calculate = (fechaStr, horaStr) => {
-                const [y, m, d] = fechaStr.split('-').map(Number);
-                const [hh, mm] = horaStr.split(':').map(Number);
-                const baseYear = (m < 3 || (m === 3 && d < 12)) ? y - 1 : y;
-                const residue = baseYear % 52;
-                
-                let yType = ""; let yNum = 0;
-                for (const [type, list] of Object.entries(RESIDUE_TABLE)) {
-                    const idx = list.indexOf(residue);
-                    if (idx !== -1) { yType = type; yNum = idx + 1; break; }
-                }
-                
-                const frontiers = { CALLI: [0,43], TOCHTLI: [6,43], ACATL: [12,43], TECPATL: [18,43] };
-                const [fH, fM] = frontiers[yType];
-                let effDay = (hh * 60 + mm < fH * 60 + fM) ? d - 1 : d;
-                let nemStart = (yType === 'ACATL' || yType === 'TECPATL') ? 6 : 7;
-let dayIdx = effDay - nemStart;
+    // Cerrar menú si tocas fuera
+    document.addEventListener("click", (e) => {
+      const menu = document.getElementById("mobile-menu");
+      const burger = document.querySelector(".hamburger");
+      if (!menu || !burger) return;
 
-/*
-  🔥 LIMBO DE FIN DE AÑO
-  El último día de Nemontemi se alarga hasta que inicia el nuevo año.
-  Si el cálculo da 5 (día 6), en realidad sigue siendo día 5.
-*/
+      const clickDentroMenu = menu.contains(e.target);
+      const clickEnBurger = burger.contains(e.target);
 
-// Si es negativo, no es Nemontemi
-if (dayIdx < 0) {
-  throw new Error("No es Nemontemi.");
-}
+      if (!clickDentroMenu && !clickEnBurger) {
+        menu.classList.add("hidden");
+      }
+    });
 
-// Si se pasa de 4 (por el día largo), lo fijamos al último día
-if (dayIdx > 4) {
-  dayIdx = 4;
-}
+    // Cerrar menú con ESC
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") {
+        const menu = document.getElementById("mobile-menu");
+        if (menu) menu.classList.add("hidden");
+      }
+    });
 
-                const sName = NEMONTEMI_SEQUENCES[yType][dayIdx];
-                const sIdx = SIGNOS_DATA.findIndex(s => s.n === sName);
-                const numeral = (NUMERAL_START[yNum - 1] + dayIdx - 1) % 13 + 1;
-                let tonalIndex = 0;
-                for (let i = 0; i < 260; i++) { if (i % 13 === (numeral - 1) && i % 20 === sIdx) { tonalIndex = i; break; } }
+    // Si cambias a escritorio, cierra el menú
+    window.addEventListener("resize", () => {
+      if (window.innerWidth >= 768) {
+        const menu = document.getElementById("mobile-menu");
+        if (menu) menu.classList.add("hidden");
+      }
+    });
 
-                setRes({
-                    numeral, sName, sEsp: SIGNOS_DATA[sIdx].es,
-                    imgNum: sIdx + 1, diaNem: dayIdx + 1,
-                    desc: DESCRIPCIONES[sName], ave: AVES_DIA[numeral - 1],
-                    noche: SENORES_NOCHE[tonalIndex % 9], anio: `${yNum} ${yType}`
-                });
-            };
+    // Reloj + fase lunar (igual que index)
+    function actualizarReloj() {
+      const ahora = new Date();
 
-            const Navigation = () => (
-                <>
-                    <nav className="desktop-nav">
-                        <div className="nav-content">
-                            <img src="logo_tiempo_sagrado_horizontal.png" alt="Logo" className="main-logo" onClick={() => window.location.href='index.html'} />
-                            <div className="nav-links">
-                                <a href="index.html">Calculadora</a>
-                                <a href="index.html#sec-cuenta">La Cuenta</a>
-                                <a href="index.html#sec-nosotros">Nosotros</a>
-                            </div>
-                        </div>
-                    </nav>
-                    <nav className="bottom-nav">
-                        <button className="nav-item" onClick={() => window.location.href='index.html'}>
-                            <span className="material-icons-outlined">calendar_month</span>Calculadora
-                        </button>
-                        <button className="nav-item" onClick={() => window.location.href='index.html#sec-cuenta'}>
-                            <span className="material-icons-outlined">auto_stories</span>La Cuenta
-                        </button>
-                        <button className="nav-item" onClick={() => window.location.href='index.html#sec-nosotros'}>
-                            <span className="material-icons-outlined">info</span>Nosotros
-                        </button>
-                    </nav>
-                </>
-            );
+      const horas = ahora.getHours().toString().padStart(2, '0');
+      const minutos = ahora.getMinutes().toString().padStart(2, '0');
+      const reloj = document.getElementById('reloj-txt');
+      if (reloj) reloj.textContent = `${horas}:${minutos}`;
 
-            if (loading) {
-                return (
-                    <div className="min-h-screen flex flex-col items-center justify-center p-6 text-center" style={{ backgroundColor: '#b00e2d' }}>
-                        <img src="signos/spinner-grecas.png" className="w-32 h-32 mb-8 spinner-azteca" alt="Cargando..." onError={(e) => { e.target.src = "https://www.svgrepo.com/show/25443/aztec-sun.svg"; }} />
-                        <h2 className="text-white text-xs font-bold uppercase tracking-[0.4em] animate-pulse">Consultando Nemontemi</h2>
-                    </div>
-                );
+      const opciones = { weekday: 'long', day: 'numeric', month: 'long' };
+      let fechaLarga = ahora.toLocaleDateString('es-MX', opciones);
+      fechaLarga = fechaLarga.charAt(0).toUpperCase() + fechaLarga.slice(1);
+      const fechaTxt = document.getElementById('fecha-txt');
+      if (fechaTxt) fechaTxt.textContent = fechaLarga;
+
+      const lunas = [
+        { n: "Luna Nueva", i: "🌑" }, { n: "Luna Creciente", i: "🌒" },
+        { n: "Cuarto Creciente", i: "🌓" }, { n: "Gibosa Creciente", i: "🌔" },
+        { n: "Luna Llena", i: "🌕" }, { n: "Gibosa Menguante", i: "🌖" },
+        { n: "Cuarto Menguante", i: "🌗" }, { n: "Luna Menguante", i: "🌘" }
+      ];
+      const refDate = new Date(2000, 0, 6);
+      const diff = (ahora - refDate) / (1000 * 60 * 60 * 24);
+      const cycle = 29.530588853;
+      const pos = (diff % cycle) / cycle;
+      const index = Math.floor(pos * 8);
+
+      const lunaIcon = document.getElementById('luna-icon');
+      const lunaNombre = document.getElementById('luna-nombre');
+      if (lunaIcon) lunaIcon.textContent = lunas[index].i;
+      if (lunaNombre) lunaNombre.textContent = lunas[index].n;
+    }
+
+    actualizarReloj();
+    setInterval(actualizarReloj, 60000);
+  </script>
+
+  <!-- =========================
+       APP NEMONTEMI (LÓGICA INTACTA)
+       ========================= -->
+  <script type="text/babel">
+    const { useState, useEffect } = React;
+
+    const DESCRIPCIONES = {
+      "Cipactli": "Representa el origen, la abundancia y la fuerza creadora primordial. Es un día para iniciar proyectos con bases sólidas.",
+      "Ehecatl": "Símbolo de la comunicación, el espíritu y el aliento de vida. Invita a la flexibilidad y a dejar fluir las ideas.",
+      "Calli": "El refugio, la mente y el cuerpo físico. Es un tiempo para mirar hacia adentro y fortalecer nuestro hogar interno.",
+      "Cuetzpalin": "Símbolo de la regeneración y la agilidad. Representa la capacidad de adaptarse y sanar rápidamente.",
+      "Coatl": "La energía vital y la sabiduría terrenal. Día para conectar con el instinto y la transformación espiritual.",
+      "Miquiztli": "No es el fin, sino la transición. Representa la quietud, la reflexión y el soltar lo que ya no sirve.",
+      "Mazatl": "El guía elusivo y sagrado. Representa la intuición, la vigilancia y la conexión con lo divino en la naturaleza.",
+      "Tochtli": "Símbolo de la fertilidad y la autogestión. Invita a la previsión y a disfrutar de los frutos del esfuerzo.",
+      "Atl": "La fuerza emocional y la purificación. Día para limpiar el espíritu y dejar que los sentimientos fluyan.",
+      "Itzcuintli": "El guía fiel del alma. Representa la lealtad inquebrantable, la protección de la manada y el instinto agudo.",
+      "Ozomatli": "La alegría, el arte y el juego. Es un día para celebrar la vida con creatividad y sin complicaciones.",
+      "Malinalli": "La hierba que persiste. Representa la tenacidad, la renovación constante y la fuerza de la comunidad.",
+      "Acatl": "Símbolo de la autoridad espiritual y la rectitud. Día para buscar la sabiduría y elevar la conciencia.",
+      "Ocelotl": "El guerrero nocturno y el misterio. Representa la valentía, el poder oculto y la visión en la oscuridad.",
+      "Cuauhtli": "La visión elevada y la libertad. Es un tiempo para ver el panorama completo y aspirar a lo más alto.",
+      "Cozcaquauhtli": "El limpiador y el sabio anciano. Representa la longevidad, la paciencia y el reciclaje de la energía.",
+      "Ollin": "El movimiento perpetuo y el cambio. Nos recuerda que la vida es un ciclo constante de evolución.",
+      "Tecpatl": "La verdad cortante y la disciplina. Día para tomar decisiones firmes y separar lo real de lo ilusorio.",
+      "Quiahuitl": "La bendición de la lluvia y la fertilidad emocional. Representa el alivio y el crecimiento tras la tormenta.",
+      "Xochitl": "La belleza, el arte y el plenitud. Es el florecimiento del alma y la conexión con el placer sagrado."
+    };
+
+    const SIGNOS_DATA = [
+      { n: "Cipactli", es: "Caimán" }, { n: "Ehecatl", es: "Viento" }, { n: "Calli", es: "Casa" }, { n: "Cuetzpalin", es: "Lagartija" }, { n: "Coatl", es: "Serpiente" },
+      { n: "Miquiztli", es: "Muerte" }, { n: "Mazatl", es: "Venado" }, { n: "Tochtli", es: "Conejo" }, { n: "Atl", es: "Agua" }, { n: "Itzcuintli", es: "Perro" },
+      { n: "Ozomatli", es: "Mono" }, { n: "Malinalli", es: "Hierba" }, { n: "Acatl", es: "Caña" }, { n: "Ocelotl", es: "Jaguar" }, { n: "Cuauhtli", es: "Águila" },
+      { n: "Cozcaquauhtli", es: "Zopilote" }, { n: "Ollin", es: "Movimiento" }, { n: "Tecpatl", es: "Pedernal" }, { n: "Quiahuitl", es: "Lluvia" }, { n: "Xochitl", es: "Flor" }
+    ];
+
+    const AVES_DIA = [
+      { nahuatl: "Nexhuitzillin", es: "Pájaro Espina" }, { nahuatl: "Quetzahuitzillin", es: "Pájaro Hermoso" }, { nahuatl: "Tototzin", es: "Halcón" },
+      { nahuatl: "Zolin", es: "Codorniz" }, { nahuatl: "Acalotl", es: "Cuervo" }, { nahuatl: "Chicoatli", es: "Lechuza" }, { nahuatl: "Papalotl", es: "Mariposa" },
+      { nahuatl: "Ixcuauhtli", es: "Águila Obsidiana" }, { nahuatl: "Chalchiuhtotolin", es: "Guajolote" }, { nahuatl: "Tecolotl", es: "Tecolote" }, { nahuatl: "Alotl", es: "Guacamaya" },
+      { nahuatl: "Quetzatototl", es: "Quetzal" }, { nahuatl: "Toznene", es: "Papagayo" }
+    ];
+
+    const SENORES_NOCHE = [
+      { n: "Xiuhtecuhtli" }, { n: "Itztli" }, { n: "Piziltecuhtli" }, { n: "Centeotl" }, { n: "Mictlantecuhtli" },
+      { n: "Chalchihuitlicue" }, { n: "Tlazoltéotl" }, { n: "Tepeyólotl" }, { n: "Tláloc" }
+    ];
+
+    const RESIDUE_TABLE = {
+      CALLI: [37, 25, 13, 1, 41, 29, 17, 5, 45, 33, 21, 9, 49],
+      TOCHTLI: [50, 38, 26, 14, 2, 42, 30, 18, 6, 46, 34, 22, 10],
+      ACATL: [11, 51, 39, 27, 15, 3, 43, 31, 19, 7, 47, 35, 23],
+      TECPATL: [24, 12, 0, 40, 28, 16, 4, 44, 32, 20, 8, 48, 36]
+    };
+
+    const NEMONTEMI_SEQUENCES = {
+      TOCHTLI: ["Cipactli", "Ehecatl", "Calli", "Cuetzpalin", "Coatl"],
+      ACATL: ["Miquiztli", "Mazatl", "Tochtli", "Atl", "Itzcuintli"],
+      TECPATL: ["Ozomatli", "Malinalli", "Acatl", "Ocelotl", "Cuauhtli"],
+      CALLI: ["Cozcaquauhtli", "Ollin", "Tecpatl", "Quiahuitl", "Xochitl"]
+    };
+
+    const NUMERAL_START = [1, 6, 11, 3, 8, 13, 5, 10, 2, 7, 12, 4, 9];
+
+    const App = () => {
+      const [res, setRes] = useState(null);
+      const [loading, setLoading] = useState(true);
+      const [fechaHeader, setFechaHeader] = useState("");
+
+      useEffect(() => {
+        const params = new URLSearchParams(window.location.search);
+        const f = params.get('fecha'), h = params.get('hora');
+
+        if (f && h) {
+          const fObj = new Date(f + 'T00:00:00');
+          setFechaHeader(fObj.toLocaleDateString('es-MX', {day:'numeric', month:'long', year:'numeric'}));
+
+          setTimeout(() => {
+            try {
+              calculate(f, h);
+            } catch (e) {
+              window.location.href = `./index.html?fecha=${encodeURIComponent(f)}&hora=${encodeURIComponent(h)}#sec-calculadora`;
+              return;
+            } finally {
+              setLoading(false);
             }
+          }, 1500);
 
-            return (
-                <div className="app-container">
-                    <Navigation />
-                    
-                    <header className="cosmic-banner">
-                        <div>
-                            <div className="font-semibold text-[17px] text-gray-900">{fechaHeader}</div>
-                            <div className="text-[11px] text-gray-400">Día de Guardia e Introspección</div>
-                        </div>
-                        <div className="text-right">
-                            <div className="text-[20px]">⏳</div>
-                            <div className="text-[9px] font-bold text-gray-400 uppercase tracking-tighter">Nemontemi</div>
-                        </div>
-                    </header>
+        } else {
+          window.location.href = 'index.html';
+        }
+      }, []);
 
-                    <main className="max-w-md mx-auto px-4 pb-32 fade-in">
-                        <div className="bg-white rounded-[2.5rem] shadow-2xl overflow-hidden border border-gray-100">
-                            {/* Header del Card */}
-                            <div className="pt-10 pb-6 px-8 text-center bg-gray-900 text-white">
-                                <h1 className="text-2xl font-black uppercase tracking-widest">Nemontemi</h1>
-                                <p className="opacity-40 text-[9px] font-bold uppercase tracking-[0.3em] mt-1">El Vacío Creador</p>
-                            </div>
+      const calculate = (fechaStr, horaStr) => {
+        const [y, m, d] = fechaStr.split('-').map(Number);
+        const [hh, mm] = horaStr.split(':').map(Number);
+        const baseYear = (m < 3 || (m === 3 && d < 12)) ? y - 1 : y;
+        const residue = baseYear % 52;
 
-                            <div className="px-6 py-8 text-center">
-                                {/* Imagen del Signo */}
-                                <div className="w-32 h-32 bg-gray-50 rounded-full flex items-center justify-center mx-auto mb-4 border border-gray-100 shadow-inner">
-                                    <img src={`signos/${res.imgNum}.png`} className="w-24 h-24 object-contain" alt={res.sName} />
-                                </div>
+        let yType = ""; let yNum = 0;
+        for (const [type, list] of Object.entries(RESIDUE_TABLE)) {
+          const idx = list.indexOf(residue);
+          if (idx !== -1) { yType = type; yNum = idx + 1; break; }
+        }
 
-                                <h2 className="text-3xl font-black text-gray-900 leading-tight">
-                                    {res.numeral} {res.sName}
-                                </h2>
-                                <p className="text-[10px] font-bold text-red-600 uppercase tracking-widest mb-4">
-                                    Día {res.diaNem} de 5 • {res.sEsp}
-                                </p>
+        const frontiers = { CALLI: [0,43], TOCHTLI: [6,43], ACATL: [12,43], TECPATL: [18,43] };
+        const [fH, fM] = frontiers[yType];
+        let effDay = (hh * 60 + mm < fH * 60 + fM) ? d - 1 : d;
+        let nemStart = (yType === 'ACATL' || yType === 'TECPATL') ? 6 : 7;
+        let dayIdx = effDay - nemStart;
 
-                                {/* Descripción */}
-                                <div className="mb-6 px-5 py-5 bg-gray-50 rounded-3xl border border-gray-100">
-                                    <p className="text-[12px] text-gray-600 leading-relaxed italic">"{res.desc}"</p>
-                                </div>
+        /*
+          🔥 LIMBO DE FIN DE AÑO
+          El último día de Nemontemi se alarga hasta que inicia el nuevo año.
+          Si el cálculo da 5 (día 6), en realidad sigue siendo día 5.
+        */
 
-                                {/* Grid de Atributos */}
-                                <div className="grid grid-cols-2 gap-3 text-left">
-                                    <div className="bg-emerald-50 rounded-2xl p-4 border border-emerald-100">
-                                        <span className="text-[8px] font-bold text-emerald-800 uppercase block mb-1">Ave Sagrada</span>
-                                        <p className="text-[11px] font-bold text-emerald-900 leading-tight">{res.ave.nahuatl}</p>
-                                        <p className="text-[9px] text-emerald-600 italic">{res.ave.es}</p>
-                                    </div>
-                                    <div className="bg-slate-900 rounded-2xl p-4 border border-slate-700 text-white">
-                                        <span className="text-[8px] font-bold text-slate-400 uppercase block mb-1">Señor Noche</span>
-                                        <p className="text-[11px] font-bold text-white leading-tight">{res.noche.n}</p>
-                                        <p className="text-[9px] text-slate-400 italic">Guía nocturno</p>
-                                    </div>
-                                </div>
+        // Si es negativo, no es Nemontemi
+        if (dayIdx < 0) {
+          throw new Error("No es Nemontemi.");
+        }
 
-                                {/* Pie del Card */}
-                                <div className="mt-6 bg-gray-50 rounded-2xl p-3 border border-gray-100">
-                                    <p className="text-[8px] font-bold text-gray-400 uppercase tracking-tighter">Ciclo del Año</p>
-                                    <p className="text-xs font-bold text-gray-700 uppercase">{res.anio}</p>
-                                </div>
+        // Si se pasa de 4 (por el día largo), lo fijamos al último día
+        if (dayIdx > 4) {
+          dayIdx = 4;
+        }
 
-                                <button onClick={() => window.location.href='index.html'} 
-                                        className="w-full mt-8 py-4 rounded-2xl font-bold text-gray-400 border border-gray-100 hover:bg-gray-50 transition-all text-[10px] uppercase tracking-widest">
-                                    ← Volver al Inicio
-                                </button>
-                            </div>
-                        </div>
-                    </main>
+        const sName = NEMONTEMI_SEQUENCES[yType][dayIdx];
+        const sIdx = SIGNOS_DATA.findIndex(s => s.n === sName);
+        const numeral = (NUMERAL_START[yNum - 1] + dayIdx - 1) % 13 + 1;
+
+        let tonalIndex = 0;
+        for (let i = 0; i < 260; i++) {
+          if (i % 13 === (numeral - 1) && i % 20 === sIdx) { tonalIndex = i; break; }
+        }
+
+        setRes({
+          numeral, sName, sEsp: SIGNOS_DATA[sIdx].es,
+          imgNum: sIdx + 1, diaNem: dayIdx + 1,
+          desc: DESCRIPCIONES[sName], ave: AVES_DIA[numeral - 1],
+          noche: SENORES_NOCHE[tonalIndex % 9], anio: `${yNum} ${yType}`
+        });
+      };
+
+      if (loading) {
+        return (
+          <div className="min-h-screen flex flex-col items-center justify-center p-6 text-center" style={{ backgroundColor: '#b00e2d' }}>
+            <img
+              src="signos/spinner-grecas.png"
+              className="w-32 h-32 mb-8 spinner-azteca"
+              alt="Cargando..."
+              onError={(e) => { e.target.src = "https://www.svgrepo.com/show/25443/aztec-sun.svg"; }}
+            />
+            <h2 className="text-white text-xs font-bold uppercase tracking-[0.4em] animate-pulse">Consultando Nemontemi</h2>
+          </div>
+        );
+      }
+
+      return (
+        <main className="px-4 pb-32 fade-in">
+          {/* Sub-banner Nemontemi (mantiene tu contenido, look consistente) */}
+          <div className="max-w-md mx-auto mb-4 bg-white rounded-2xl border border-gray-100 shadow-sm px-5 py-4 flex items-center justify-between">
+            <div>
+              <div className="font-semibold text-[15px] text-gray-900">{fechaHeader}</div>
+              <div className="text-[11px] text-gray-400">Día de Guardia e Introspección</div>
+            </div>
+            <div className="text-right">
+              <div className="text-[18px]">⏳</div>
+              <div className="text-[9px] font-bold text-gray-400 uppercase tracking-tighter">Nemontemi</div>
+            </div>
+          </div>
+
+          {/* Card principal (igual feeling calculadora index) */}
+          <div className="max-w-md mx-auto">
+            <div className="bg-white rounded-[2.5rem] shadow-2xl overflow-hidden border border-gray-100">
+              <div className="pt-10 pb-6 px-8 text-center bg-gray-900 text-white">
+                <h1 className="text-2xl font-black uppercase tracking-widest">Nemontemi</h1>
+                <p className="opacity-40 text-[9px] font-bold uppercase tracking-[0.3em] mt-1">El Vacío Creador</p>
+              </div>
+
+              <div className="px-6 py-8 text-center">
+                <div className="w-32 h-32 bg-gray-50 rounded-full flex items-center justify-center mx-auto mb-4 border border-gray-100 shadow-inner">
+                  <img src={`signos/${res.imgNum}.png`} className="w-24 h-24 object-contain" alt={res.sName} />
                 </div>
-            );
-        };
 
-        const root = ReactDOM.createRoot(document.getElementById('root'));
-        root.render(<App />);
-    </script>
+                <h2 className="text-3xl font-black text-gray-900 leading-tight">
+                  {res.numeral} {res.sName}
+                </h2>
+
+                <p className="text-[10px] font-bold text-red-600 uppercase tracking-widest mb-4">
+                  Día {res.diaNem} de 5 • {res.sEsp}
+                </p>
+
+                <div className="mb-6 px-5 py-5 bg-gray-50 rounded-3xl border border-gray-100">
+                  <p className="text-[12px] text-gray-600 leading-relaxed italic">"{res.desc}"</p>
+                </div>
+
+                <div className="grid grid-cols-2 gap-3 text-left">
+                  <div className="bg-emerald-50 rounded-2xl p-4 border border-emerald-100">
+                    <span className="text-[8px] font-bold text-emerald-800 uppercase block mb-1">Ave Sagrada</span>
+                    <p className="text-[11px] font-bold text-emerald-900 leading-tight">{res.ave.nahuatl}</p>
+                    <p className="text-[9px] text-emerald-600 italic">{res.ave.es}</p>
+                  </div>
+
+                  <div className="bg-slate-900 rounded-2xl p-4 border border-slate-700 text-white">
+                    <span className="text-[8px] font-bold text-slate-400 uppercase block mb-1">Señor Noche</span>
+                    <p className="text-[11px] font-bold text-white leading-tight">{res.noche.n}</p>
+                    <p className="text-[9px] text-slate-400 italic">Guía nocturno</p>
+                  </div>
+                </div>
+
+                <div className="mt-6 bg-gray-50 rounded-2xl p-3 border border-gray-100">
+                  <p className="text-[8px] font-bold text-gray-400 uppercase tracking-tighter">Ciclo del Año</p>
+                  <p className="text-xs font-bold text-gray-700 uppercase">{res.anio}</p>
+                </div>
+
+                <button
+                  onClick={() => goToIndex('sec-calculadora')}
+                  className="w-full mt-8 py-4 rounded-2xl font-bold text-gray-400 border border-gray-100 hover:bg-gray-50 transition-all text-[10px] uppercase tracking-widest"
+                >
+                  ← Volver al Inicio
+                </button>
+              </div>
+            </div>
+          </div>
+        </main>
+      );
+    };
+
+    // Montaje (mismo stack que tú ya traes)
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    root.render(<App />);
+  </script>
 </body>
 </html>
