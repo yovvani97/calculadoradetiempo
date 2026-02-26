@@ -585,7 +585,6 @@
         setInterval(actualizarReloj, 60000);
     </script>
     
-    <script src="/js/preload.js"></script>
 <script src="js/preload.js"></script>
 <script>
   // Si preloadSignos existe, lo usamos.
@@ -1128,16 +1127,24 @@ if (!ready) {
   const mount = document.getElementById("root-calculadora");
 
   if (!mount) {
-    console.error("No existe #root-calculadora");
-    return;
-  }
+    
 
-  const root = ReactDOM.createRoot(mount);
-  root.render(<App />);
+  <script type="text/babel">
+  // ... TODO tu código de React arriba ...
+
+  const mount = document.getElementById("root-calculadora");
+  if (!mount) {
+    console.error("No existe #root-calculadora");
+  } else {
+    // ✅ Esto funciona en más casos (hosting simple)
+    ReactDOM.render(<App />, mount);
+  }
+</script>
 });
 </script>
 </body>
 </html>
+
 
 
 
