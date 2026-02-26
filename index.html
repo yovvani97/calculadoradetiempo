@@ -584,12 +584,11 @@
         actualizarReloj();
         setInterval(actualizarReloj, 60000);
     </script>
-    <script type="module">
-import { preloadSignos } from '/js/preload.js';
-
+    <script src="/js/preload.js"></script>
+<script>
 window.APP_READY = false;
 
-preloadSignos().then(() => {
+window.preloadSignos().then(() => {
   window.APP_READY = true;
 });
 </script>
@@ -1138,6 +1137,7 @@ if (!ready) {
 </script>
 </body>
 </html>
+
 
 
 
