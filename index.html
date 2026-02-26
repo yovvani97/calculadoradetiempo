@@ -268,6 +268,147 @@
       margin-bottom: 10px;
       filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
     }
+    /* ===============================
+   RESPONSIVE NAV + HAMBURGUESA
+   =============================== */
+
+.desktop-nav { display: block; } /* en móvil también se ve, pero adaptada */
+
+/* En móvil ocultamos los links de escritorio y redes */
+@media (max-width: 767px) {
+  .nav-links, .social-links { display: none !important; }
+
+  .nav-content {
+    justify-content: center;
+    position: relative;
+  }
+
+  /* Logo centrado y más grande */
+  .main-logo {
+    height: 48px;
+  }
+}
+
+/* Botón hamburguesa (solo móvil) */
+.hamburger {
+  display: none;
+  position: absolute;
+  right: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 44px;
+  height: 44px;
+  border: 1px solid rgba(0,0,0,0.08);
+  background: rgba(255,255,255,0.9);
+  border-radius: 14px;
+  cursor: pointer;
+  padding: 10px;
+}
+
+.hamburger span {
+  display: block;
+  height: 2px;
+  background: #1d1d1f;
+  border-radius: 2px;
+  margin: 5px 0;
+}
+
+/* Menú móvil desplegable */
+.mobile-menu {
+  position: fixed;
+  top: var(--navbar-height);
+  left: 12px;
+  right: 12px;
+  background: rgba(255,255,255,0.92);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(0,0,0,0.08);
+  border-radius: 22px;
+  padding: 12px;
+  z-index: 1200;
+  box-shadow: 0 12px 40px rgba(0,0,0,0.10);
+}
+
+.mobile-menu a {
+  display: block;
+  padding: 12px 14px;
+  border-radius: 16px;
+  text-decoration: none;
+  color: var(--apple-text);
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.mobile-menu a:hover {
+  background: rgba(176,14,45,0.08);
+  color: var(--mexica-red);
+}
+
+.mobile-social {
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid rgba(0,0,0,0.06);
+}
+
+.mobile-social a i { margin-right: 8px; color: #86868b; }
+
+@media (max-width: 767px) {
+  .hamburger { display: block; }
+}
+    /* ===============================
+   BANNER RELOJ + LUNA RESPONSIVE
+   =============================== */
+@media (max-width: 767px) {
+  .cosmic-banner {
+    margin: 12px;
+    border-radius: 18px;
+    border: 1px solid rgba(0,0,0,0.06);
+    gap: 10px;
+  }
+
+  /* que no se separen tanto */
+  .cosmic-banner {
+    justify-content: space-between;
+  }
+
+  #reloj-container, #fase-lunar {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  #reloj-txt { font-size: 18px !important; }
+  #fecha-txt { font-size: 11px !important; }
+
+  #fase-lunar div:first-child { font-size: 18px !important; }
+  #fase-lunar div:last-child {
+    font-size: 9px !important;
+    letter-spacing: 0.8px !important;
+  }
+}
+    /* ===============================
+   NOSOTROS RESPONSIVE
+   =============================== */
+@media (max-width: 767px) {
+  /* reduce padding general */
+  .content-card { margin: 12px; padding: 20px; border-radius: 22px; }
+
+  /* “apple sections” más compactas */
+  .apple-section { border-radius: 22px; }
+  .section-content { padding: 22px; max-width: 100% !important; }
+  .apple-section.align-left .section-content { margin-left: 0; max-width: 100% !important; }
+
+  .apple-section h2 { font-size: 28px; }
+  .apple-section p { font-size: 15px; }
+
+  /* si tienes el grid inline (como en tu código), se adapta solo, pero reforzamos */
+  .app-wrapper > section#sec-nosotros div[style*="grid-template-columns"] {
+    grid-template-columns: 1fr !important;
+  }
+}
+    @media (max-width: 767px) {
+  .app-wrapper { padding-bottom: 110px; } /* para que el bottom-nav no tape contenido */
+}
   </style>
 </head>
 
@@ -291,6 +432,24 @@
         <a href="https://tiktok.com" target="_blank"><i class="fa-brands fa-tiktok"></i></a>
       </div>
     </div>
+    <!-- Botón hamburguesa (solo móvil) -->
+<button class="hamburger" aria-label="Abrir menú" onclick="toggleMenu()">
+  <span></span><span></span><span></span>
+</button>
+
+<!-- Menú móvil desplegable -->
+<div id="mobile-menu" class="mobile-menu hidden">
+  <a onclick="navegar('sec-calculadora'); toggleMenu(false)">Calculadora</a>
+  <a onclick="navegar('sec-cuenta'); toggleMenu(false)">La Cuenta</a>
+  <a onclick="navegar('sec-nosotros'); toggleMenu(false)">Nosotros</a>
+  <a onclick="navegar('sec-rituales'); toggleMenu(false)">Rituales</a>
+
+  <div class="mobile-social">
+    <a href="https://facebook.com" target="_blank" rel="noopener"><i class="fa-brands fa-facebook-f"></i> Facebook</a>
+    <a href="https://instagram.com" target="_blank" rel="noopener"><i class="fa-brands fa-instagram"></i> Instagram</a>
+    <a href="https://tiktok.com" target="_blank" rel="noopener"><i class="fa-brands fa-tiktok"></i> TikTok</a>
+  </div>
+</div>
   </nav>
 
   <div class="app-wrapper">
@@ -533,16 +692,24 @@
 
   <script>
     function navegar(idSeccion) {
-      document.querySelectorAll('section').forEach(s => s.classList.add('hidden'));
-      const target = document.getElementById(idSeccion);
-      if (target) target.classList.remove('hidden');
+    // Cambiar sección visible
+    document.querySelectorAll('section').forEach(s => s.classList.add('hidden'));
+    document.getElementById(idSeccion).classList.remove('hidden');
 
-      document.querySelectorAll('.nav-item').forEach(btn => btn.classList.remove('active'));
-      const index = ['sec-calculadora', 'sec-cuenta', 'sec-nosotros', 'sec-rituales'].indexOf(idSeccion);
-      if (index !== -1) document.querySelectorAll('.nav-item')[index].classList.add('active');
+    // Activar botón inferior
+    document.querySelectorAll('.nav-item').forEach(btn => btn.classList.remove('active'));
+    const index = ['sec-calculadora', 'sec-cuenta', 'sec-nosotros', 'sec-rituales'].indexOf(idSeccion);
+    if(index !== -1) document.querySelectorAll('.nav-item')[index].classList.add('active');
 
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+    // Scroll arriba
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+
+    // 👇 NUEVO: cerrar menú hamburguesa si está abierto
+    const mobileMenu = document.getElementById('mobile-menu');
+    if (mobileMenu && !mobileMenu.classList.contains('hidden')) {
+        mobileMenu.classList.add('hidden');
     }
+}
 
     function actualizarReloj() {
       const ahora = new Date();
@@ -920,8 +1087,7 @@
 
       return (
         <div className="min-h-screen bg-gray-50 font-sans text-gray-900 flex items-center justify-center p-4">
-          <div className="max-w-md w-full bg-white rounded-[2.5rem] shadow-2xl overflow-hidden border border-gray-100/50">
-
+<div className="w-full max-w-none sm:max-w-md bg-white rounded-[2.5rem] shadow-2xl overflow-hidden border border-gray-100/50">
             <div className="pt-10 pb-6 px-8 text-center">
               <h1 className="text-3xl font-bold tracking-tight text-gray-900 mb-2">Tonalpohualli</h1>
               <p className="text-gray-400 text-sm font-medium">Calculadora de Tiempo Sagrado</p>
@@ -1112,3 +1278,4 @@
   </script>
 </body>
 </html>
+
