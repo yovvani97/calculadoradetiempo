@@ -1124,12 +1124,21 @@ if (!ready) {
     );
   };
 
+  window.addEventListener("DOMContentLoaded", function () {
   const mount = document.getElementById("root-calculadora");
+
+  if (!mount) {
+    console.error("No existe #root-calculadora");
+    return;
+  }
+
   const root = ReactDOM.createRoot(mount);
   root.render(<App />);
+});
 </script>
 </body>
 </html>
+
 
 
 
